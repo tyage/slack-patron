@@ -2,5 +2,6 @@ require 'sinatra'
 require './db'
 
 get '/' do
-  SlackLog.all.length.to_s
+  logs = SlackLog.all
+  erb :index, locals: { logs: logs }
 end
