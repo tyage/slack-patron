@@ -1,3 +1,7 @@
+<% members.each do |m| %>
+  <%= m['name'] %>
+<% end %>
+
 <% logs.each do |l| %>
   <li><%= l.user %>: <%= l.text %>(<%= l.posted_at %>)</li>
 <% end %>

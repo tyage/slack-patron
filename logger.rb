@@ -1,12 +1,5 @@
-require 'yaml'
-require 'slack'
+require './slack'
 require './db'
-
-config = YAML.load_file('./config.yml')
-
-Slack.configure do |c|
-  c.token = config['slack']['token']
-end
 
 realtime = Slack.realtime
 realtime.on :message do |mes|
