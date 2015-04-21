@@ -1,10 +1,14 @@
 # Slack logger and viewer
 
+```sh
+$ bundle install
+$ bundle exec rake db:migrate
+```
+
 ## using logger
 
 copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
-$ bundle install
-$ bundle exec ruby log.rb
+$ bundle exec ruby logger.rb
 ```
