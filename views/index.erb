@@ -1,7 +1,9 @@
-<% members.each do |m| %>
-  <%= m['name'] %>
-<% end %>
+<% logs.each do |c, logs| %>
+  <h2><%= channels[c]['name'] %></h2>
 
-<% logs.each do |l| %>
-  <li><%= l.user %>: <%= l.text %>(<%= l.posted_at %>)</li>
+  <ul>
+    <% logs.each do |l| %>
+      <li><%= members[l.user]['name'] %>: <%= l.text %>(<%= l.posted_at %>)</li>
+    <% end %>
+  </ul>
 <% end %>
