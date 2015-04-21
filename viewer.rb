@@ -18,15 +18,18 @@ def channels
   hashed_channels
 end
 
-get '/' do
+def logs
   hashed_logs = {}
-  logs = SlackLog.all
-  logs.each do |l|
+  SlackLog.all.each do |l|
     hashed_logs[l.channel] ||= []
     hashed_logs[l.channel] << l
   end
+  hashed_logs
+end
+
+get '/' do
   erb :index, locals: {
-    logs: hashed_logs,
+    logs: logs,
     members: members,
     channels: channels
   }
