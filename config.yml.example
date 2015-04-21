@@ -1,2 +1,3 @@
 slack:
-  token: 
+  token:
+database: db/log.db
