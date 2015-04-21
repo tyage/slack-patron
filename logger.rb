@@ -12,7 +12,7 @@ realtime = Slack.realtime
 realtime.on :message do |mes|
   log = SlackLog.new
   log.text = mes['text']
-  log.created_at = mes['ts']
+  log.posted_at = mes['ts']
   log.channel = mes['channel']
   log.user = mes['user']
   log.save
