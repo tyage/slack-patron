@@ -15,6 +15,6 @@ $ bundle exec ruby logger.rb
 
 ## Starting viewer
 
-```
-bundle exec rackup
+```sh
+$ bundle exec rackup
 ```
