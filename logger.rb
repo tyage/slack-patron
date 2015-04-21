@@ -1,6 +1,6 @@
 require 'yaml'
 require 'slack'
-require './slack-log'
+require './db'
 
 config = YAML.load_file('./config.yml')
 

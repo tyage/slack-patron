@@ -1,5 +1,6 @@
 require 'sinatra'
+require './db'
 
 get '/' do
-  'test'
+  SlackLog.all
 end
