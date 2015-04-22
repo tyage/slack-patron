@@ -1,9 +1,11 @@
 var SlackLogViewer = React.createClass({
   render: function() {
+    var messages = [];
+    var channels = [];
     return (
       <div>
-        <SlackChannels />
-        <SlackMesssages />
+        <SlackChannels channels={channels} />
+        <SlackMessages messages={messages} />
       </div>
     );
   }
