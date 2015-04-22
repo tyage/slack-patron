@@ -2,3 +2,4 @@
 /vendor/bundle
 config.yml
 /db/*.db
+/public/bower_components
