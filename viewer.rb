@@ -28,9 +28,15 @@ def logs
 end
 
 get '/' do
-  erb :index, locals: {
-    logs: logs,
-    members: members,
-    channels: channels
-  }
+  erb :index
+end
+
+get '/members.json' do
+  content_type :json
+  members.to_json
+end
+
+get '/channels.json' do
+  content_type :json
+  channels.to_json
 end
