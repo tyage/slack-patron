@@ -40,3 +40,8 @@ get '/channels.json' do
   content_type :json
   channels.to_json
 end
+
+get '/logs.json' do
+  content_type :json
+  logs.to_json
+end
