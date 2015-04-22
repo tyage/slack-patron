@@ -16,5 +16,6 @@ $ bundle exec ruby logger.rb
 ## Starting viewer
 
 ```sh
+$ bower install
 $ bundle exec rackup
 ```
