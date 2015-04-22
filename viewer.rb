@@ -20,7 +20,7 @@ end
 
 def logs
   hashed_logs = {}
-  SlackLog.all.each do |l|
+  SlackLog.all.order(:posted_at).each do |l|
     hashed_logs[l.channel] ||= []
     hashed_logs[l.channel] << l
   end

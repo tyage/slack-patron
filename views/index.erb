@@ -1,9 +1,1 @@
-<% logs.each do |c, logs| %>
-  <h2><%= channels[c]['name'] %></h2>
-
-  <ul>
-    <% logs.each do |l| %>
-      <li><%= members[l.user]['name'] %>: <%= l.text %>(<%= l.posted_at %>)</li>
-    <% end %>
-  </ul>
-<% end %>
+<div id="slack-log-viewer"></div>
