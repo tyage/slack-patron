@@ -11,21 +11,18 @@ var SlackLogViewer = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
-    $.get('/channels.json', function(channels) {
+    $.when(
+      $.get('/channels.json'),
+      $.get('/members.json'),
+      $.get('/logs.json')
+    ).done(function(channels, members, logs) {
+      console.log(channels)
       self.setState({
-        channels: channels
+        channels: channels[0],
+        members: members[0],
+        logs: logs[0]
       });
-    });
-    $.get('/members.json', function(members) {
-      self.setState({
-        members: members
-      });
-    });
-    $.get('/logs.json', function(logs) {
-      self.setState({
-        logs: logs
-      });
-    });
+    })
   },
   changeCurrentChannel: function(channel) {
     this.setState({
