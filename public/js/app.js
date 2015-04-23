@@ -82,20 +82,26 @@ var SlackChannels = React.createClass({
 var SlackMember = React.createClass({
   render: function() {
     return (
-      <p>{this.props.member.name}: </p>
+      <p>{this.props.member.name}</p>
     );
   }
 });
 
 var SlackMessage = React.createClass({
+  member: function() {
+    return this.props.members[this.props.message.user];
+  },
   render: function() {
     return (
       <div className="slack-message">
-        <div className="slack-message-member">
-          <SlackMember member={this.props.members[this.props.message.user]} />
+        <div className="slack-message-member-image">
+          <img src={this.member().profile.image_32} />
         </div>
-        <div className="slack-message-text">{this.props.message.text}</div>
-        <div className="slack-message-date">{this.props.message.posted_at}</div>
+        <div className="slack-message-content">
+          <div className="slack-message-member-name">{this.member().name}</div>
+          <div className="slack-message-date">{this.props.message.posted_at}</div>
+          <div className="slack-message-text">{this.props.message.text}</div>
+        </div>
       </div>
     );
   }

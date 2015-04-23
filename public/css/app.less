@@ -2,23 +2,28 @@
 
 body {
   margin: 0;
+  font-size: 15px;
 }
 p {
   margin: 0;
 }
+ul {
+  padding: 0;
+  margin: 0;
+}
 
 #slack-log-viewer {
+  @width: 220px;
   .clearfix;
   .slack-channels {
     float: left;
     background: rgb(69, 55, 68);
     color: rgb(171, 155, 169);
-    padding: 0;
-    margin: 0;
-    width: 180px;
+    width: @width;
+    height: calc(~'100% - 40px');
+    padding: 20px 0;
+    overflow: scroll;
     li {
-      padding: 0;
-      margin: 0;
       text-shadow: 0 1px 1px rgba(0,0,0,0.25);
       cursor: pointer;
       &:hover {
@@ -30,11 +35,42 @@ p {
       }
       p {
         line-height: 1.5rem;
-        padding: 5px 10px;
+        padding: 0 .5rem 0 1rem;
+        font-size: 1rem;
       }
     }
   }
   .slack-messages {
     float: left;
+    width: calc(~'100% - @{width}');
+    height: 100%;
+    overflow: scroll;
+    .slack-message {
+      .clearfix;
+      margin: 10px;
+      .slack-message-member-image {
+        float: left;
+        margin: 0 16px 0 0;
+        img {
+          border-radius: 5px;
+        }
+      }
+      .slack-message-content {
+        .slack-message-member-name {
+          display: inline-block;
+          color: rgb(61, 60, 64);
+          font-weight: 900;
+          padding-right: .25rem;
+        }
+        .slack-message-date {
+          display: inline-block;
+          color: #babbbf;
+          font-size: 12px;
+        }
+        .slack-message-text {
+          color: #3d3c40;
+        }
+      }
+    }
   }
 }
