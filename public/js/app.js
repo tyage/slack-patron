@@ -11,12 +11,12 @@ var SlackLogViewer = React.createClass({
   },
   componentDidMount: function() {
     var self = this;
+    var time = (new Date()).getTime();
     $.when(
-      $.get('/channels.json'),
-      $.get('/members.json'),
-      $.get('/logs.json')
+      $.get('/channels.json?t=' + time),
+      $.get('/members.json?t=' + time),
+      $.get('/logs.json?t=' + time)
     ).done(function(channels, members, logs) {
-      console.log(channels)
       self.setState({
         channels: channels[0],
         members: members[0],
