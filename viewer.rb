@@ -1,6 +1,6 @@
 require 'sinatra'
-require './slack'
-require './db'
+require './lib/slack'
+require './lib/db'
 
 def members
   hashed_members = {}

@@ -1,5 +1,5 @@
-require './slack'
-require './db'
+require './lib/slack'
+require './lib/db'
 
 # log history
 def fetch_history(channel)
