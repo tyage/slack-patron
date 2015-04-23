@@ -7,11 +7,11 @@ def fetch_history(channel)
     channel: channel,
     count: 1000
   )['messages'].each do |mes|
-    SlackLog.create(
+    log = SlackLog.create(
       text: mes['text'],
       posted_at: mes['ts'].to_f,
       ts: mes['ts'],
-      channel: channel,
+      channel: channel['id'],
       user: mes['user']
     )
   end
@@ -20,6 +20,8 @@ end
 Slack.channels_list['channels'].each do |c|
   fetch_history(c['id'])
 end
+
+p 'logging history finished!'
 
 # realtime logging
 realtime = Slack.realtime
