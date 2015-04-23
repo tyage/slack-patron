@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150421024825) do
+ActiveRecord::Schema.define(version: 20150423130124) do
 
   create_table "slack_logs", force: :cascade do |t|
     t.text     "text"
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20150421024825) do
     t.datetime "posted_at"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "ts"
   end
 
 end
