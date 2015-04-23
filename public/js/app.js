@@ -91,6 +91,9 @@ var SlackMessage = React.createClass({
   member: function() {
     return this.props.members[this.props.message.user];
   },
+  formatedDate: function() {
+    return new Date(this.props.message.posted_at * 1000).toLocaleString();
+  },
   render: function() {
     return (
       <div className="slack-message">
@@ -99,7 +102,7 @@ var SlackMessage = React.createClass({
         </div>
         <div className="slack-message-content">
           <div className="slack-message-member-name">{this.member().name}</div>
-          <div className="slack-message-date">{this.props.message.posted_at}</div>
+          <div className="slack-message-date">{this.formatedDate()}</div>
           <div className="slack-message-text">{this.props.message.text}</div>
         </div>
       </div>
