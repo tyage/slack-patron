@@ -11,7 +11,7 @@ def fetch_history(channel)
       text: mes['text'],
       posted_at: mes['ts'].to_f,
       ts: mes['ts'],
-      channel: channel['id'],
+      channel: channel,
       user: mes['user']
     )
   end
