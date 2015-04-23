@@ -1,0 +1,40 @@
+@import "clearfix";
+
+body {
+  margin: 0;
+}
+p {
+  margin: 0;
+}
+
+#slack-log-viewer {
+  .clearfix;
+  .slack-channels {
+    float: left;
+    background: rgb(69, 55, 68);
+    color: rgb(171, 155, 169);
+    padding: 0;
+    margin: 0;
+    width: 180px;
+    li {
+      padding: 0;
+      margin: 0;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+      cursor: pointer;
+      &:hover {
+        background: #3e313c;
+      }
+      &.selected {
+        background: rgb(76, 150, 137);
+        color: white;
+      }
+      p {
+        line-height: 1.5rem;
+        padding: 5px 10px;
+      }
+    }
+  }
+  .slack-messages {
+    float: left;
+  }
+}

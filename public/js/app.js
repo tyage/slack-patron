@@ -36,7 +36,8 @@ var SlackLogViewer = React.createClass({
     return (
       <div>
         <SlackChannels channels={this.state.channels}
-          changeCurrentChannel={this.changeCurrentChannel} />
+          changeCurrentChannel={this.changeCurrentChannel}
+          currentChannel={this.state.currentChannel} />
         <SlackMessages members={this.state.members} logs={this.state.logs}
           currentChannel={this.state.currentChannel} />
       </div>
@@ -58,8 +59,12 @@ var SlackChannels = React.createClass({
     var self = this;
     var createChannelList = function(channels) {
       return _.map(channels, function(channel) {
+        var classNames = [];
+        if (self.props.currentChannel === channel.id) {
+          classNames.push('selected');
+        }
         return (
-          <li>
+          <li className={classNames.join(' ')}>
             <SlackChannel channel={channel}
               handleClick={self.props.changeCurrentChannel} />
           </li>
@@ -67,7 +72,7 @@ var SlackChannels = React.createClass({
       });
     };
     return (
-      <ul class="slack-channels">
+      <ul className="slack-channels">
         {createChannelList(this.props.channels)}
       </ul>
     );
@@ -85,12 +90,12 @@ var SlackMember = React.createClass({
 var SlackMessage = React.createClass({
   render: function() {
     return (
-      <div class="slack-message">
+      <div className="slack-message">
         <div className="slack-message-member">
           <SlackMember member={this.props.members[this.props.message.user]} />
         </div>
-        <div class="slack-message-text">{this.props.message.text}</div>
-        <div class="slack-message-date">{this.props.message.posted_at}</div>
+        <div className="slack-message-text">{this.props.message.text}</div>
+        <div className="slack-message-date">{this.props.message.posted_at}</div>
       </div>
     );
   }
@@ -105,7 +110,7 @@ var SlackMessages = React.createClass({
       });
     };
     return (
-      <div class="slack-messages">
+      <div className="slack-messages">
         {createMessage(this.props.logs[this.props.currentChannel])}
       </div>
     );
