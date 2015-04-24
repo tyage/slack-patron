@@ -14,19 +14,23 @@ var SlackLogViewer = React.createClass({
     var time = (new Date()).getTime();
     $.when(
       $.get('/channels.json?t=' + time),
-      $.get('/members.json?t=' + time),
-      $.get('/logs.json?t=' + time)
-    ).done(function(channels, members, logs) {
+      $.get('/members.json?t=' + time)
+    ).done(function(channels, members) {
       self.setState({
         channels: channels[0],
         members: members[0],
-        logs: logs[0]
       });
     })
   },
   changeCurrentChannel: function(channel) {
     this.setState({
       currentChannel: channel
+    });
+    var self = this;
+    $.get('/logs/' + channel + '.json').done(function(logs) {
+      self.setState({
+        logs: logs
+      });
     });
   },
   render: function() {
@@ -35,8 +39,7 @@ var SlackLogViewer = React.createClass({
         <SlackChannels channels={this.state.channels}
           changeCurrentChannel={this.changeCurrentChannel}
           currentChannel={this.state.currentChannel} />
-        <SlackMessages members={this.state.members} logs={this.state.logs}
-          currentChannel={this.state.currentChannel} />
+        <SlackMessages members={this.state.members} logs={this.state.logs} />
       </div>
     );
   }
@@ -120,7 +123,7 @@ var SlackMessages = React.createClass({
     };
     return (
       <div className="slack-messages">
-        {createMessage(this.props.logs[this.props.currentChannel])}
+        {createMessage(this.props.logs)}
       </div>
     );
   }
