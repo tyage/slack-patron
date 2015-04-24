@@ -18,13 +18,8 @@ def channels
   hashed_channels
 end
 
-def logs
-  hashed_logs = {}
-  SlackLog.all.order(:posted_at).each do |l|
-    hashed_logs[l.channel] ||= []
-    hashed_logs[l.channel] << l
-  end
-  hashed_logs
+def logs(channel)
+  SlackLog.where(channel: channel).order(:posted_at)
 end
 
 get '/' do
@@ -41,7 +36,7 @@ get '/channels.json' do
   channels.to_json
 end
 
-get '/logs.json' do
+get '/logs/:channel.json' do
   content_type :json
-  logs.to_json
+  logs(params[:channel]).to_json
 end
