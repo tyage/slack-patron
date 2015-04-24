@@ -1,6 +1,12 @@
 "use strict";
 
 var SlackLogViewer = React.createClass({
+  getDefaultChannel: function(channel) {
+    return window.localStorage.getItem('Slack.defaultChannel');
+  },
+  setDefaultChannel: function(channel) {
+    window.localStorage.setItem('Slack.defaultChannel', channel);
+  },
   getInitialState: function() {
     return {
       logs: [],
@@ -20,14 +26,21 @@ var SlackLogViewer = React.createClass({
         channels: channels[0],
         members: members[0],
       });
-    })
+
+      var defaultChannel = self.getDefaultChannel() || _.findKey(self.state.channels);
+      self.changeCurrentChannel(defaultChannel);
+    });
   },
   changeCurrentChannel: function(channel) {
     this.setState({
       currentChannel: channel
     });
+
+    this.setDefaultChannel(channel);
+
     var self = this;
-    $.get('/logs/' + channel + '.json').done(function(logs) {
+    var time = (new Date()).getTime();
+    $.get('/logs/' + channel + '.json?t=' + time).done(function(logs) {
       self.setState({
         logs: logs
       });
