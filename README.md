@@ -19,5 +19,7 @@ $ bundle exec ruby logger.rb
 
 ```sh
 $ bower install
+$ npm install
+$ ./node_modules/.bin/gulp
 $ bundle exec rackup
 ```
