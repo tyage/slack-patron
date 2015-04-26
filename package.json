@@ -18,6 +18,7 @@
   "homepage": "https://github.com/tyage/slack-logger",
   "devDependencies": {
     "gulp": "^3.8.11",
-    "gulp-babel": "^5.1.0"
+    "gulp-babel": "^5.1.0",
+    "gulp-concat": "^2.5.2"
   }
 }
