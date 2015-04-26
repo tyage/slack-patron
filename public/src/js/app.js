@@ -1,5 +1,3 @@
-"use strict";
-
 let SlackLogViewer = React.createClass({
   getDefaultChannel() {
     return window.localStorage.getItem('Slack.defaultChannel');
