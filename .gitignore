@@ -3,3 +3,4 @@
 config.yml
 /db/*.db
 /public/bower_components
+/node_modules
