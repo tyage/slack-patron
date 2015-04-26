@@ -10,7 +10,7 @@ gulp.task('babel', function() {
     .pipe(gulp.dest('public/dist/js/'));
 });
 
-gulp.task('less', function () {
+gulp.task('less', function() {
   return gulp.src('public/src/css/*.less')
     .pipe(less())
     .pipe(concat('app.css'))

@@ -1,7 +1,7 @@
 "use strict";
 
-var SlackLogViewer = React.createClass({
-  getDefaultChannel: function(channel) {
+let SlackLogViewer = React.createClass({
+  getDefaultChannel: function() {
     return window.localStorage.getItem('Slack.defaultChannel');
   },
   setDefaultChannel: function(channel) {
@@ -16,19 +16,18 @@ var SlackLogViewer = React.createClass({
     };
   },
   componentDidMount: function() {
-    var self = this;
-    var time = (new Date()).getTime();
+    let time = (new Date()).getTime();
     $.when(
       $.get('/channels.json?t=' + time),
       $.get('/members.json?t=' + time)
-    ).done(function(channels, members) {
-      self.setState({
+    ).done((channels, members) => {
+      this.setState({
         channels: channels[0],
         members: members[0],
       });
 
-      var defaultChannel = self.getDefaultChannel() || _.findKey(self.state.channels);
-      self.changeCurrentChannel(defaultChannel);
+      let defaultChannel = this.getDefaultChannel() || _.findKey(this.state.channels);
+      this.changeCurrentChannel(defaultChannel);
     });
   },
   changeCurrentChannel: function(channel) {
@@ -38,10 +37,9 @@ var SlackLogViewer = React.createClass({
 
     this.setDefaultChannel(channel);
 
-    var self = this;
-    var time = (new Date()).getTime();
-    $.get('/logs/' + channel + '.json?t=' + time).done(function(logs) {
-      self.setState({
+    let time = (new Date()).getTime();
+    $.get('/logs/' + channel + '.json?t=' + time).done((logs) => {
+      this.setState({
         logs: logs
       });
     });
@@ -58,7 +56,7 @@ var SlackLogViewer = React.createClass({
   }
 });
 
-var SlackChannel = React.createClass({
+let SlackChannel = React.createClass({
   handleClick: function() {
     this.props.handleClick(this.props.channel.id);
   },
@@ -67,23 +65,21 @@ var SlackChannel = React.createClass({
   }
 });
 
-var SlackChannels = React.createClass({
+let SlackChannels = React.createClass({
   render: function() {
-    var self = this;
-    var createChannelList = function(channels) {
-      return _.map(channels, function(channel) {
-        var classNames = [];
-        if (self.props.currentChannel === channel.id) {
+    let createChannelList = (channels) => _.map(channels, (channel) => {
+        let classNames = [];
+        if (this.props.currentChannel === channel.id) {
           classNames.push('selected');
         }
         return (
           <li className={classNames.join(' ')}>
             <SlackChannel channel={channel}
-              handleClick={self.props.changeCurrentChannel} />
+              handleClick={this.props.changeCurrentChannel} />
           </li>
         );
       });
-    };
+
     return (
       <ul className="slack-channels">
         {createChannelList(this.props.channels)}
@@ -92,7 +88,7 @@ var SlackChannels = React.createClass({
   }
 });
 
-var SlackMember = React.createClass({
+let SlackMember = React.createClass({
   render: function() {
     return (
       <p>{this.props.member.name}</p>
@@ -100,7 +96,7 @@ var SlackMember = React.createClass({
   }
 });
 
-var SlackMessage = React.createClass({
+let SlackMessage = React.createClass({
   member: function() {
     return this.props.members[this.props.message.user];
   },
@@ -126,14 +122,12 @@ var SlackMessage = React.createClass({
   }
 });
 
-var SlackMessages = React.createClass({
+let SlackMessages = React.createClass({
   render: function() {
-    var self = this;
-    var createMessage = function(messages, i) {
-      return _.map(messages, function(message) {
-        return <SlackMessage message={message} members={self.props.members} />;
+    let createMessage = (messages, i) => _.map(messages, (message) => {
+        return <SlackMessage message={message} members={this.props.members} />;
       });
-    };
+
     return (
       <div className="slack-messages">
         {createMessage(this.props.logs)}
@@ -142,6 +136,6 @@ var SlackMessages = React.createClass({
   }
 });
 
-$(function() {
+$(() => {
   React.render(<SlackLogViewer />, $('#slack-log-viewer').get(0));
 });
