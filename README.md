@@ -6,7 +6,14 @@ copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
 $ bundle install
+$ npm install
 $ bundle exec rake db:migrate
+```
+
+## Watch js and css src
+
+```
+$ ./node_modules/.bin/gulp watch
 ```
 
 ## Starting logger
@@ -19,7 +26,6 @@ $ bundle exec ruby logger.rb
 
 ```sh
 $ bower install
-$ npm install
 $ ./node_modules/.bin/gulp
 $ bundle exec rackup
 ```
