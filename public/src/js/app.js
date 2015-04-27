@@ -1,13 +1,11 @@
-"use strict";
-
-var SlackLogViewer = React.createClass({
-  getDefaultChannel: function(channel) {
+let SlackLogViewer = React.createClass({
+  getDefaultChannel() {
     return window.localStorage.getItem('Slack.defaultChannel');
   },
-  setDefaultChannel: function(channel) {
+  setDefaultChannel(channel) {
     window.localStorage.setItem('Slack.defaultChannel', channel);
   },
-  getInitialState: function() {
+  getInitialState() {
     return {
       logs: [],
       members: [],
@@ -15,38 +13,36 @@ var SlackLogViewer = React.createClass({
       currentChannel: null
     };
   },
-  componentDidMount: function() {
-    var self = this;
-    var time = (new Date()).getTime();
+  componentDidMount() {
+    let time = (new Date()).getTime();
     $.when(
       $.get('/channels.json?t=' + time),
       $.get('/members.json?t=' + time)
-    ).done(function(channels, members) {
-      self.setState({
+    ).done((channels, members) => {
+      this.setState({
         channels: channels[0],
         members: members[0],
       });
 
-      var defaultChannel = self.getDefaultChannel() || _.findKey(self.state.channels);
-      self.changeCurrentChannel(defaultChannel);
+      let defaultChannel = this.getDefaultChannel() || _.findKey(this.state.channels);
+      this.changeCurrentChannel(defaultChannel);
     });
   },
-  changeCurrentChannel: function(channel) {
+  changeCurrentChannel(channel) {
     this.setState({
       currentChannel: channel
     });
 
     this.setDefaultChannel(channel);
 
-    var self = this;
-    var time = (new Date()).getTime();
-    $.get('/logs/' + channel + '.json?t=' + time).done(function(logs) {
-      self.setState({
+    let time = (new Date()).getTime();
+    $.get('/logs/' + channel + '.json?t=' + time).done((logs) => {
+      this.setState({
         logs: logs
       });
     });
   },
-  render: function() {
+  render() {
     return (
       <div>
         <SlackChannels channels={this.state.channels}
@@ -58,32 +54,30 @@ var SlackLogViewer = React.createClass({
   }
 });
 
-var SlackChannel = React.createClass({
-  handleClick: function() {
+let SlackChannel = React.createClass({
+  handleClick() {
     this.props.handleClick(this.props.channel.id);
   },
-  render: function() {
+  render() {
     return <p onClick={this.handleClick}>{this.props.channel.name}</p>
   }
 });
 
-var SlackChannels = React.createClass({
-  render: function() {
-    var self = this;
-    var createChannelList = function(channels) {
-      return _.map(channels, function(channel) {
-        var classNames = [];
-        if (self.props.currentChannel === channel.id) {
+let SlackChannels = React.createClass({
+  render() {
+    let createChannelList = (channels) => _.map(channels, (channel) => {
+        let classNames = [];
+        if (this.props.currentChannel === channel.id) {
           classNames.push('selected');
         }
         return (
           <li className={classNames.join(' ')}>
             <SlackChannel channel={channel}
-              handleClick={self.props.changeCurrentChannel} />
+              handleClick={this.props.changeCurrentChannel} />
           </li>
         );
       });
-    };
+
     return (
       <ul className="slack-channels">
         {createChannelList(this.props.channels)}
@@ -92,25 +86,25 @@ var SlackChannels = React.createClass({
   }
 });
 
-var SlackMember = React.createClass({
-  render: function() {
+let SlackMember = React.createClass({
+  render() {
     return (
       <p>{this.props.member.name}</p>
     );
   }
 });
 
-var SlackMessage = React.createClass({
-  member: function() {
+let SlackMessage = React.createClass({
+  member() {
     return this.props.members[this.props.message.user];
   },
-  formatDate: function(date) {
+  formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   },
-  formatText: function(text) {
+  formatText(text) {
     return text.replace(/<@[0-9A-Za-z]+\|([0-9A-Za-z]+)>/gi, "@$1");
   },
-  render: function() {
+  render() {
     return (
       <div className="slack-message">
         <div className="slack-message-member-image">
@@ -126,14 +120,12 @@ var SlackMessage = React.createClass({
   }
 });
 
-var SlackMessages = React.createClass({
-  render: function() {
-    var self = this;
-    var createMessage = function(messages, i) {
-      return _.map(messages, function(message) {
-        return <SlackMessage message={message} members={self.props.members} />;
+let SlackMessages = React.createClass({
+  render() {
+    let createMessage = (messages, i) => _.map(messages, (message) => {
+        return <SlackMessage message={message} members={this.props.members} />;
       });
-    };
+
     return (
       <div className="slack-messages">
         {createMessage(this.props.logs)}
@@ -142,6 +134,6 @@ var SlackMessages = React.createClass({
   }
 });
 
-$(function() {
+$(() => {
   React.render(<SlackLogViewer />, $('#slack-log-viewer').get(0));
 });
