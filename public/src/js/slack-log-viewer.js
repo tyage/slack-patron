@@ -1,4 +1,16 @@
 let SlackLogViewer = React.createClass({
+  generateApiUrl(url) {
+    return url + '?t=' + (new Date()).getTime();
+  },
+  getChannels() {
+    return $.get(this.generateApiUrl('/channels.json'));
+  },
+  getMembers() {
+    return $.get(this.generateApiUrl('/members.json'));
+  },
+  getLogs(channel) {
+    return $.get(this.generateApiUrl('/logs/' + channel + '.json'));
+  },
   getDefaultChannel() {
     return window.localStorage.getItem('Slack.defaultChannel');
   },
@@ -16,8 +28,8 @@ let SlackLogViewer = React.createClass({
   componentDidMount() {
     let time = (new Date()).getTime();
     $.when(
-      $.get('/channels.json?t=' + time),
-      $.get('/members.json?t=' + time)
+      this.getChannels(),
+      this.getMembers()
     ).done((channels, members) => {
       this.setState({
         channels: channels[0],
@@ -36,7 +48,7 @@ let SlackLogViewer = React.createClass({
     this.setDefaultChannel(channel);
 
     let time = (new Date()).getTime();
-    $.get('/logs/' + channel + '.json?t=' + time).done((logs) => {
+    this.getLogs(channel).done((logs) => {
       this.setState({
         logs: logs
       });
