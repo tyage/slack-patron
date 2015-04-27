@@ -8,8 +8,8 @@ let SlackLogViewer = React.createClass({
   getInitialState() {
     return {
       logs: [],
-      members: [],
-      channels: [],
+      members: {},
+      channels: {},
       currentChannel: null
     };
   },
