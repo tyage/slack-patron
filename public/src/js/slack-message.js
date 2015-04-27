@@ -6,7 +6,7 @@ let SlackMessage = React.createClass({
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
-    return text.replace(/<@[0-9A-Za-z]+\|([0-9A-Za-z]+)>/gi, "@$1");
+    return text && text.replace(/<@[0-9A-Za-z]+\|([0-9A-Za-z]+)>/gi, "@$1");
   },
   render() {
     return (
