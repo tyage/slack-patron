@@ -10,8 +10,8 @@ var cssDist = 'public/dist/css';
 
 gulp.task('babel', function() {
   return gulp.src(jsSrc)
-    .pipe(babel())
     .pipe(concat('app.js'))
+    .pipe(babel())
     .pipe(gulp.dest(jsDist));
 });
 
