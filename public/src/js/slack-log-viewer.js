@@ -49,8 +49,14 @@ let SlackLogViewer = React.createClass({
     this.setDefaultChannel(channel);
 
     this.getLogs(channel).done((logs) => {
+      this.setState({ logs });
+    });
+  },
+  loadMoreMessages() {
+    let minPostedAt = (this.state.logs.length > 0) && this.state.logs[0].posted_at;
+    this.getLogs(this.state.currentChannel, minPostedAt).done((newLogs) => {
       this.setState({
-        logs: logs
+        logs: [...newLogs, ...this.state.logs]
       });
     });
   },
@@ -60,7 +66,8 @@ let SlackLogViewer = React.createClass({
         <SlackChannels channels={this.state.channels}
           changeCurrentChannel={this.changeCurrentChannel}
           currentChannel={this.state.currentChannel} />
-        <SlackMessages members={this.state.members} logs={this.state.logs} />
+        <SlackMessages members={this.state.members} logs={this.state.logs}
+          loadMoreMessages={this.loadMoreMessages} />
       </div>
     );
   }
