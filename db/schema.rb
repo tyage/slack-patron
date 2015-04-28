@@ -11,7 +11,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428082730) do
+ActiveRecord::Schema.define(version: 20150428083042) do
+
+  create_table "channels", force: :cascade do |t|
+    t.string   "slack_id"
+    t.string   "name"
+    t.datetime "created"
+    t.string   "creater"
+    t.boolean  "is_archived"
+  end
 
   create_table "slack_logs", force: :cascade do |t|
     t.text     "text"
