@@ -22,8 +22,12 @@ gulp.task('babel', function() {
 
 gulp.task('less', function() {
   return gulp.src(cssSrc)
-    .pipe(less())
     .pipe(concat('app.css'))
+    .pipe(less())
+    .on('error', function(e) {
+      gutil.log(gutil.colors.red(e));
+      this.emit('end');
+    })
     .pipe(gulp.dest(cssDist));
 });
 
