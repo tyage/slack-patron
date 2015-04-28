@@ -11,13 +11,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428083900) do
+ActiveRecord::Schema.define(version: 20150428085236) do
 
   create_table "channels", force: :cascade do |t|
     t.string   "slack_id"
     t.string   "name"
     t.datetime "created"
-    t.string   "creater"
+    t.string   "creator"
     t.boolean  "is_archived"
     t.text     "raw_json"
   end
