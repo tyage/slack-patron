@@ -38,11 +38,9 @@ end
 
 post '/logs/:channel.json' do
   content_type :json
-  params[:limit] ||= 100
-  params[:min_posted_at] ||= Time.now
   logs(params[:channel])
-    .limit(params[:limit])
-    .where('posted_at < ?', params[:min_posted_at])
+    .limit(params[:limit] || 100)
+    .where('posted_at < ?', params[:min_posted_at] || Time.now)
     .reverse
     .to_json
 end
