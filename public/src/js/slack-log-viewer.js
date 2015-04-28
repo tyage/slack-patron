@@ -8,8 +8,10 @@ let SlackLogViewer = React.createClass({
   getMembers() {
     return $.get(this.generateApiUrl('/members.json'));
   },
-  getLogs(channel) {
-    return $.get(this.generateApiUrl('/logs/' + channel + '.json'));
+  getLogs(channel, minPostedAt) {
+    return $.post(this.generateApiUrl('/logs/' + channel + '.json'), {
+      min_posted_at: minPostedAt
+    });
   },
   getDefaultChannel() {
     return window.localStorage.getItem('Slack.defaultChannel');
