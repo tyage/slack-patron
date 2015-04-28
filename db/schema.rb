@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150428083756) do
+ActiveRecord::Schema.define(version: 20150428083900) do
 
   create_table "channels", force: :cascade do |t|
     t.string   "slack_id"
@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20150428083756) do
     t.datetime "created"
     t.string   "creater"
     t.boolean  "is_archived"
+    t.text     "raw_json"
   end
 
   create_table "slack_logs", force: :cascade do |t|
@@ -38,6 +39,7 @@ ActiveRecord::Schema.define(version: 20150428083756) do
     t.boolean "is_bot"
     t.text    "image"
     t.string  "email"
+    t.text    "raw_json"
   end
 
 end
