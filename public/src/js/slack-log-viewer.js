@@ -66,7 +66,7 @@ let SlackLogViewer = React.createClass({
   },
   render() {
     return (
-      <div>
+      <div className="slack-log-viewer">
         <SlackChannels channels={this.state.channels}
           changeCurrentChannel={this.changeCurrentChannel}
           currentChannel={this.state.currentChannel} />
