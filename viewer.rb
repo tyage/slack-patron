@@ -4,16 +4,16 @@ require './lib/db'
 
 def members
   hashed_members = {}
-  Slack.users_list['members'].each do |m|
-    hashed_members[m['id']] = m
+  User.all.each do |m|
+    hashed_members[m.slack_id] = m
   end
   hashed_members
 end
 
 def channels
   hashed_channels = {}
-  Slack.channels_list['channels'].each do |c|
-    hashed_channels[c['id']] = c
+  Channel.all.each do |c|
+    hashed_channels[c.slack_id] = c
   end
   hashed_channels
 end
