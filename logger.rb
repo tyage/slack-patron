@@ -1,19 +1,30 @@
 require './lib/slack'
 require './lib/db'
 
-# log history
+# users
+User.delete_all
+Slack.users_list['members'].each do |u|
+  User.load_data(u)
+end
+
+p 'loading users finished!'
+
+# channels
+Channel.delete_all
+Slack.channels_list['channels'].each do |c|
+  Channel.load_data(c)
+end
+
+p 'loading channels finished!'
+
+# log history messages
 def fetch_history(channel)
   Slack.channels_history(
     channel: channel,
     count: 1000
-  )['messages'].each do |mes|
-    SlackLog.create(
-      text: mes['text'],
-      posted_at: mes['ts'].to_f,
-      ts: mes['ts'],
-      channel: channel,
-      user: mes['user']
-    )
+  )['messages'].each do |m|
+    message = SlackLog.load_data(m)
+    message.channel = channel
   end
 end
 
@@ -21,18 +32,12 @@ Slack.channels_list['channels'].each do |c|
   fetch_history(c['id'])
 end
 
-p 'logging history finished!'
+p 'loading messages finished!'
 
-# realtime logging
+# log messages in realtime
 realtime = Slack.realtime
-realtime.on :message do |mes|
-  p mes
-  SlackLog.create(
-    text: mes['text'],
-    posted_at: mes['ts'].to_f,
-    ts: mes['ts'],
-    channel: mes['channel'],
-    user: mes['user']
-  )
+realtime.on :message do |m|
+  p m
+  SlackLog.load_data(m)
 end
 realtime.start

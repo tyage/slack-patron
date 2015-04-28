@@ -3,42 +3,23 @@ require 'zip'
 require 'fileutils'
 
 def importMessages(channel, messages)
-  messages.each do |mes|
-    SlackLog.create(
-      text: mes['text'],
-      posted_at: mes['ts'].to_f,
-      ts: mes['ts'],
-      channel: channel.slack_id,
-      user: mes['user'],
-      raw_json: mes.to_json
-    )
+  messages.each do |m|
+    message = SlackLog.load_data(m);
+    message.channel = channel.slack_id
   end
 end
 
 def importChannels(channels)
   Channel.delete_all
   channels.each do |channel|
-    Channel.create(
-      slack_id: channel['id'],
-      name: channel['name'],
-      created: channel['created'],
-      creator: channel['creator'],
-      is_archived: channel['is_archived'],
-      raw_json: channel.to_json
-    )
+    Channel.load_data(channel)
   end
 end
 
 def importUsers(users)
   User.delete_all
   users.each do |user|
-    User.create(
-      slack_id: user['id'],
-      name: user['name'],
-      is_bot: user['is_bot'],
-      image: user['profile']['image_32'],
-      raw_json: user.to_json
-    )
+    User.load_data(user)
   end
 end
 
@@ -70,8 +51,8 @@ begin
       if !File.directory?(dist + entry.to_s) and entry.to_s.split('/').size > 1
         puts "import #{entry.to_s}"
         channel = Channel.where(name: entry.to_s.split('/')[0]).first
-        content = JSON.load(entry.get_input_stream)
-        importMessages(channel, content)
+        messages = JSON.load(entry.get_input_stream)
+        importMessages(channel, messages)
       end
     end
   end
