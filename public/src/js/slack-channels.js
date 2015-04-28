@@ -2,7 +2,7 @@ let SlackChannels = React.createClass({
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
         let classNames = [];
-        if (this.props.currentChannel === channel.id) {
+        if (this.props.currentChannel === channel.slack_id) {
           classNames.push('selected');
         }
         return (

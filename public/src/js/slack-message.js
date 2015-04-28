@@ -12,7 +12,7 @@ let SlackMessage = React.createClass({
     return (
       <div className="slack-message">
         <div className="slack-message-member-image">
-          <img src={this.member() && this.member().profile.image_32} />
+          <img src={this.member() && this.member().image} />
         </div>
         <div className="slack-message-content">
           <div className="slack-message-member-name">{this.member() && this.member().name}</div>
