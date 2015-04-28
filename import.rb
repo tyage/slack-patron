@@ -2,6 +2,15 @@ require './lib/db'
 require 'zip'
 require 'fileutils'
 
+# format of exported file
+#
+# exported.zip
+#
+# - channels.json
+# - users.json
+# - channel/
+#     - 2015-01-01.json
+
 exportFile = ARGV[0]
 
 def importJson(channel, content)
@@ -25,6 +34,7 @@ begin
     open(dist + 'channels.json') do |io|
       channels = JSON.load(io)
       zip.each do |entry|
+        # channel/2015-01-01.json
         if !File.directory?(dist + entry.to_s) and entry.to_s.split('/').size > 1
           puts "import #{entry.to_s}"
           channel = channels.find do |c|
