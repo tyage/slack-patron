@@ -19,7 +19,7 @@ def channels
 end
 
 def logs(channel)
-  SlackLog.where(channel: channel).order(:posted_at)
+  SlackLog.where(channel: channel).order(posted_at: :asc)
 end
 
 get '/' do
