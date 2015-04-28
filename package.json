@@ -21,6 +21,7 @@
     "gulp-babel": "^5.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-less": "^3.0.3",
+    "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4"
   }
 }
