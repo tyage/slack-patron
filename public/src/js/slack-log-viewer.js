@@ -8,8 +8,10 @@ let SlackLogViewer = React.createClass({
   getMembers() {
     return $.get(this.generateApiUrl('/members.json'));
   },
-  getLogs(channel) {
-    return $.get(this.generateApiUrl('/logs/' + channel + '.json'));
+  getLogs(channel, minPostedAt) {
+    return $.post(this.generateApiUrl('/logs/' + channel + '.json'), {
+      min_posted_at: minPostedAt
+    });
   },
   getDefaultChannel() {
     return window.localStorage.getItem('Slack.defaultChannel');
@@ -26,7 +28,6 @@ let SlackLogViewer = React.createClass({
     };
   },
   componentDidMount() {
-    let time = (new Date()).getTime();
     $.when(
       this.getChannels(),
       this.getMembers()
@@ -47,10 +48,15 @@ let SlackLogViewer = React.createClass({
 
     this.setDefaultChannel(channel);
 
-    let time = (new Date()).getTime();
     this.getLogs(channel).done((logs) => {
+      this.setState({ logs });
+    });
+  },
+  loadMoreMessages() {
+    let minPostedAt = (this.state.logs.length > 0) && this.state.logs[0].posted_at;
+    this.getLogs(this.state.currentChannel, minPostedAt).done((newLogs) => {
       this.setState({
-        logs: logs
+        logs: [...newLogs, ...this.state.logs]
       });
     });
   },
@@ -60,7 +66,8 @@ let SlackLogViewer = React.createClass({
         <SlackChannels channels={this.state.channels}
           changeCurrentChannel={this.changeCurrentChannel}
           currentChannel={this.state.currentChannel} />
-        <SlackMessages members={this.state.members} logs={this.state.logs} />
+        <SlackMessages members={this.state.members} logs={this.state.logs}
+          loadMoreMessages={this.loadMoreMessages} />
       </div>
     );
   }

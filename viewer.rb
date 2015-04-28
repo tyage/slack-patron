@@ -19,7 +19,7 @@ def channels
 end
 
 def logs(channel)
-  SlackLog.where(channel: channel).order(posted_at: :asc)
+  SlackLog.where(channel: channel).order(posted_at: :desc)
 end
 
 get '/' do
@@ -36,7 +36,11 @@ get '/channels.json' do
   channels.to_json
 end
 
-get '/logs/:channel.json' do
+post '/logs/:channel.json' do
   content_type :json
-  logs(params[:channel]).to_json
+  logs(params[:channel])
+    .limit(params[:limit] || 100)
+    .where('posted_at < ?', params[:min_posted_at] || Time.now)
+    .reverse
+    .to_json
 end
