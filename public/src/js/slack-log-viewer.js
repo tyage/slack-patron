@@ -52,7 +52,8 @@ let SlackLogViewer = React.createClass({
       this.setState({ logs });
 
       // go to bottom when channel changed
-      $('.slack-messages').scrollTop(Infinity);
+      let slackMessages = $('.slack-messages');
+      slackMessages.scrollTop(slackMessages.get(0).scrollHeight);
     });
   },
   loadMoreMessages() {
