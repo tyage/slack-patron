@@ -7,7 +7,7 @@ def fetch_history(channel)
     channel: channel,
     count: 1000
   )['messages'].each do |mes|
-    log = SlackLog.create(
+    SlackLog.create(
       text: mes['text'],
       posted_at: mes['ts'].to_f,
       ts: mes['ts'],
