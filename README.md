@@ -16,6 +16,14 @@ $ bundle exec rake db:migrate
 $ ./node_modules/.bin/gulp watch
 ```
 
+## Import exported data
+
+download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
+
+```sh
+$ bundle exec ruby import.rb PATH_TO_ZIP_FILE
+```
+
 ## Starting logger
 
 ```sh

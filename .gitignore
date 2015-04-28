@@ -5,3 +5,4 @@ config.yml
 /public/bower_components
 /public/dist
 /node_modules
+/tmp
