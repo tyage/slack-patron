@@ -28,7 +28,6 @@ let SlackLogViewer = React.createClass({
     };
   },
   componentDidMount() {
-    let time = (new Date()).getTime();
     $.when(
       this.getChannels(),
       this.getMembers()
@@ -49,7 +48,6 @@ let SlackLogViewer = React.createClass({
 
     this.setDefaultChannel(channel);
 
-    let time = (new Date()).getTime();
     this.getLogs(channel).done((logs) => {
       this.setState({
         logs: logs
