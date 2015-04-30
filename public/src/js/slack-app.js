@@ -52,16 +52,22 @@ let SlackApp = React.createClass({
       this.setState({ messages });
 
       // go to bottom when channel changed
-      let slackMessages = $('.slack-messages');
-      slackMessages.scrollTop(slackMessages.get(0).scrollHeight);
+      $('.slack-messages').scrollTop(this.currentMessagesHeight());
     });
+  },
+  currentMessagesHeight() {
+    return $('.slack-messages').get(0).scrollHeight;
   },
   loadMoreMessages() {
     let minPostedAt = (this.state.messages.length > 0) && this.state.messages[0].posted_at;
+    let oldMessagesHeight = this.currentMessagesHeight();
     this.getMessages(this.state.currentChannel, minPostedAt).done((newMessages) => {
       this.setState({
         messages: [...newMessages, ...this.state.messages]
       });
+      $('.slack-messages').scrollTop(
+        this.currentMessagesHeight() - oldMessagesHeight
+      );
     });
   },
   render() {
