@@ -27,9 +27,11 @@ p 'loading channels finished!'
 
 # log history messages
 def fetch_history(channel)
+  latestMessage = Message.all.where(channel: channel).order(posted_at: :desc).first
   Slack.channels_history(
     channel: channel,
-    count: 1000
+    count: 1000,
+    oldest: latestMessage.posted_at
   )['messages'].each do |m|
     m['channel'] = channel
     message = Message.load_data(m)
