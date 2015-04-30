@@ -16,7 +16,7 @@ def update_channels
 end
 
 # realtime events
-Thread.new {
+realtime_thread = Thread.new {
   realtime = Slack.realtime
 
   realtime.on :message do |m|
@@ -77,3 +77,7 @@ Slack.channels_list['channels'].each do |c|
 end
 
 puts 'loading messages finished!'
+
+# dont exit because realtime event is running
+
+realtime_thread.join
