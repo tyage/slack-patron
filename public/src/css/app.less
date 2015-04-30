@@ -46,6 +46,17 @@ ul {
     width: calc(~'100% - @{width}');
     height: 100%;
     overflow: auto;
+    .slack-messages-load-more {
+      text-align: center;
+      cursor: pointer;
+      background: #259db8;
+      color: #fff;
+      padding: 10px 0;
+      opacity: 0.6;
+      &:hover {
+        opacity: 1;
+      }
+    }
     .slack-message {
       .clearfix;
       margin: 10px;
