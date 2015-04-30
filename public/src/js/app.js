@@ -1,3 +1,3 @@
 $(() => {
-  React.render(<SlackLogViewer />, $('#app').get(0));
+  React.render(<SlackApp />, $('#app').get(0));
 });

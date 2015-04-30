@@ -1,4 +1,4 @@
-let SlackLogViewer = React.createClass({
+let SlackApp = React.createClass({
   generateApiUrl(url) {
     return url + '?t=' + (new Date()).getTime();
   },

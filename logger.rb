@@ -47,7 +47,7 @@ realtime = Slack.realtime
 
 realtime.on :message do |m|
   p m
-  SlackLog.load_data(m)
+  Message.load_data(m)
 end
 
 realtime.on :team_join do |e|
