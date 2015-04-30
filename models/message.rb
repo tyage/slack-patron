@@ -1,4 +1,4 @@
-class SlackLog < ActiveRecord::Base
+class Message < ActiveRecord::Base
   validates :ts, uniqueness: true
 
   def self.load_data(message)

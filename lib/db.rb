@@ -1,5 +1,5 @@
 require 'active_record'
-require './models/slack-log'
+require './models/message'
 require './models/user'
 require './models/channel'
 

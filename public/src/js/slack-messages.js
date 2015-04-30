@@ -7,7 +7,7 @@ let SlackMessages = React.createClass({
     return (
       <div className="slack-messages">
         <div onClick={this.props.loadMoreMessages}>Load more messages...</div>
-        {createMessage(this.props.logs)}
+        {createMessage(this.props.messages)}
       </div>
     );
   }

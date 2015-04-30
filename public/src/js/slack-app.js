@@ -1,4 +1,4 @@
-let SlackLogViewer = React.createClass({
+let SlackApp = React.createClass({
   generateApiUrl(url) {
     return url + '?t=' + (new Date()).getTime();
   },
@@ -8,8 +8,8 @@ let SlackLogViewer = React.createClass({
   getMembers() {
     return $.get(this.generateApiUrl('/members.json'));
   },
-  getLogs(channel, minPostedAt) {
-    return $.post(this.generateApiUrl('/logs/' + channel + '.json'), {
+  getMessages(channel, minPostedAt) {
+    return $.post(this.generateApiUrl('/messages/' + channel + '.json'), {
       min_posted_at: minPostedAt
     });
   },
@@ -21,7 +21,7 @@ let SlackLogViewer = React.createClass({
   },
   getInitialState() {
     return {
-      logs: [],
+      messages: [],
       members: {},
       channels: {},
       currentChannel: null
@@ -48,8 +48,8 @@ let SlackLogViewer = React.createClass({
 
     this.setDefaultChannel(channel);
 
-    this.getLogs(channel).done((logs) => {
-      this.setState({ logs });
+    this.getMessages(channel).done((messages) => {
+      this.setState({ messages });
 
       // go to bottom when channel changed
       let slackMessages = $('.slack-messages');
@@ -57,20 +57,20 @@ let SlackLogViewer = React.createClass({
     });
   },
   loadMoreMessages() {
-    let minPostedAt = (this.state.logs.length > 0) && this.state.logs[0].posted_at;
-    this.getLogs(this.state.currentChannel, minPostedAt).done((newLogs) => {
+    let minPostedAt = (this.state.messages.length > 0) && this.state.messages[0].posted_at;
+    this.getMessages(this.state.currentChannel, minPostedAt).done((newMessages) => {
       this.setState({
-        logs: [...newLogs, ...this.state.logs]
+        messages: [...newMessages, ...this.state.messages]
       });
     });
   },
   render() {
     return (
-      <div className="slack-log-viewer">
+      <div className="slack-app">
         <SlackChannels channels={this.state.channels}
           changeCurrentChannel={this.changeCurrentChannel}
           currentChannel={this.state.currentChannel} />
-        <SlackMessages members={this.state.members} logs={this.state.logs}
+        <SlackMessages members={this.state.members} messages={this.state.messages}
           loadMoreMessages={this.loadMoreMessages} />
       </div>
     );
