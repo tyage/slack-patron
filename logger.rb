@@ -11,7 +11,7 @@ end
 
 update_users
 
-p 'loading users finished!'
+puts 'loading users finished!'
 
 # channels
 def update_channels
@@ -23,7 +23,7 @@ end
 
 update_channels
 
-p 'loading channels finished!'
+puts 'loading channels finished!'
 
 # log history messages
 def fetch_history(channel)
@@ -39,31 +39,33 @@ def fetch_history(channel)
 end
 
 Slack.channels_list['channels'].each do |c|
+  puts 'loading messages from ' + c['name']
   fetch_history(c['id'])
+  sleep 1
 end
 
-p 'loading messages finished!'
+puts 'loading messages finished!'
 
 # realtime events
 realtime = Slack.realtime
 
 realtime.on :message do |m|
-  p m
+  puts m
   Message.load_data(m)
 end
 
 realtime.on :team_join do |e|
-  p "new user has joined"
+  puts "new user has joined"
   update_users
 end
 
 realtime.on :user_change do |e|
-  p "user data has changed"
+  puts "user data has changed"
   update_users
 end
 
 realtime.on :channel_created do |c|
-  p "channel has created"
+  puts "channel has created"
   update_channels
 end
 
