@@ -1,7 +1,6 @@
 require './lib/slack'
 require './lib/db'
 
-# users
 def update_users
   User.delete_all
   Slack.users_list['members'].each do |u|
@@ -9,11 +8,6 @@ def update_users
   end
 end
 
-update_users
-
-puts 'loading users finished!'
-
-# channels
 def update_channels
   Channel.delete_all
   Slack.channels_list['channels'].each do |c|
@@ -21,6 +15,44 @@ def update_channels
   end
 end
 
+# realtime events
+Thread.new {
+  realtime = Slack.realtime
+
+  realtime.on :message do |m|
+    puts m
+    Message.load_data(m)
+  end
+
+  realtime.on :team_join do |e|
+    puts "new user has joined"
+    update_users
+  end
+
+  realtime.on :user_change do |e|
+    puts "user data has changed"
+    update_users
+  end
+
+  realtime.on :channel_created do |c|
+    puts "channel has created"
+    update_channels
+  end
+
+  realtime.on :channel_rename do |c|
+    p "channel has renamed"
+    update_channels
+  end
+
+  realtime.start
+}
+
+# users
+update_users
+
+puts 'loading users finished!'
+
+# channels
 update_channels
 
 puts 'loading channels finished!'
@@ -45,33 +77,3 @@ Slack.channels_list['channels'].each do |c|
 end
 
 puts 'loading messages finished!'
-
-# realtime events
-realtime = Slack.realtime
-
-realtime.on :message do |m|
-  puts m
-  Message.load_data(m)
-end
-
-realtime.on :team_join do |e|
-  puts "new user has joined"
-  update_users
-end
-
-realtime.on :user_change do |e|
-  puts "user data has changed"
-  update_users
-end
-
-realtime.on :channel_created do |c|
-  puts "channel has created"
-  update_channels
-end
-
-realtime.on :channel_rename do |c|
-  p "channel has renamed"
-  update_channels
-end
-
-realtime.start
