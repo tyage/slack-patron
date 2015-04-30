@@ -58,7 +58,7 @@ let SlackApp = React.createClass({
   },
   loadMoreMessages() {
     let minPostedAt = (this.state.messages.length > 0) && this.state.messages[0].posted_at;
-    this.getMesssages(this.state.currentChannel, minPostedAt).done((newMessages) => {
+    this.getMessages(this.state.currentChannel, minPostedAt).done((newMessages) => {
       this.setState({
         messages: [...newMessages, ...this.state.messages]
       });
