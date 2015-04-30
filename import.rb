@@ -4,8 +4,8 @@ require 'fileutils'
 
 def importMessages(channel, messages)
   messages.each do |m|
-    message = SlackLog.load_data(m);
-    message.channel = channel.slack_id
+    m['channel'] = channel.slack_id
+    message = Message.load_data(m);
   end
 end
 
