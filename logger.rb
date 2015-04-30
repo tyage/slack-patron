@@ -31,8 +31,8 @@ def fetch_history(channel)
     channel: channel,
     count: 1000
   )['messages'].each do |m|
-    message = SlackLog.load_data(m)
-    message.channel = channel
+    m['channel'] = channel
+    message = Message.load_data(m)
   end
 end
 
