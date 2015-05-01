@@ -63,7 +63,7 @@ def fetch_history(channel)
   Slack.channels_history(
     channel: channel,
     count: 1000,
-    oldest: latestMessage.posted_at
+    oldest: latestMessage.nil? ? nil : latestMessage.posted_at
   )['messages'].each do |m|
     m['channel'] = channel
     message = Message.load_data(m)
@@ -73,7 +73,7 @@ end
 Slack.channels_list['channels'].each do |c|
   puts 'loading messages from ' + c['name']
   fetch_history(c['id'])
-  sleep 1
+  sleep(1)
 end
 
 puts 'loading messages finished!'
