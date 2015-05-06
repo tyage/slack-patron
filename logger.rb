@@ -5,7 +5,7 @@ require './lib/db'
 channels_updated_at = {}
 Channels.find.each do |c|
   last_message = Messages.find(channel: c[:id]).sort(ts: -1).to_a[0]
-  channels_updated_at[c[:id]] = last_message.nil? nil : last_message[:ts]
+  channels_updated_at[c[:id]] = last_message.nil? ? nil : last_message[:ts]
 end
 
 def update_users
