@@ -2,7 +2,7 @@ require 'mongo'
 
 config = YAML.load_file('./config.yml')
 
-db_config = config['database']['development']
+db_config = config['database']
 db = Mongo::Client.new([ db_config['uri'] ], database: db_config['database'])
 
 Users = db['users']

@@ -1,9 +1,5 @@
 slack:
   token:
 database:
-  development:
-    uri: localhost:27017
-    database: slack_logger
-  production:
-    uri: localhost:27017
-    database: slack_logger
+  uri: localhost:27017
+  database: slack_logger
