@@ -18,7 +18,6 @@ GEM
     rack (1.6.0)
     rack-protection (1.5.3)
       rack
-    rake (10.1.0)
     rubyzip (1.1.7)
     sinatra (1.4.6)
       rack (~> 1.4)
@@ -40,7 +39,6 @@ PLATFORMS
 DEPENDENCIES
   json
   mongo
-  rake
   rubyzip
   sinatra
   slack-api
