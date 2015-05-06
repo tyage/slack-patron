@@ -17,7 +17,7 @@ realtime_thread = Thread.new {
 
   realtime.on :message do |m|
     puts m
-    Messages.insert_one(m)
+    insert_message(m)
   end
 
   realtime.on :team_join do |e|
@@ -55,14 +55,14 @@ puts 'loading channels finished!'
 
 # log history messages
 def fetch_history(channel)
-  latestMessage = Messages.find(channel: channel).sort(ts: -1).to_a[0]
+  latestMessageTime = Messages.find(channel: channel).sort(ts: -1).to_a[0][:ts]
   messages = Slack.channels_history(
     channel: channel,
     count: 1000,
-    oldest: latestMessage.nil? ? nil : latestMessage[:ts]
+    oldest: latestMessageTime
   )['messages'].each do |m|
     m['channel'] = channel
-    Messages.insert_one(m)
+    insert_message(m)
   end
 end
 
