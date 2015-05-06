@@ -13,7 +13,7 @@ end
 
 def channels
   hashed_channels = {}
-  Channels.find.each do |c|
+  Channels.find.sort(name: 1).each do |c|
     hashed_channels[c[:id]] = c
   end
   hashed_channels
