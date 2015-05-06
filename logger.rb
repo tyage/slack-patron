@@ -1,18 +1,20 @@
 require './lib/slack'
 require './lib/db'
 
+# realtimeイベントに最終取得日が上書きされないよう、先に保存しておく
+channels_updated_at = {}
+Channels.find.each do |c|
+  channels_updated_at[c[:id]] = Messages.find(channel: c[:id]).sort(ts: -1).to_a[0][:ts]
+end
+
 def update_users
-  User.delete_all
-  Slack.users_list['members'].each do |u|
-    User.load_data(u)
-  end
+  Users.find.delete_many
+  Users.insert_many(Slack.users_list['members'])
 end
 
 def update_channels
-  Channel.delete_all
-  Slack.channels_list['channels'].each do |c|
-    Channel.load_data(c)
-  end
+  Channels.find.delete_many
+  Channels.insert_many(Slack.channels_list['channels'])
 end
 
 # realtime events
@@ -21,7 +23,7 @@ realtime_thread = Thread.new {
 
   realtime.on :message do |m|
     puts m
-    Message.load_data(m)
+    insert_message(m)
   end
 
   realtime.on :team_join do |e|
@@ -58,21 +60,20 @@ update_channels
 puts 'loading channels finished!'
 
 # log history messages
-def fetch_history(channel)
-  latestMessage = Message.all.where(channel: channel).order(posted_at: :desc).first
+def fetch_history(channel, updated_at)
   Slack.channels_history(
     channel: channel,
     count: 1000,
-    oldest: latestMessage.nil? ? nil : latestMessage.posted_at
+    oldest: updated_at
   )['messages'].each do |m|
     m['channel'] = channel
-    message = Message.load_data(m)
+    insert_message(m)
   end
 end
 
-Slack.channels_list['channels'].each do |c|
-  puts 'loading messages from ' + c['name']
-  fetch_history(c['id'])
+Channels.find.each do |c|
+  puts 'loading messages from ' + c[:name]
+  fetch_history(c[:id], channels_updated_at[c[:id]])
   sleep(1)
 end
 

@@ -1,25 +1,32 @@
 require 'sinatra'
+require 'json'
 require './lib/slack'
 require './lib/db'
 
 def members
   hashed_members = {}
-  User.all.each do |m|
-    hashed_members[m.slack_id] = m
+  Users.find.each do |m|
+    hashed_members[m[:id]] = m
   end
   hashed_members
 end
 
 def channels
   hashed_channels = {}
-  Channel.all.each do |c|
-    hashed_channels[c.slack_id] = c
+  Channels.find.each do |c|
+    hashed_channels[c[:id]] = c
   end
   hashed_channels
 end
 
-def messages(channel)
-  Message.where(channel: channel).order(posted_at: :desc)
+def messages(params)
+  Messages
+    .find(
+      channel: params[:channel],
+      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s }
+    )
+    .sort(ts: -1)
+    .limit(params[:limit] || 100)
 end
 
 get '/' do
@@ -38,9 +45,8 @@ end
 
 post '/messages/:channel.json' do
   content_type :json
-  messages(params[:channel])
-    .limit(params[:limit] || 100)
-    .where('posted_at < ?', params[:min_posted_at] || Time.now)
+  messages(params)
+    .to_a
     .reverse
     .to_json
 end

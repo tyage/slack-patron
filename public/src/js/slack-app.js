@@ -8,9 +8,9 @@ let SlackApp = React.createClass({
   getMembers() {
     return $.get(this.generateApiUrl('/members.json'));
   },
-  getMessages(channel, minPostedAt) {
+  getMessages(channel, minTs) {
     return $.post(this.generateApiUrl('/messages/' + channel + '.json'), {
-      min_posted_at: minPostedAt
+      min_ts: minTs
     });
   },
   getDefaultChannel() {
@@ -59,9 +59,9 @@ let SlackApp = React.createClass({
     return $('.slack-messages').get(0).scrollHeight;
   },
   loadMoreMessages() {
-    let minPostedAt = (this.state.messages.length > 0) && this.state.messages[0].posted_at;
+    let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
     let oldMessagesHeight = this.currentMessagesHeight();
-    this.getMessages(this.state.currentChannel, minPostedAt).done((newMessages) => {
+    this.getMessages(this.state.currentChannel, minTs).done((newMessages) => {
       this.setState({
         messages: [...newMessages, ...this.state.messages]
       });

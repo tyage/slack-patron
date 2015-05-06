@@ -2,8 +2,8 @@ slack:
   token:
 database:
   development:
-    adapter: sqlite3
-    database: db/development.db
+    uri: localhost:27017
+    database: slack_logger
   production:
-    adapter: sqlite3
-    database: db/production.db
+    uri: localhost:27017
+    database: slack_logger

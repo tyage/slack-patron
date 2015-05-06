@@ -1,26 +1,23 @@
-require './lib/db'
+require 'json'
 require 'zip'
 require 'fileutils'
+require './lib/db'
 
 def importMessages(channel, messages)
   messages.each do |m|
-    m['channel'] = channel.slack_id
-    message = Message.load_data(m);
+    m['channel'] = channel[:id]
+    insert_message(m)
   end
 end
 
 def importChannels(channels)
-  Channel.delete_all
-  channels.each do |channel|
-    Channel.load_data(channel)
-  end
+  Channels.find.delete_many
+  Channels.insert_many(channels)
 end
 
 def importUsers(users)
-  User.delete_all
-  users.each do |user|
-    User.load_data(user)
-  end
+  Users.find.delete_many
+  Users.insert_many(users)
 end
 
 # format of exported file
@@ -50,7 +47,7 @@ begin
       # channel/2015-01-01.json
       if !File.directory?(dist + entry.to_s) and entry.to_s.split('/').size > 1
         puts "import #{entry.to_s}"
-        channel = Channel.where(name: entry.to_s.split('/')[0]).first
+        channel = Channels.find(name: entry.to_s.split('/')[0]).to_a[0]
         messages = JSON.load(entry.get_input_stream)
         importMessages(channel, messages)
       end
