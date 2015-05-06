@@ -2,17 +2,13 @@ require './lib/slack'
 require './lib/db'
 
 def update_users
-  User.delete_all
-  Slack.users_list['members'].each do |u|
-    User.load_data(u)
-  end
+  Users.find.delete_many
+  Users.insert_many(Slack.users_list['members'])
 end
 
 def update_channels
-  Channel.delete_all
-  Slack.channels_list['channels'].each do |c|
-    Channel.load_data(c)
-  end
+  Channels.find.delete_many
+  Channels.insert_many(Slack.channels_list['channels'])
 end
 
 # realtime events
@@ -21,7 +17,7 @@ realtime_thread = Thread.new {
 
   realtime.on :message do |m|
     puts m
-    Message.load_data(m)
+    Messages.insert_one(m)
   end
 
   realtime.on :team_join do |e|
@@ -59,14 +55,14 @@ puts 'loading channels finished!'
 
 # log history messages
 def fetch_history(channel)
-  latestMessage = Message.all.where(channel: channel).order(posted_at: :desc).first
-  Slack.channels_history(
+  latestMessage = Messages.find(channel: channel).sort(ts: -1).to_a[0]
+  messages = Slack.channels_history(
     channel: channel,
     count: 1000,
-    oldest: latestMessage.nil? ? nil : latestMessage.posted_at
+    oldest: latestMessage.nil? ? nil : latestMessage[:ts]
   )['messages'].each do |m|
     m['channel'] = channel
-    message = Message.load_data(m)
+    Messages.insert_one(m)
   end
 end
 
