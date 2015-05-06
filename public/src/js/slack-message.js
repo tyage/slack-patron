@@ -12,11 +12,11 @@ let SlackMessage = React.createClass({
     return (
       <div className="slack-message">
         <div className="slack-message-member-image">
-          <img src={this.member() && this.member().image} />
+          <img src={this.member() && this.member().profile.image_32} />
         </div>
         <div className="slack-message-content">
           <div className="slack-message-member-name">{this.member() && this.member().name}</div>
-          <div className="slack-message-date">{this.formatDate(this.props.message.posted_at)}</div>
+          <div className="slack-message-date">{this.formatDate(this.props.message.ts)}</div>
           <div className="slack-message-text">{this.formatText(this.props.message.text)}</div>
         </div>
       </div>
