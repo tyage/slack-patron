@@ -7,7 +7,6 @@ copy `config.yml.example` to `config.yml` and edit it.
 ```sh
 $ bundle install
 $ npm install
-$ bundle exec rake db:migrate
 $ bower install
 ```
 
