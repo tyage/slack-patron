@@ -1,4 +1,4 @@
-let SlackMessage = React.createClass({
+export default React.createClass({
   member() {
     return this.props.members[this.props.message.user];
   },

@@ -1,4 +1,7 @@
-let SlackApp = React.createClass({
+import SlackChannels from './slack-channels.js';
+import SlackMessages from './slack-messages.js';
+
+export default React.createClass({
   generateApiUrl(url) {
     return url + '?t=' + (new Date()).getTime();
   },

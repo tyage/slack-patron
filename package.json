@@ -17,11 +17,14 @@
   },
   "homepage": "https://github.com/tyage/slack-logger",
   "devDependencies": {
+    "babel-core": "^5.2.16",
+    "babel-loader": "^5.0.0",
     "gulp": "^3.8.11",
-    "gulp-babel": "^5.1.0",
     "gulp-concat": "^2.5.2",
     "gulp-less": "^3.0.3",
     "gulp-util": "^3.0.4",
-    "gulp-watch": "^4.2.4"
+    "gulp-watch": "^4.2.4",
+    "gulp-webpack": "^1.4.0",
+    "webpack": "^1.8.11"
   }
 }

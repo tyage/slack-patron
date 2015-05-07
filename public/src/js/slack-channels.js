@@ -1,4 +1,6 @@
-let SlackChannels = React.createClass({
+import SlackChannel from './slack-channel';
+
+export default React.createClass({
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
         let classNames = [];

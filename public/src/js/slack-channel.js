@@ -1,4 +1,4 @@
-let SlackChannel = React.createClass({
+export default React.createClass({
   handleClick() {
     this.props.handleClick(this.props.channel.id);
   },
