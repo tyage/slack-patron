@@ -56,24 +56,14 @@ export default React.createClass({
 
     this.getMessages(channel).done((messages) => {
       this.setState({ messages });
-
-      // go to bottom when channel changed
-      $('.slack-messages').scrollTop(this.currentMessagesHeight());
     });
-  },
-  currentMessagesHeight() {
-    return $('.slack-messages').get(0).scrollHeight;
   },
   loadMoreMessages() {
     let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
-    let oldMessagesHeight = this.currentMessagesHeight();
     this.getMessages(this.state.currentChannel, minTs).done((newMessages) => {
       this.setState({
         messages: [...newMessages, ...this.state.messages]
       });
-      $('.slack-messages').scrollTop(
-        this.currentMessagesHeight() - oldMessagesHeight
-      );
     });
   },
   render() {
