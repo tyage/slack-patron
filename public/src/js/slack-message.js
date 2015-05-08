@@ -1,3 +1,5 @@
+import React from 'react';
+
 export default React.createClass({
   member() {
     return this.props.members[this.props.message.user];

@@ -1,3 +1,5 @@
+import React from 'react';
+import $ from 'jquery';
 import SlackApp from './slack-app.js';
 
 $(() => {

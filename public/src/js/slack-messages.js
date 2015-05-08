@@ -1,3 +1,5 @@
+import React from 'react';
+import _ from 'lodash';
 import SlackMessage from './slack-message';
 
 export default React.createClass({

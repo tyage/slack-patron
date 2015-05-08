@@ -25,6 +25,9 @@
     "gulp-util": "^3.0.4",
     "gulp-watch": "^4.2.4",
     "gulp-webpack": "^1.4.0",
+    "jquery": "^2.1.4",
+    "lodash": "^3.8.0",
+    "react": "^0.13.2",
     "webpack": "^1.8.11"
   }
 }

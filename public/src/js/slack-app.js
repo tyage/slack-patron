@@ -1,3 +1,6 @@
+import React from 'react';
+import $ from 'jquery';
+import _ from 'lodash';
 import SlackChannels from './slack-channels.js';
 import SlackMessages from './slack-messages.js';
 
