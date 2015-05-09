@@ -6,10 +6,8 @@ var webpack = require('gulp-webpack');
 var webpackConfig = require('./webpack.config.js');
 
 var config = {
-  jsSrc: 'public/src/js/*.js',
-  jsDist: 'public/dist/js',
-  cssSrc: 'public/src/css/*.less',
-  cssDist: 'public/dist/css'
+  src: 'public/src',
+  dist: 'public/dist'
 };
 
 gulp.task('js', function() {
@@ -23,19 +21,19 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-  return gulp.src(config.cssSrc)
+  return gulp.src(config.src + '/css/**')
     .pipe(concat('app.css'))
     .pipe(less())
     .on('error', function(e) {
       gutil.log(gutil.colors.red(e));
       this.emit('end');
     })
-    .pipe(gulp.dest(config.cssDist));
+    .pipe(gulp.dest(config.dist + '/css'));
 });
 
 gulp.task('watch', function() {
-  gulp.watch(config.jsSrc, ['js']);
-  gulp.watch(config.cssSrc, ['css']);
+  gulp.watch(config.src + '/js/**', ['js']);
+  gulp.watch(config.src + '/css/**', ['css']);
 });
 
 gulp.task('default', ['js', 'css'], function() {
