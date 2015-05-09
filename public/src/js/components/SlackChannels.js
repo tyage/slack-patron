@@ -1,6 +1,6 @@
 import React from 'react';
 import _ from 'lodash';
-import SlackChannel from './slack-channel';
+import SlackChannel from './SlackChannel';
 
 export default React.createClass({
   render() {

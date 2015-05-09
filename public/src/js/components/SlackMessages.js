@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import SlackMessage from './slack-message';
+import SlackMessage from './SlackMessage';
 
 export default React.createClass({
   getInitialState() {

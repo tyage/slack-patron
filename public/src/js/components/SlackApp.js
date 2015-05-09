@@ -1,8 +1,9 @@
 import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
-import SlackChannels from './slack-channels.js';
-import SlackMessages from './slack-messages.js';
+import SlackChannels from './SlackChannels';
+import SlackMessages from './SlackMessages';
+import { Dispatcher } from 'flux';
 
 export default React.createClass({
   generateApiUrl(url) {
