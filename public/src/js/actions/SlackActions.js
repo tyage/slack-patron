@@ -13,11 +13,11 @@ export default {
       });
     });
   },
-  getMembers() {
-    $.get(generateApiUrl('/members.json')).then((members) => {
+  getUsers() {
+    $.get(generateApiUrl('/users.json')).then((users) => {
       SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_MEMBERS,
-        members
+        actionType: SlackConstants.UPDATE_USERS,
+        users
       });
     });
   },

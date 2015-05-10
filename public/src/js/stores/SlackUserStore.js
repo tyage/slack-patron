@@ -2,12 +2,12 @@ import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 
-let _members = {};
+let _users = {};
 
 let CHANGE_EVENT = Symbol();
 
 class SlackUserStore extends EventEmitter {
-  getMembers() { return _members; }
+  getUsers() { return _users; }
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
@@ -22,8 +22,8 @@ let slackUserStore = new SlackUserStore();
 
 SlackDispatcher.register((action) => {
   switch(action.actionType) {
-    case SlackConstants.UPDATE_MEMBERS:
-      _members = action.members;
+    case SlackConstants.UPDATE_USERS:
+      _users = action.users;
       slackUserStore.emitChange();
       break;
   }

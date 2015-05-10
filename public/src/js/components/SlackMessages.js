@@ -11,7 +11,7 @@ let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
     currentChannel: SlackCurrentChannelStore.getCurrentChannel(),
-    members: SlackUserStore.getMembers()
+    users: SlackUserStore.getUsers()
   };
 };
 
@@ -71,7 +71,7 @@ export default React.createClass({
   },
   render() {
     let createMessage = (messages, i) => _.map(messages, (message) => {
-        return <SlackMessage message={message} users={this.state.members} />;
+        return <SlackMessage message={message} users={this.state.users} />;
       });
     let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';

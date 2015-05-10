@@ -5,7 +5,7 @@ import SlackActions from '../actions/SlackActions';
 
 export default React.createClass({
   componentDidMount() {
-    SlackActions.getMembers();
+    SlackActions.getUsers();
   },
   render() {
     return (
