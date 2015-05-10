@@ -2,16 +2,24 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
+import SlackActions from '../actions/SlackActions';
+import SlackStore from '../stores/SlackStore';
+
+let getState = () => {
+  return {
+    members: SlackStore.getMembers(),
+    messages: SlackStore.getMessages(),
+    currentChannel: SlackStore.getCurrentChannel()
+  };
+};
 
 export default React.createClass({
-  getInitialState() {
-    return {
-      isLoadingMore: false,
-      oldHeight: 0
-    };
-  },
-  componentDidUpdate(prevProps) {
-    if (prevProps.messages[0] === this.props.messages[0]) {
+  _onChange() {
+    let prevMessages = this.state.messages;
+    this.setState(getState());
+
+    // messages are not changed
+    if (prevMessages[0] === this.state.messages[0]) {
       return;
     }
 
@@ -26,6 +34,12 @@ export default React.createClass({
       $(this.getDOMNode()).scrollTop(this.currentHeight());
     }
   },
+  getInitialState() {
+    return _.merge(getState(), {
+      isLoadingMore: false,
+      oldHeight: 0
+    });
+  },
   currentHeight() {
     return $(this.getDOMNode()).get(0).scrollHeight;
   },
@@ -38,11 +52,19 @@ export default React.createClass({
       isLoadingMore: true,
       oldHeight: this.currentHeight()
     });
-    this.props.loadMoreMessages();
+
+    this.loadMoreMessages();
+  },
+  loadMoreMessages() {
+    let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
+    SlackActions.getMoreMessages(this.state.currentChannel, minTs);
+  },
+  componentDidMount() {
+    SlackStore.addChangeListener(this._onChange);
   },
   render() {
     let createMessage = (messages, i) => _.map(messages, (message) => {
-        return <SlackMessage message={message} members={this.props.members} />;
+        return <SlackMessage message={message} members={this.state.members} />;
       });
     let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
@@ -51,7 +73,7 @@ export default React.createClass({
       <div className="slack-messages">
         <div className="slack-messages-load-more {loadMoreClassName}"
           onClick={this.handleLoadMore}>{loadMoreText}</div>
-        {createMessage(this.props.messages)}
+        {createMessage(this.state.messages)}
       </div>
     );
   }
