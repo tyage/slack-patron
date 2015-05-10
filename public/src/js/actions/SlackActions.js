@@ -32,7 +32,7 @@ export default {
   },
   getMoreMessages(channel, minTs) {
     let url = generateApiUrl('/messages/' + channel + '.json');
-    $.post(url, { minTs }).then((messages) => {
+    $.post(url, { min_ts: minTs }).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
         messages
