@@ -34,8 +34,10 @@ export default React.createClass({
     }
   },
   _onCurrentChannelChange() {
-    this.setState(getState());
-    SlackActions.getMessages(this.state.currentChannel);
+    // setStateではすぐには更新されない
+    let state = getState();
+    this.setState(state);
+    SlackActions.getMessages(state.currentChannel);
   },
   getInitialState() {
     return _.merge(getState(), {

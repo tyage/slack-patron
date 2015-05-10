@@ -17,15 +17,17 @@ export default React.createClass({
     return getState();
   },
   _onChannelChange() {
-    this.setState(getState());
+    let state = getState();
+    this.setState(state);
 
+    // XXX setTImeoutどうにかならんのか
     setTimeout(() => {
       let defaultChannel = SlackCurrentChannelStore.getDefaultChannel();
       if (defaultChannel) {
         SlackActions.updateCurrentChannel(defaultChannel);
       } else {
         // 現在のChannelが設定されていない場合は一番はじめのChannelを選択
-        SlackActions.updateCurrentChannel(_.findKey(this.state.channels));
+        SlackActions.updateCurrentChannel(_.findKey(state.channels));
       }
     });
   },
