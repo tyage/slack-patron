@@ -3,12 +3,12 @@ require 'json'
 require './lib/slack'
 require './lib/db'
 
-def members
-  hashed_members = {}
-  Users.find.each do |m|
-    hashed_members[m[:id]] = m
+def users
+  hashed_users = {}
+  Users.find.each do |u|
+    hashed_users[u[:id]] = u
   end
-  hashed_members
+  hashed_users
 end
 
 def channels
@@ -33,9 +33,9 @@ get '/' do
   erb :index
 end
 
-get '/members.json' do
+get '/users.json' do
   content_type :json
-  members.to_json
+  users.to_json
 end
 
 get '/channels.json' do
