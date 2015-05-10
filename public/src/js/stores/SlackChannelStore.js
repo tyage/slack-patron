@@ -3,18 +3,14 @@ import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 import _ from 'lodash';
 
-let _messages = [];
-let _members = {};
 let _channels = {};
 let _currentChannel = null;
 
 let CHANGE_EVENT = Symbol();
 let defaultChannelStorageKey = 'Slack.defaultChannel';
 
-class SlackStore extends EventEmitter {
+class SlackChannelStore extends EventEmitter {
   getChannels() { return _channels; }
-  getMembers() { return _members; }
-  getMessages() { return _messages; }
   getCurrentChannel() { return _currentChannel; }
   initializeDefaultChannel() {
     let defaultChannel = window.localStorage.getItem(defaultChannelStorageKey);
@@ -39,33 +35,21 @@ class SlackStore extends EventEmitter {
     this.removeListener(CHANGE_EVENT, callback);
   }
 }
-let slackStore = new SlackStore();
+let slackChannelStore = new SlackChannelStore();
 
 SlackDispatcher.register((action) => {
   switch(action.actionType) {
-    case SlackConstants.UPDATE_MESSAGES:
-      _messages = action.messages;
-      slackStore.emitChange();
-      break;
-    case SlackConstants.UPDATE_MORE_MESSAGES:
-      _messages = [...action.messages, ..._messages];
-      slackStore.emitChange();
-      break;
-    case SlackConstants.UPDATE_MEMBERS:
-      _members = action.members;
-      slackStore.emitChange();
-      break;
     case SlackConstants.UPDATE_CHANNELS:
       _channels = action.channels;
-      slackStore.initializeDefaultChannel();
-      slackStore.emitChange();
+      slackChannelStore.initializeDefaultChannel();
+      slackChannelStore.emitChange();
       break;
     case SlackConstants.UPDATE_CURRENT_CHANNEL:
       _currentChannel = action.currentChannel;
-      slackStore.setDefaultChannel(_currentChannel);
-      slackStore.emitChange();
+      slackChannelStore.setDefaultChannel(_currentChannel);
+      slackChannelStore.emitChange();
       break;
   }
 });
 
-export default slackStore;
+export default slackChannelStore;

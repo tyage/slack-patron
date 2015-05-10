@@ -3,12 +3,13 @@ import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
 import SlackActions from '../actions/SlackActions';
-import SlackStore from '../stores/SlackStore';
+import SlackMessageStore from '../stores/SlackMessageStore';
+import SlackChannelStore from '../stores/SlackChannelStore';
 
 let getState = () => {
   return {
-    messages: SlackStore.getMessages(),
-    currentChannel: SlackStore.getCurrentChannel()
+    messages: SlackMessageStore.getMessages(),
+    currentChannel: SlackChannelStore.getCurrentChannel()
   };
 };
 
@@ -57,7 +58,7 @@ export default React.createClass({
     SlackActions.getMoreMessages(this.state.currentChannel, minTs);
   },
   componentDidMount() {
-    SlackStore.addChangeListener(this._onChange);
+    SlackMessageStore.addChangeListener(this._onChange);
   },
   render() {
     let createMessage = (messages, i) => _.map(messages, (message) => {

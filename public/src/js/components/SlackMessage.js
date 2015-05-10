@@ -1,9 +1,9 @@
 import React from 'react';
-import SlackStore from '../stores/SlackStore';
+import SlackUserStore from '../stores/SlackUserStore';
 
 let getState = () => {
   return {
-    members: SlackStore.getMembers()
+    members: SlackUserStore.getMembers()
   };
 };
 
@@ -24,7 +24,7 @@ export default React.createClass({
     return getState();
   },
   componentDidMount() {
-    SlackStore.addChangeListener(this._onChange);
+    SlackUserStore.addChangeListener(this._onChange);
   },
   render() {
     return (

@@ -1,13 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
 import SlackChannel from './SlackChannel';
-import SlackStore from '../stores/SlackStore';
+import SlackChannelStore from '../stores/SlackChannelStore';
 import SlackActions from '../actions/SlackActions';
 
 let getState = () => {
   return {
-    channels: SlackStore.getChannels(),
-    currentChannel: SlackStore.getCurrentChannel()
+    channels: SlackChannelStore.getChannels(),
+    currentChannel: SlackChannelStore.getCurrentChannel()
   };
 };
 
@@ -19,9 +19,9 @@ export default React.createClass({
     this.setState(getState());
   },
   componentDidMount() {
-    SlackStore.addChangeListener(this._onChange);
+    SlackChannelStore.addChangeListener(this._onChange);
     SlackActions.getChannels();
-    SlackActions.updateCurrentChannel(SlackStore.getDefaultChannel());
+    SlackActions.updateCurrentChannel(SlackChannelStore.getDefaultChannel());
   },
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
