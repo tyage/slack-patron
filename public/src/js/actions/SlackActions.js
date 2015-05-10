@@ -44,7 +44,5 @@ export default {
       actionType: SlackConstants.UPDATE_CURRENT_CHANNEL,
       currentChannel: channel
     });
-
-    this.getMessages(channel);
   }
 };
