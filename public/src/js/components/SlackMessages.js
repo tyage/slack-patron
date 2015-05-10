@@ -7,7 +7,6 @@ import SlackStore from '../stores/SlackStore';
 
 let getState = () => {
   return {
-    members: SlackStore.getMembers(),
     messages: SlackStore.getMessages(),
     currentChannel: SlackStore.getCurrentChannel()
   };
@@ -64,7 +63,7 @@ export default React.createClass({
   },
   render() {
     let createMessage = (messages, i) => _.map(messages, (message) => {
-        return <SlackMessage message={message} members={this.state.members} />;
+        return <SlackMessage message={message} />;
       });
     let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
