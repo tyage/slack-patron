@@ -1,30 +1,14 @@
 import React from 'react';
-import SlackUserStore from '../stores/SlackUserStore';
-
-let getState = () => {
-  return {
-    members: SlackUserStore.getMembers()
-  };
-};
 
 export default React.createClass({
   member() {
-    return this.state.members[this.props.message.user];
+    return this.props.users[this.props.message.user];
   },
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
     return text && text.replace(/<@[0-9A-Za-z]+\|([0-9A-Za-z]+)>/gi, "@$1");
-  },
-  _onChange() {
-    this.setState(getState());
-  },
-  getInitialState() {
-    return getState();
-  },
-  componentDidMount() {
-    SlackUserStore.addChangeListener(this._onChange);
   },
   render() {
     return (
