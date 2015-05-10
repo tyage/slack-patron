@@ -18,19 +18,17 @@ export default React.createClass({
     this.setState(getState());
 
     // messages are not changed
-    if (prevMessages[0] === this.state.messages[0]) {
-      return;
-    }
-
-    if (this.state.isLoadingMore) {
-      // fix scrollTop when load more messages
-      $(this.getDOMNode()).scrollTop(
-        this.currentHeight() - this.state.oldHeight
-      );
-      this.setState({ isLoadingMore: false });
-    } else {
-      // go to bottom when channel changed
-      $(this.getDOMNode()).scrollTop(this.currentHeight());
+    if (prevMessages[0] !== this.state.messages[0]) {
+      if (this.state.isLoadingMore) {
+        // fix scrollTop when load more messages
+        $(this.getDOMNode()).scrollTop(
+          this.currentHeight() - this.state.oldHeight
+        );
+        this.setState({ isLoadingMore: false });
+      } else {
+        // go to bottom when channel changed
+        $(this.getDOMNode()).scrollTop(this.currentHeight());
+      }
     }
   },
   getInitialState() {
