@@ -19,14 +19,15 @@ class SlackStore extends EventEmitter {
   initializeDefaultChannel() {
     let defaultChannel = window.localStorage.getItem(defaultChannelStorageKey);
     if (!defaultChannel) {
-      this.setDefaultChannel(_.findKey(_channels));
+      let channel = _.findKey(_channels);
+      this.setDefaultChannel(channel);
     }
   }
   getDefaultChannel() {
     return window.localStorage.getItem(defaultChannelStorageKey);
   }
   setDefaultChannel(channel) {
-    window.localStorage.setItem(defaultChannelStorageKey, channel);
+    window.localStorage.setItem(defaultChannelStorageKey, channel || '');
   }
   emitChange() {
     this.emit(CHANGE_EVENT);
