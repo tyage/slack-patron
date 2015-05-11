@@ -24,10 +24,11 @@ export default React.createClass({
     setTimeout(() => {
       let channel = SlackCurrentChannelStore.getChannelFromPath();
       if (channel) {
-        SlackActions.updateCurrentChannel(channel);
+        SlackActions.updateCurrentChannel({ channel, pushState: false });
       } else {
         // 現在のChannelが設定されていない場合は一番はじめのChannelを選択
-        SlackActions.updateCurrentChannel(_.findKey(state.channels));
+        channel = _.findKey(state.channels);
+        SlackActions.updateCurrentChannel({ channel, replaceState: true });
       }
     });
   },
@@ -40,7 +41,8 @@ export default React.createClass({
     SlackActions.getChannels();
 
     window.addEventListener('popstate', (e) => {
-      SlackActions.updateCurrentChannel(e.state.channel, false);
+      let channel = SlackCurrentChannelStore.getChannelFromPath();
+      SlackActions.updateCurrentChannel({ channel, pushState: false });
     });
   },
   render() {
