@@ -2,20 +2,20 @@ import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 
-// default channel is stored at localStorage
-let defaultChannelStorageKey = 'Slack.defaultChannel';
-let setDefaultChannel = (channel) => {
-  window.localStorage.setItem(defaultChannelStorageKey, channel || '');
-};
-let getDefaultChannel = () => window.localStorage.getItem(defaultChannelStorageKey);
-
 let _currentChannel = null;
+let setCurrentChannel = (channel, pushState) => {
+  _currentChannel = channel;
+  if (pushState) {
+    window.history.pushState({ channel }, null, '/' + channel);
+  }
+};
+let getChannelFromPath = () => window.location.pathname.slice(1);
 
 let CHANGE_EVENT = Symbol();
 
 class SlackCurrentChannelStore extends EventEmitter {
   getCurrentChannel() { return _currentChannel; }
-  getDefaultChannel() { return getDefaultChannel(); }
+  getChannelFromPath() { return getChannelFromPath(); }
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
@@ -31,8 +31,7 @@ let slackCurrentChannelStore = new SlackCurrentChannelStore();
 SlackDispatcher.register((action) => {
   switch(action.actionType) {
     case SlackConstants.UPDATE_CURRENT_CHANNEL:
-      _currentChannel = action.currentChannel;
-      setDefaultChannel(_currentChannel);
+      setCurrentChannel(action.currentChannel, action.pushState);
       slackCurrentChannelStore.emitChange();
       break;
   }

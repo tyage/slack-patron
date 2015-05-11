@@ -39,10 +39,11 @@ export default {
       });
     });
   },
-  updateCurrentChannel(channel) {
+  updateCurrentChannel(channel, pushState = true) {
     SlackDispatcher.dispatch({
       actionType: SlackConstants.UPDATE_CURRENT_CHANNEL,
-      currentChannel: channel
+      currentChannel: channel,
+      pushState
     });
   }
 };
