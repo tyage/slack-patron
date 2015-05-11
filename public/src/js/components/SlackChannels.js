@@ -40,7 +40,7 @@ export default React.createClass({
     SlackActions.getChannels();
 
     window.addEventListener('popstate', (e) => {
-      SlackActions.updateCurrentChannel(e.state.channel);
+      SlackActions.updateCurrentChannel(e.state.channel, false);
     });
   },
   render() {

@@ -3,9 +3,11 @@ import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 
 let _currentChannel = null;
-let setCurrentChannel = (channel) => {
+let setCurrentChannel = (channel, pushState) => {
   _currentChannel = channel;
-  window.history.pushState({ channel }, null, '/' + channel);
+  if (pushState) {
+    window.history.pushState({ channel }, null, '/' + channel);
+  }
 };
 let getChannelFromPath = () => window.location.pathname.slice(1);
 
@@ -29,7 +31,7 @@ let slackCurrentChannelStore = new SlackCurrentChannelStore();
 SlackDispatcher.register((action) => {
   switch(action.actionType) {
     case SlackConstants.UPDATE_CURRENT_CHANNEL:
-      setCurrentChannel(action.currentChannel);
+      setCurrentChannel(action.currentChannel, action.pushState);
       slackCurrentChannelStore.emitChange();
       break;
   }
