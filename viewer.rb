@@ -29,10 +29,6 @@ def messages(params)
     .limit(params[:limit] || 100)
 end
 
-get '/' do
-  erb :index
-end
-
 get '/users.json' do
   content_type :json
   users.to_json
@@ -49,4 +45,12 @@ post '/messages/:channel.json' do
     .to_a
     .reverse
     .to_json
+end
+
+get '/' do
+  erb :index
+end
+
+get '/:channel' do
+  erb :index
 end

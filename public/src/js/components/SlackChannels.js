@@ -22,9 +22,9 @@ export default React.createClass({
 
     // XXX setTImeoutどうにかならんのか
     setTimeout(() => {
-      let defaultChannel = SlackCurrentChannelStore.getDefaultChannel();
-      if (defaultChannel) {
-        SlackActions.updateCurrentChannel(defaultChannel);
+      let channel = SlackCurrentChannelStore.getChannelFromPath();
+      if (channel) {
+        SlackActions.updateCurrentChannel(channel);
       } else {
         // 現在のChannelが設定されていない場合は一番はじめのChannelを選択
         SlackActions.updateCurrentChannel(_.findKey(state.channels));
@@ -38,6 +38,10 @@ export default React.createClass({
     SlackChannelStore.addChangeListener(this._onChannelChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
     SlackActions.getChannels();
+
+    window.addEventListener('popstate', (e) => {
+      SlackActions.updateCurrentChannel(e.state.channel);
+    });
   },
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
