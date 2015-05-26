@@ -33,13 +33,13 @@ download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
 $ bundle exec ruby import.rb PATH_TO_ZIP_FILE
 ```
 
-## Starting logger
+## Start logger
 
 ```sh
 $ bundle exec ruby logger.rb
 ```
 
-## Starting viewer
+## Start viewer
 
 ```sh
 $ ./node_modules/.bin/gulp
