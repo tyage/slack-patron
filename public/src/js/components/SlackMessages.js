@@ -10,6 +10,7 @@ import SlackUserStore from '../stores/SlackUserStore';
 let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
+    hasMoreMessages: SlackMessageStore.hasMoreMessages(),
     currentChannel: SlackCurrentChannelStore.getCurrentChannel(),
     users: SlackUserStore.getUsers()
   };
@@ -78,8 +79,12 @@ export default React.createClass({
 
     return (
       <div className="slack-messages">
-        <div className="slack-messages-load-more {loadMoreClassName}"
-          onClick={this.handleLoadMore}>{loadMoreText}</div>
+        {
+          this.state.hasMoreMessages ?
+            <div className="slack-messages-load-more {loadMoreClassName}"
+              onClick={this.handleLoadMore}>{loadMoreText}</div> :
+            null
+        }
         {createMessage(this.state.messages)}
       </div>
     );
