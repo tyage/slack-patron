@@ -1,2 +1,5 @@
 require './viewer'
-run Sinatra::Application
+
+map '/sssslack' do
+  run Sinatra::Application
+end
