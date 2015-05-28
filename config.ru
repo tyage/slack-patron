@@ -1,5 +1,5 @@
 require './viewer'
 
-map '/sssslack' do
+map '/sssslack/' do
   run Sinatra::Application
 end

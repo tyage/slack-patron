@@ -2,18 +2,21 @@ import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 
+let baseUri = window.location.pathname.split('/');
+baseUri.pop();
+baseUri = baseUri.join('/');
 let _currentChannel = null;
 let setCurrentChannel = (channel, { pushState, replaceState }) => {
   _currentChannel = channel;
   let stateObj = { channel };
-  let path = '/' + channel;
+  let path = baseUri + '/' + channel;
   if (replaceState) {
     window.history.replaceState(stateObj, null, path);
   } else if (pushState) {
     window.history.pushState(stateObj, null, path);
   }
 };
-let getChannelFromPath = () => window.location.pathname.slice(1);
+let getChannelFromPath = () => window.location.pathname.split('/').pop();
 
 let CHANGE_EVENT = Symbol();
 

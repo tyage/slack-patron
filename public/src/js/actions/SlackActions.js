@@ -6,7 +6,7 @@ let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 
 export default {
   getChannels() {
-    $.get(generateApiUrl('/channels.json')).then((channels) => {
+    $.get(generateApiUrl('./channels.json')).then((channels) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_CHANNELS,
         channels
@@ -14,7 +14,7 @@ export default {
     });
   },
   getUsers() {
-    $.get(generateApiUrl('/users.json')).then((users) => {
+    $.get(generateApiUrl('./users.json')).then((users) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_USERS,
         users
@@ -22,7 +22,7 @@ export default {
     });
   },
   getMessages(channel) {
-    let url = generateApiUrl('/messages/' + channel + '.json');
+    let url = generateApiUrl('./messages/' + channel + '.json');
     $.post(url).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
@@ -31,7 +31,7 @@ export default {
     });
   },
   getMoreMessages(channel, minTs) {
-    let url = generateApiUrl('/messages/' + channel + '.json');
+    let url = generateApiUrl('./messages/' + channel + '.json');
     $.post(url, { min_ts: minTs }).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
