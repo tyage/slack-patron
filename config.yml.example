@@ -1,3 +1,4 @@
+prefix_path: /
 slack:
   # Create and get slack token from https://api.slack.com/web#authentication
   token:
