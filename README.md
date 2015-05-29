@@ -15,7 +15,7 @@ copy `config.yml.example` to `config.yml` and edit it.
 ```sh
 $ bundle install
 $ npm install
-$ bower install
+$ ./node_modules/.bin/bower install
 $ mongod # you need to start mongo db server
 ```
 
