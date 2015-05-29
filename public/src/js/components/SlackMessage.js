@@ -21,6 +21,9 @@ export default React.createClass({
   },
   render() {
     let user = this.props.users[this.props.message.user];
+    if (this.props.message.hidden) {
+      return null;
+    }
     return (
       <div className="slack-message">
         <div className="slack-message-user-image">
