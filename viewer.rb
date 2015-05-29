@@ -48,6 +48,9 @@ post '/messages/:channel.json' do
 end
 
 get '/' do
+  if request.path_info === '' then
+    return redirect to('./')
+  end
   erb :index
 end
 
