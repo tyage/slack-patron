@@ -11,6 +11,14 @@ ul {
   padding: 0;
   margin: 0;
 }
+a {
+  color: #2a80b9;
+  text-decoration: none;
+  &:active, &:hover, &:focus {
+    color: #439fe0;
+    text-decoration: underline;
+  }
+}
 
 .slack-app {
   @width: 220px;
@@ -58,15 +66,17 @@ ul {
       }
     }
     .slack-message {
-      .clearfix;
-      margin: 10px;
+      margin: 0.5rem 18px 0.5rem 1.5rem;
+      padding: .25rem 2rem .1rem 3rem;
+      position: relative;
       .slack-message-user-image {
-        float: left;
-        margin: 0 16px 0 0;
-        width: 32px;
-        height: 32px;
+        position: absolute;
+        top: 3px;
+        left: 0;
         img {
-          border-radius: 5px;
+          width: 36px;
+          height: 36px;
+          border-radius: .2rem;
         }
       }
       .slack-message-content {

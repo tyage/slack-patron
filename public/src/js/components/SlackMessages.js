@@ -6,18 +6,23 @@ import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SlackUserStore from '../stores/SlackUserStore';
+import SlackChannelStore from '../stores/SlackChannelStore';
 
 let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
     hasMoreMessages: SlackMessageStore.hasMoreMessages(),
     currentChannel: SlackCurrentChannelStore.getCurrentChannel(),
-    users: SlackUserStore.getUsers()
+    users: SlackUserStore.getUsers(),
+    channels: SlackChannelStore.getChannels()
   };
 };
 
 export default React.createClass({
   _onUserChange() {
+    this.setState(getState());
+  },
+  _onChannelChange() {
     this.setState(getState());
   },
   _onMessageChange() {
@@ -69,10 +74,12 @@ export default React.createClass({
     SlackMessageStore.addChangeListener(this._onMessageChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
     SlackUserStore.addChangeListener(this._onUserChange);
+    SlackChannelStore.addChangeListener(this._onChannelChange);
   },
   render() {
     let createMessage = (messages, i) => _.map(messages, (message) => {
-        return <SlackMessage message={message} users={this.state.users} />;
+        return <SlackMessage message={message} users={this.state.users}
+          channels={this.state.channels} />;
       });
     let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
