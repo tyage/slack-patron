@@ -24,7 +24,7 @@ export default React.createClass({
     return (
       <div className="slack-message">
         <div className="slack-message-user-image">
-          <img src={user && user.profile.image_32} />
+          <img src={user && user.profile.image_48} />
         </div>
         <div className="slack-message-content">
           <div className="slack-message-user-name">{user && user.name}</div>
