@@ -1,2 +1,8 @@
+require 'yaml'
 require './viewer'
-run Sinatra::Application
+
+config = YAML.load_file('./config.yml')
+
+map (config['prefix_path'] || '/') do
+  run Sinatra::Application
+end
