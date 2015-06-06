@@ -1,6 +1,14 @@
-# Slack logger and viewer
+# Slack patron
+
+Log and view all Slack messages in your local server.
 
 ![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)
+
+## What Slack patron do?
+
+- Log slack messages, channels, users in MongoDB.
+  - You can import "Exported data"
+- View these data in web browser.
 
 ## Requirements
 
@@ -10,7 +18,7 @@
 
 ## Startup
 
-copy `config.yml.example` to `config.yml` and edit it.
+Copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
 $ bundle install
@@ -19,29 +27,43 @@ $ ./node_modules/.bin/bower install
 $ mongod # you need to start mongo db server
 ```
 
-## Watch js and css src
+## Log slack data
 
-```
-$ ./node_modules/.bin/gulp watch
-```
+First, you can import all messages from "Exported data".
 
-## Import exported data
+Second, you can log Slack messages with Slack API.
 
-download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
+### Import exported data
+
+Download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
 
 ```sh
 $ bundle exec ruby import.rb PATH_TO_ZIP_FILE
 ```
 
-## Start logger
+### Start realtime logger
 
 ```sh
 $ bundle exec ruby logger.rb
 ```
 
-## Start viewer
+## View slack data
+
+You can view Slack data with web browser.
+
+### Start data viewer
 
 ```sh
 $ ./node_modules/.bin/gulp
 $ bundle exec rackup
+```
+
+## Development
+
+If you are developer, you should build js, css as below.
+
+### Watch js and css src
+
+```
+$ ./node_modules/.bin/gulp watch
 ```
