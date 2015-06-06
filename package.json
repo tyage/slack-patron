@@ -1,5 +1,5 @@
 {
-  "name": "slack-logger",
+  "name": "slack-patron",
   "version": "1.0.0",
   "description": "![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tyage/slack-logger.git"
+    "url": "https://github.com/tyage/slack-patron.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/tyage/slack-logger/issues"
+    "url": "https://github.com/tyage/slack-patron/issues"
   },
-  "homepage": "https://github.com/tyage/slack-logger",
+  "homepage": "https://github.com/tyage/slack-patron",
   "dependencies": {
     "babel-core": "^5.2.16",
     "babel-loader": "^5.0.0",

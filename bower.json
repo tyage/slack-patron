@@ -1,7 +1,7 @@
 {
-  "name": "slack-logger",
+  "name": "slack-patron",
   "version": "0.0.0",
-  "homepage": "https://github.com/tyage/slack-logger",
+  "homepage": "https://github.com/tyage/slack-patron",
   "authors": [
     "tyage <namatyage@gmail.com>"
   ],
