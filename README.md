@@ -6,9 +6,9 @@ Log and view all Slack messages in your local server.
 
 ## What Slack patron do?
 
-- Log slack messages, channels, users in MongoDB.
+1. Log slack messages, channels, users in MongoDB.
   - You can import "Exported data"
-- View these data in web browser.
+2. View these data in web browser.
 
 ## Requirements
 
@@ -27,7 +27,7 @@ $ ./node_modules/.bin/bower install
 $ mongod # you need to start mongo db server
 ```
 
-## Log slack data
+## 1. Log slack data
 
 First, you can import all messages from "Exported data".
 
@@ -47,7 +47,7 @@ $ bundle exec ruby import.rb PATH_TO_ZIP_FILE
 $ bundle exec ruby logger.rb
 ```
 
-## View slack data
+## 2. View slack data
 
 You can view Slack data with web browser.
 
