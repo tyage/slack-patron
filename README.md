@@ -27,7 +27,7 @@ $ ./node_modules/.bin/bower install
 $ mongod # you need to start mongo db server
 ```
 
-## 1. Log slack data
+## 1. Log Slack data
 
 First, you can import all messages from "Exported data".
 
@@ -47,7 +47,7 @@ $ bundle exec ruby import.rb PATH_TO_ZIP_FILE
 $ bundle exec ruby logger.rb
 ```
 
-## 2. View slack data
+## 2. View Slack data
 
 You can view Slack data with web browser.
 
