@@ -60,7 +60,7 @@ $ bundle exec rackup
 
 ## Development
 
-If you are developer, you should build js, css as below.
+If you are developer, you can build js, css as below.
 
 ### Watch js and css src
 
