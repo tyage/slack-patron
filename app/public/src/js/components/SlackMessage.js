@@ -12,7 +12,7 @@ export default React.createClass({
     if (text) {
       return text.replace(/<#([0-9A-Za-z]+)>/, (m, id) => channelLink(id))
         .replace(/<#([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => channelLink(id))
-        .replace(/<@([0-9A-Za-z]+)>/, (m, id) => userLink(id))
+        .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
         .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(uri));
