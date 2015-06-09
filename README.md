@@ -39,7 +39,7 @@ Download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
 (This may need administrator privileges in your team!)
 
 ```sh
-$ bundle exec ruby import.rb PATH_TO_ZIP_FILE
+$ bundle exec ruby app/import.rb PATH_TO_ZIP_FILE
 ```
 
 ### 1.2 Start realtime logger
@@ -47,7 +47,7 @@ $ bundle exec ruby import.rb PATH_TO_ZIP_FILE
 You can log messages as soon as it is posted with this command.
 
 ```sh
-$ bundle exec ruby logger.rb
+$ bundle exec ruby app/logger.rb
 ```
 
 ## 2. View Slack data

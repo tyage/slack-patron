@@ -1,8 +1,7 @@
 /.bundle
 /vendor/bundle
 config.yml
-/db/*.db
-/public/bower_components
-/public/dist
+/app/public/bower_components
+/app/public/dist
 /node_modules
 /tmp

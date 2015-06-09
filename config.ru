@@ -1,5 +1,5 @@
 require 'yaml'
-require './viewer'
+require './app/viewer'
 
 config = YAML.load_file('./config.yml')
 
