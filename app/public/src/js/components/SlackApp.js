@@ -1,5 +1,5 @@
 import React from 'react';
-import SlackChannels from './SlackChannels';
+import SlackMenu from './SlackMenu';
 import SlackMessages from './SlackMessages';
 import SlackActions from '../actions/SlackActions';
 
@@ -10,7 +10,7 @@ export default React.createClass({
   render() {
     return (
       <div className="slack-app">
-        <SlackChannels />
+        <SlackMenu />
         <SlackMessages />
       </div>
     );

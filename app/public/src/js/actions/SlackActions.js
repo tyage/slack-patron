@@ -45,5 +45,14 @@ export default {
       currentChannel: channel,
       option: { pushState, replaceState }
     });
+  },
+  getTeamInfo() {
+    let url = generateApiUrl('./team.json');
+    $.get(url).then((teamInfo) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_TEAM_INFO,
+        teamInfo
+      });
+    });
   }
 };

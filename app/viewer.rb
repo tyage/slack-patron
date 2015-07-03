@@ -47,6 +47,11 @@ post '/messages/:channel.json' do
     .to_json
 end
 
+get '/team.json' do
+  content_type :json
+  Slack.team_info['team'].to_json
+end
+
 get '/' do
   if request.path_info === '' then
     return redirect to('./')
