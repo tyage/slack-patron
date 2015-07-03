@@ -2,6 +2,9 @@ require 'sinatra'
 require 'json'
 require './lib/slack'
 require './lib/db'
+require './lib/slack_logger'
+
+slack_logger = SlackLogger.new
 
 def users
   hashed_users = {}
@@ -50,6 +53,19 @@ end
 get '/team.json' do
   content_type :json
   Slack.team_info['team'].to_json
+end
+
+post '/stop_logger' do
+  slack_logger.stop
+end
+
+post '/start_logger' do
+  slack_logger.start
+end
+
+get '/logger_status' do
+  content_type :json
+  slack_logger.working?.to_json
 end
 
 get '/' do
