@@ -24,6 +24,11 @@ export default React.createClass({
     if (this.props.message.hidden) {
       return null;
     }
+    let createMarkup = () => {
+      return {
+        __html: this.formatText(this.props.message.text) || ''
+      };
+    };
     return (
       <div className="slack-message">
         <div className="slack-message-user-image">
@@ -33,7 +38,7 @@ export default React.createClass({
           <div className="slack-message-user-name">{user && user.name}</div>
           <div className="slack-message-date">{this.formatDate(this.props.message.ts)}</div>
           <div className="slack-message-text"
-            dangerouslySetInnerHTML={{__html: this.formatText(this.props.message.text)}}></div>
+            dangerouslySetInnerHTML={createMarkup()}></div>
         </div>
       </div>
     );
