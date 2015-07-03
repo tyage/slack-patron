@@ -1,14 +1,13 @@
 @import "./lib/variable";
 
 .sidebar {
-  @menu-header-height: 60px;
-  width: @slack-menu-width;
+  width: @sidebar-width;
   height: calc(~'100% - 20px');
   float: left;
   background: #4d394b;
   padding: 0 0 20px 0;
   .sidebar-header {
-    height: @menu-header-height;
+    height: @sidebar-header-height;
     position: relative;
     &:hover {
       background: #3e313c;
@@ -19,7 +18,7 @@
       color: #fff;
       font-size: 1.125rem;
       padding: 0 1rem;
-      line-height: @menu-header-height;
+      line-height: @sidebar-header-height;
       .configure-toggler {
         position: absolute;
         right: 1.25rem;
@@ -33,7 +32,7 @@
   .slack-channels {
     color: #ab9ba9;
     overflow: auto;
-    height: calc(~'100% - @{menu-header-height}');
+    height: calc(~'100% - @{sidebar-header-height}');
     li {
       text-shadow: 0 1px 1px rgba(0,0,0,0.25);
       cursor: pointer;

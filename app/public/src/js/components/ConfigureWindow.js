@@ -8,7 +8,7 @@ export default React.createClass({
           <div className="configure-section">
             <p className="section-title">Realtime Message Logger</p>
             <p>Fetch Slack event of messages, channels and users with Realtime API</p>
-            <div>
+            <div id="realtime-configure-form">
               <label>
                 <input type="radio" name="realtime" />
                 <span>On</span>

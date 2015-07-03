@@ -1,3 +1,5 @@
+@import "./lib/clearfix";
+
 .configure-window {
   width: 600px;
   margin: 0 0 0 -300px;
@@ -11,9 +13,10 @@
   padding: 1rem;
   color: #555459;
   .configure-section {
-    margin: 0 0 10px 0;
+    margin: 0 0 20px 0;
     .section-title {
       font-weight: bold;
+      margin: 0 0 5px 0;
     }
   }
 }
@@ -26,4 +29,19 @@
   background-color: #000;
   z-index: 900;
   opacity: .4;
+}
+#realtime-configure-form {
+  .clearfix;
+  margin: 5px 0 0 0;
+  label {
+    line-height: 1rem;
+    input {
+      margin: 0px 10px 0 0;
+      float: left;
+    }
+    span {
+      margin: 0 20px 0 0;
+      float: left;
+    }
+  }
 }
