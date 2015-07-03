@@ -21,7 +21,6 @@ export default React.createClass({
   },
   componentDidMount() {
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
-    SlackActions.getTeamInfo();
   },
   toggleConfigureWindow() {
     this.setState({

@@ -99,6 +99,6 @@ class SlackLogger
     unless @thread.nil?
       return @thread.status
     end
-    false
+    nil
   end
 end

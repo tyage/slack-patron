@@ -63,7 +63,7 @@ post '/start_logger' do
   slack_logger.start
 end
 
-get '/logger_status' do
+get '/logger_status.json' do
   content_type :json
   slack_logger.status.to_json
 end
