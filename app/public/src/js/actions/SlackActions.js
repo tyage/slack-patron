@@ -54,10 +54,5 @@ export default {
         teamInfo
       });
     });
-  },
-  openLoggerConfigure() {
-    SlackDispatcher.dispatch({
-      actionType: SlackConstants.OPEN_LOGGER_CONFIGURE
-    });
   }
 };

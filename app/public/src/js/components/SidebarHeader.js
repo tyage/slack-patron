@@ -8,11 +8,13 @@ let getState = () => {
     teamInfo: SlackTeamStore.getTeamInfo()
   };
 };
+let loggerConfigureWindow = Symbol();
 
 export default React.createClass({
   getInitialState() {
     return _.merge(getState(), {
-      showMenu: false
+      showMenu: false,
+      configureWindow: null
     });
   },
   _onTeamInfoChange() {
@@ -27,8 +29,10 @@ export default React.createClass({
       showMenu: !this.state.showMenu
     });
   },
-  openLoggerConfigure() {
-    SlackActions.openLoggerConfigure();
+  openLoggerConfigureWindow() {
+    this.setState({
+      configureWindow: loggerConfigureWindow
+    });
   },
   render() {
     return (
@@ -41,8 +45,14 @@ export default React.createClass({
           this.state.showMenu &&
             <ul className="menu-items">
               <li className="menu-item">Preferences</li>
-              <li className="menu-item" onClick={this.openLoggerConfigure}>Configure Logger</li>
+              <li className="menu-item" onClick={this.openLoggerConfigureWindow}>Configure Logger</li>
             </ul>
+        }
+        {
+          this.state.configureWindow === loggerConfigureWindow &&
+            <div className="configure-window">
+
+            </div>
         }
       </div>
     );
