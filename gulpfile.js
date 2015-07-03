@@ -21,7 +21,7 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-  return gulp.src(config.src + '/css/**')
+  return gulp.src(config.src + '/css/app.less')
     .pipe(concat('app.css'))
     .pipe(less())
     .on('error', function(e) {
