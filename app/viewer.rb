@@ -6,6 +6,7 @@ require './lib/slack_logger'
 require './lib/slack_import'
 
 slack_logger = SlackLogger.new
+slack_import = SlackImport.new
 
 def users
   hashed_users = {}
@@ -72,9 +73,7 @@ end
 post '/import_data' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
-  Thread.new {
-    importFromFile(exported_file)
-  }
+  slack_import.import_from_file(exported_file)
 end
 
 get '/' do
