@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'lodash';
 import SlackTeamStore from '../stores/SlackTeamStore';
 import SlackActions from '../actions/SlackActions';
 
@@ -10,7 +11,9 @@ let getState = () => {
 
 export default React.createClass({
   getInitialState() {
-    return getState();
+    return _.merge(getState(), {
+      showMenu: false
+    });
   },
   _onTeamInfoChange() {
     this.setState(getState());
@@ -19,15 +22,25 @@ export default React.createClass({
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
     SlackActions.getTeamInfo();
   },
+  toggleMenu() {
+    this.setState({
+      showMenu: !this.state.showMenu
+    });
+  },
   render() {
     return (
       <div className="slack-menu-header">
-        <div className="team-info">
+        <div className="team-info" onClick={this.toggleMenu}>
           <span className="team-name">{this.state.teamInfo.name}</span>
+          <p className="menu-toggler"></p>
         </div>
-        <ul className="menu-items">
-          <li className="menu-item"></li>
-        </ul>
+        {
+          this.state.showMenu &&
+            <ul className="menu-items">
+              <li className="menu-item">Preferences</li>
+              <li className="menu-item">Configure Logger</li>
+            </ul>
+        }
       </div>
     );
   }

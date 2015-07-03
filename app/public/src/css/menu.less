@@ -10,13 +10,46 @@
   .slack-menu-header {
     height: @menu-header-height;
     cursor: pointer;
+    position: relative;
     &:hover {
       background: #3e313c;
     }
     .team-info {
+      position: relative;
       color: #fff;
       font-size: 1.125rem;
-      padding: 1rem 1rem 0 1rem;
+      padding: 0 1rem;
+      line-height: @menu-header-height;
+      .menu-toggler {
+        position: absolute;
+        right: 1.25rem;
+        top: 0;
+        &:before {
+          content: '>';
+        }
+      }
+    }
+    .menu-items {
+      position: absolute;
+      background: #fff;
+      border-radius: 8px;
+      top: 49px;
+      left: 150px;
+      padding: 1.125rem 1rem;
+      width: 250px;
+      list-style-type: none;
+      box-shadow: 0 3px 8px rgba(0,0,0,.25);
+      z-index: 100;
+      .menu-item {
+        color: #555459;
+        padding: 0 .75rem;
+        line-height: 1.5625rem;
+        border-radius: .25rem;
+        &:hover {
+          background: #439fe0;
+          color: #fff;
+        }
+      }
     }
   }
   .slack-channels {
