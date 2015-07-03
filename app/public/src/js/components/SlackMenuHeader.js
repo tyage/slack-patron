@@ -14,7 +14,6 @@ export default React.createClass({
   },
   _onTeamInfoChange() {
     this.setState(getState());
-    console.log(this.state)
   },
   componentDidMount() {
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
@@ -23,11 +22,11 @@ export default React.createClass({
   render() {
     return (
       <div className="slack-menu-header">
-        <div class="team-info">
-          <div class="team-name">{this.state.teamInfo.name}</div>
+        <div className="team-info">
+          <span className="team-name">{this.state.teamInfo.name}</span>
         </div>
-        <ul class="menu-items">
-          <li class="menu-item"></li>
+        <ul className="menu-items">
+          <li className="menu-item"></li>
         </ul>
       </div>
     );
