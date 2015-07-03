@@ -3,6 +3,7 @@ require 'json'
 require './lib/slack'
 require './lib/db'
 require './lib/slack_logger'
+require './lib/slack_import'
 
 slack_logger = SlackLogger.new
 
@@ -66,6 +67,14 @@ end
 get '/logger_status.json' do
   content_type :json
   slack_logger.status.to_json
+end
+
+post '/import_data' do
+  exported_file = '/tmp/slack_export.zip'
+  FileUtils.move(params[:file][:tempfile], exported_file)
+  Thread.new {
+    importFromFile(exported_file)
+  }
 end
 
 get '/' do

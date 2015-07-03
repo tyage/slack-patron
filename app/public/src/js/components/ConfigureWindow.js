@@ -30,6 +30,14 @@ export default React.createClass({
   stopLogger() {
     SlackActions.stopLogger();
   },
+  importData(e) {
+    e.preventDefault();
+    let formData = new FormData(React.findDOMNode(this.refs.importData));
+    SlackActions.importData(formData);
+
+    let importFile = React.findDOMNode(this.refs.importFile);
+    importFile.value = "";
+  },
   render() {
     let isLoggerWorking = !!this.state.loggerStatus ;
     return (
@@ -39,9 +47,14 @@ export default React.createClass({
             <p className="section-title">Import Slack Data</p>
             <p>Import a Slack data from zipfile</p>
             <p>You can export Slack data from <a href={`https://${this.state.teamInfo.domain}.slack.com/services/export`} target="_blank">here</a>(You need administrator privileges)</p>
-            <div>
-              <input type="file" />
-            </div>
+            <form id="import-slack-data-form" onSubmit={this.importData} ref="importData">
+              <div className="form-section">
+                <input type="file" name="file" ref="importFile" />
+              </div>
+              <div className="form-section">
+                <input className="submit-button" type="submit" value="Import data" />
+              </div>
+            </form>
           </div>
           <div className="configure-section">
             <p className="section-title">Slack Data Logger</p>

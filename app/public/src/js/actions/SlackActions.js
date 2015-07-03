@@ -75,5 +75,15 @@ export default {
     $.post(url).then(() => {
       this.getLoggerStatus();
     });
+  },
+  importData(formData) {
+    let url = generateApiUrl('./import_data');
+    $.ajax({
+      url,
+      method: 'post',
+      data: formData,
+      processData: false,
+      contentType: false
+    });
   }
 };
