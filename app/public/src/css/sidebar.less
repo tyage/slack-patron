@@ -1,20 +1,20 @@
 @import "variable";
 
-.slack-menu {
+.sidebar {
   @menu-header-height: 60px;
   width: @slack-menu-width;
   height: calc(~'100% - 20px');
   float: left;
   background: #4d394b;
   padding: 0 0 20px 0;
-  .slack-menu-header {
+  .sidebar-header {
     height: @menu-header-height;
-    cursor: pointer;
     position: relative;
     &:hover {
       background: #3e313c;
     }
     .team-info {
+      cursor: pointer;
       position: relative;
       color: #fff;
       font-size: 1.125rem;
@@ -45,6 +45,7 @@
         padding: 0 .75rem;
         line-height: 1.5625rem;
         border-radius: .25rem;
+        cursor: pointer;
         &:hover {
           background: #439fe0;
           color: #fff;

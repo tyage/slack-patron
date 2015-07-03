@@ -1,7 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
-import SlackApp from './components/SlackApp';
+import SlackPatron from './components/SlackPatron';
 
 $(() => {
-  React.render(<SlackApp />, $('#app').get(0));
+  React.render(<SlackPatron />, $('#app').get(0));
 });

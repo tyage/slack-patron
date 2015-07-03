@@ -1,12 +1,12 @@
 import React from 'react';
-import SlackMenuHeader from './SlackMenuHeader';
+import SidebarHeader from './SidebarHeader';
 import SlackChannels from './SlackChannels';
 
 export default React.createClass({
   render() {
     return (
-      <div className="slack-menu">
-        <SlackMenuHeader />
+      <div className="sidebar">
+        <SidebarHeader />
         <SlackChannels />
       </div>
     );

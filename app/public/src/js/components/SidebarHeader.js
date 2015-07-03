@@ -27,9 +27,12 @@ export default React.createClass({
       showMenu: !this.state.showMenu
     });
   },
+  openLoggerConfigure() {
+    SlackActions.openLoggerConfigure();
+  },
   render() {
     return (
-      <div className="slack-menu-header">
+      <div className="sidebar-header">
         <div className="team-info" onClick={this.toggleMenu}>
           <span className="team-name">{this.state.teamInfo.name}</span>
           <p className="menu-toggler"></p>
@@ -38,7 +41,7 @@ export default React.createClass({
           this.state.showMenu &&
             <ul className="menu-items">
               <li className="menu-item">Preferences</li>
-              <li className="menu-item">Configure Logger</li>
+              <li className="menu-item" onClick={this.openLoggerConfigure}>Configure Logger</li>
             </ul>
         }
       </div>
