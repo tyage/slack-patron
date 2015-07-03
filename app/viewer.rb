@@ -65,7 +65,7 @@ end
 
 get '/logger_status' do
   content_type :json
-  slack_logger.working?.to_json
+  slack_logger.status.to_json
 end
 
 get '/' do

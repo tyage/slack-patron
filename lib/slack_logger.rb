@@ -9,13 +9,15 @@ class SlackLogger
   end
 
   def update_users
+    users = Slack.users_list['members']
     Users.find.delete_many
-    Users.insert_many(Slack.users_list['members'])
+    Users.insert_many(users)
   end
 
   def update_channels
+    channels = Slack.channels_list['channels']
     Channels.find.delete_many
-    Channels.insert_many(Slack.channels_list['channels'])
+    Channels.insert_many(channels)
   end
 
   # log history messages
@@ -67,19 +69,23 @@ class SlackLogger
     stop
 
     @thread = Thread.new {
-      realtime_thread = spawn_realtime_thread
+      begin
+        realtime_thread = spawn_realtime_thread
 
-      update_users
-      update_channels
+        update_users
+        update_channels
 
-      Channels.find.each do |c|
-        puts "loading messages from #{c[:name]}"
-        fetch_history(c[:id])
-        sleep(1)
+        Channels.find.each do |c|
+          puts "loading messages from #{c[:name]}"
+          fetch_history(c[:id])
+          sleep(1)
+        end
+
+        # realtime event is joined and dont exit current thread
+        realtime_thread.join
+      ensure
+        realtime_thread.kill
       end
-
-      # realtime event is joined and dont exit current thread
-      realtime_thread.join
     }
   end
 
@@ -89,9 +95,9 @@ class SlackLogger
     end
   end
 
-  def working?
+  def status
     unless @thread.nil?
-      return !@thread.stop?
+      return @thread.status
     end
     false
   end
