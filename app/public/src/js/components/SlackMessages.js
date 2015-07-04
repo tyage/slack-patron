@@ -87,10 +87,9 @@ export default React.createClass({
     return (
       <div className="slack-messages">
         {
-          this.state.hasMoreMessages ?
+          this.state.hasMoreMessages &&
             <div className="slack-messages-load-more {loadMoreClassName}"
-              onClick={this.handleLoadMore}>{loadMoreText}</div> :
-            null
+              onClick={this.handleLoadMore}>{loadMoreText}</div>
         }
         {createMessage(this.state.messages)}
       </div>

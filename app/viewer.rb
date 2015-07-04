@@ -2,6 +2,11 @@ require 'sinatra'
 require 'json'
 require './lib/slack'
 require './lib/db'
+require './lib/slack_logger'
+require './lib/slack_import'
+
+slack_logger = SlackLogger.new
+slack_import = SlackImport.new
 
 def users
   hashed_users = {}
@@ -45,6 +50,30 @@ post '/messages/:channel.json' do
     .to_a
     .reverse
     .to_json
+end
+
+get '/team.json' do
+  content_type :json
+  Slack.team_info['team'].to_json
+end
+
+post '/stop_logger' do
+  slack_logger.stop
+end
+
+post '/start_logger' do
+  slack_logger.start
+end
+
+get '/logger_status.json' do
+  content_type :json
+  slack_logger.status.to_json
+end
+
+post '/import_data' do
+  exported_file = '/tmp/slack_export.zip'
+  FileUtils.move(params[:file][:tempfile], exported_file)
+  slack_import.import_from_file(exported_file)
 end
 
 get '/' do

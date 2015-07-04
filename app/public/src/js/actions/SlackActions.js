@@ -45,5 +45,45 @@ export default {
       currentChannel: channel,
       option: { pushState, replaceState }
     });
+  },
+  getTeamInfo() {
+    let url = generateApiUrl('./team.json');
+    $.get(url).then((teamInfo) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_TEAM_INFO,
+        teamInfo
+      });
+    });
+  },
+  getLoggerStatus() {
+    let url = generateApiUrl('./logger_status.json');
+    $.get(url).then((status) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_LOGGER_STATUS,
+        status
+      });
+    });
+  },
+  startLogger() {
+    let url = generateApiUrl('./start_logger');
+    $.post(url).then(() => {
+      this.getLoggerStatus();
+    });
+  },
+  stopLogger() {
+    let url = generateApiUrl('./stop_logger');
+    $.post(url).then(() => {
+      this.getLoggerStatus();
+    });
+  },
+  importData(formData) {
+    let url = generateApiUrl('./import_data');
+    $.ajax({
+      url,
+      method: 'post',
+      data: formData,
+      processData: false,
+      contentType: false
+    });
   }
 };

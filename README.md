@@ -6,9 +6,9 @@ Log and view all Slack messages in your local server.
 
 ## What Slack patron do?
 
-1. Log slack messages, channels, users in MongoDB.
+- Log slack messages, channels, users in MongoDB.
   - Also, you can import all messages with "Exported data"
-2. View these data in web browser.
+- View these data in web browser.
 
 ## Requirements
 
@@ -21,43 +21,11 @@ Log and view all Slack messages in your local server.
 Copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
+$ mongod # you need to start mongo db server
 $ bundle install
 $ npm install
-$ ./node_modules/.bin/bower install
-$ mongod # you need to start mongo db server
-```
-
-## 1. Log Slack data
-
-First, you can import all messages from "Exported data".
-
-Second, you can log Slack messages with Slack Realtime API.
-
-### 1.1 Import exported data
-
-Download exports(ziped file) from `https://YOUR-TEAM.slack.com/services/export`
-(This may need administrator privileges in your team!)
-
-```sh
-$ bundle exec ruby app/import.rb PATH_TO_ZIP_FILE
-```
-
-### 1.2 Start realtime logger
-
-You can log messages as soon as it is posted with this command.
-
-```sh
-$ bundle exec ruby app/logger.rb
-```
-
-## 2. View Slack data
-
-You can view Slack data with your web browser.
-
-### Start data viewer
-
-```sh
 $ ./node_modules/.bin/gulp
+$ ./node_modules/.bin/bower install
 $ bundle exec rackup
 ```
 
@@ -65,6 +33,16 @@ $ bundle exec rackup
 
 If you are a developer, you watch js, css as below.
 
-```
+```sh
 $ ./node_modules/.bin/gulp watch
+```
+
+### Import Slack data in command line
+
+The size of Slack data is too big and sometimes it is impossible to upload it with patron's page.
+
+But you can import Slack data in command line.
+
+```sh
+$ bundle exec ruby app/import.rb PATH_TO_ZIP_FILE
 ```

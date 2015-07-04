@@ -1,4 +1,7 @@
-@import "clearfix";
+@import "./lib/clearfix";
+@import "./sidebar";
+@import "./messages";
+@import "./configure-window";
 
 body {
   margin: 0;
@@ -20,82 +23,7 @@ a {
   }
 }
 
-.slack-app {
-  @width: 220px;
+.slack-patron {
   .clearfix;
   height: 100%;
-  .slack-channels {
-    float: left;
-    background: #4d394b;
-    color: #ab9ba9;
-    width: @width;
-    height: calc(~'100% - 40px');
-    padding: 20px 0;
-    overflow: auto;
-    li {
-      text-shadow: 0 1px 1px rgba(0,0,0,0.25);
-      cursor: pointer;
-      &:hover {
-        background: #3e313c;
-      }
-      &.selected {
-        background: rgb(76, 150, 137);
-        color: white;
-      }
-      p {
-        line-height: 1.5rem;
-        padding: 0 .5rem 0 1rem;
-        font-size: 1rem;
-      }
-    }
-  }
-  .slack-messages {
-    float: left;
-    width: calc(~'100% - @{width}');
-    height: 100%;
-    overflow: auto;
-    .slack-messages-load-more {
-      text-align: center;
-      cursor: pointer;
-      background: #259db8;
-      color: #fff;
-      padding: 10px 0;
-      opacity: 0.6;
-      &:hover {
-        opacity: 1;
-      }
-    }
-    .slack-message {
-      margin: 0.5rem 18px 0.5rem 1.5rem;
-      padding: .25rem 2rem .1rem 3rem;
-      position: relative;
-      .slack-message-user-image {
-        position: absolute;
-        top: 3px;
-        left: 0;
-        img {
-          width: 36px;
-          height: 36px;
-          border-radius: .2rem;
-        }
-      }
-      .slack-message-content {
-        .slack-message-user-name {
-          display: inline-block;
-          color: rgb(61, 60, 64);
-          font-weight: 900;
-          padding-right: .25rem;
-          height: 23px;
-        }
-        .slack-message-date {
-          display: inline-block;
-          color: #babbbf;
-          font-size: 12px;
-        }
-        .slack-message-text {
-          color: #3d3c40;
-        }
-      }
-    }
-  }
 }

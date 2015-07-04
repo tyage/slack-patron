@@ -1,0 +1,53 @@
+@import "./lib/variable";
+
+.sidebar {
+  width: @sidebar-width;
+  height: calc(~'100% - 20px');
+  float: left;
+  background: #4d394b;
+  padding: 0 0 20px 0;
+  .sidebar-header {
+    height: @sidebar-header-height;
+    position: relative;
+    &:hover {
+      background: #3e313c;
+    }
+    .team-info {
+      cursor: pointer;
+      position: relative;
+      color: #fff;
+      font-size: 1.125rem;
+      padding: 0 1rem;
+      line-height: @sidebar-header-height;
+      .configure-toggler {
+        position: absolute;
+        right: 1.25rem;
+        top: 0;
+        &:before {
+          content: '>';
+        }
+      }
+    }
+  }
+  .slack-channels {
+    color: #ab9ba9;
+    overflow: auto;
+    height: calc(~'100% - @{sidebar-header-height}');
+    li {
+      text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+      cursor: pointer;
+      &:hover {
+        background: #3e313c;
+      }
+      &.selected {
+        background: rgb(76, 150, 137);
+        color: white;
+      }
+      p {
+        line-height: 1.5rem;
+        padding: 0 .5rem 0 1rem;
+        font-size: 1rem;
+      }
+    }
+  }
+}
