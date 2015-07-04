@@ -8,6 +8,9 @@ export default React.createClass({
     SlackActions.getUsers();
     SlackActions.getLoggerStatus();
     SlackActions.getTeamInfo();
+    window.setInterval(() => {
+      SlackActions.getLoggerStatus();
+    }, 1000 * 5);
   },
   render() {
     return (
