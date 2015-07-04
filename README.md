@@ -33,6 +33,16 @@ $ bundle exec rackup
 
 If you are a developer, you watch js, css as below.
 
-```
+```sh
 $ ./node_modules/.bin/gulp watch
+```
+
+### Import Slack data in command line
+
+The size of Slack data is too big and sometimes it is impossible to upload it with patron's page.
+
+But you can import Slack data in command line.
+
+```sh
+$ bundle exec ruby app/import.rb PATH_TO_ZIP_FILE
 ```
