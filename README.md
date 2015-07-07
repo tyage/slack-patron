@@ -7,7 +7,7 @@ Log and view all Slack messages in your local server.
 ## What Slack patron do?
 
 - Log slack messages, channels, users in MongoDB.
-  - Also, you can import all messages with "Exported data"
+  - Also, you can import all data with backup file.
 - View these data in web browser.
 
 ## Requirements
@@ -37,12 +37,12 @@ If you are a developer, you watch js, css as below.
 $ ./node_modules/.bin/gulp watch
 ```
 
-### Import Slack data in command line
+### Import Slack backup file in command line
 
-The size of Slack data is too big and sometimes it is impossible to upload it with patron's page.
+The size of Slack backup file is big and sometimes it is impossible to upload it with patron's page.
 
-But you can import Slack data in command line.
+But you can import Slack backup file in command line.
 
 ```sh
-$ bundle exec ruby app/import.rb PATH_TO_ZIP_FILE
+$ bundle exec ruby app/import.rb PATH_TO_BACKUP_FILE
 ```

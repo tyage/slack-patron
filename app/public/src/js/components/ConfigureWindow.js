@@ -30,12 +30,12 @@ export default React.createClass({
   stopLogger() {
     SlackActions.stopLogger();
   },
-  importData(e) {
+  importBackup(e) {
     e.preventDefault();
-    let formData = new FormData(React.findDOMNode(this.refs.importData));
-    SlackActions.importData(formData);
+    let formData = new FormData(React.findDOMNode(this.refs.importBackup));
+    SlackActions.importBackup(formData);
 
-    let importFile = React.findDOMNode(this.refs.importFile);
+    let importFile = React.findDOMNode(this.refs.backupFile);
     importFile.value = "";
   },
   render() {
@@ -44,15 +44,15 @@ export default React.createClass({
       <div>
         <div className="configure-window">
           <div className="configure-section">
-            <p className="section-title">Import Slack Data</p>
-            <p>Import a Slack data from zipfile</p>
-            <p>You can export Slack data from <a href={`https://${this.state.teamInfo.domain}.slack.com/services/export`} target="_blank">here</a>(You need administrator privileges)</p>
-            <form id="import-slack-data-form" onSubmit={this.importData} ref="importData">
+            <p className="section-title">Import Slack Backup File</p>
+            <p>Import a Slack backup file</p>
+            <p>You can download Slack backup file from <a href={`https://${this.state.teamInfo.domain}.slack.com/services/export`} target="_blank">this page</a>(You need administrator privileges)</p>
+            <form id="import-slack-backup-form" onSubmit={this.importBackup} ref="importBackup">
               <div className="form-section">
-                <input type="file" name="file" ref="importFile" />
+                <input type="file" name="file" ref="backupFile" />
               </div>
               <div className="form-section">
-                <input className="submit-button" type="submit" value="Import data" />
+                <input className="submit-button" type="submit" value="Import backup file" />
               </div>
             </form>
           </div>

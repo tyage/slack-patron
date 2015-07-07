@@ -70,7 +70,7 @@ get '/logger_status.json' do
   slack_logger.status.to_json
 end
 
-post '/import_data' do
+post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
   slack_import.import_from_file(exported_file)

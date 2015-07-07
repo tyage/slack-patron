@@ -76,8 +76,8 @@ export default {
       this.getLoggerStatus();
     });
   },
-  importData(formData) {
-    let url = generateApiUrl('./import_data');
+  importBackup(formData) {
+    let url = generateApiUrl('./import_backup');
     $.ajax({
       url,
       method: 'post',
