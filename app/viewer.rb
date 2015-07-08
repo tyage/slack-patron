@@ -28,7 +28,8 @@ def messages(params)
   Messages
     .find(
       channel: params[:channel],
-      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s }
+      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
+      subtype: { '$ne': 'message_deleted' }
     )
     .sort(ts: -1)
     .limit(params[:limit] || 100)
