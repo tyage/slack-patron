@@ -86,7 +86,7 @@ get '/' do
   if default_channel.nil?
     default_channel, _ = hashed_channels.first
   end
-  redirect("/#{default_channel || 'CHANNELS_NOT_FOUND'}")
+  redirect("./#{default_channel || 'CHANNELS_NOT_FOUND'}")
 end
 
 get '/:channel' do
