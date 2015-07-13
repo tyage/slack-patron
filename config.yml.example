@@ -1,7 +1,11 @@
 slack:
   # Create and get slack token from https://api.slack.com/web#authentication
   token:
+
 # Config for mongodb
 database:
   uri: localhost:27017
   database: slack_logger
+
+# Channel that is showed at first
+default_channel: general
