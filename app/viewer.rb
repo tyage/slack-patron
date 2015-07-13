@@ -5,6 +5,7 @@ require './lib/db'
 require './lib/slack_logger'
 require './lib/slack_import'
 
+config = YAML.load_file('./config.yml')
 slack_logger = SlackLogger.new
 slack_import = SlackImport.new
 
@@ -78,10 +79,14 @@ post '/import_backup' do
 end
 
 get '/' do
-  if request.path_info === '' then
-    return redirect to('./')
+  hashed_channels = channels
+  default_channel, _ = hashed_channels.find do |id, channel|
+    channel[:name] == config['default_channel']
   end
-  erb :index
+  if default_channel.nil?
+    default_channel, _ = hashed_channels.first
+  end
+  redirect("/#{default_channel || 'CHANNELS_NOT_FOUND'}")
 end
 
 get '/:channel' do
