@@ -20,16 +20,10 @@ export default React.createClass({
     let state = getState();
     this.setState(state);
 
-    // XXX setTImeoutどうにかならんのか
+    // XXX setTimeout付けないと, fluxループが2周目に突入して怒られる
     setTimeout(() => {
       let channel = SlackCurrentChannelStore.getChannelFromPath();
-      if (channel) {
-        SlackActions.updateCurrentChannel({ channel, pushState: false });
-      } else {
-        // 現在のChannelが設定されていない場合は一番はじめのChannelを選択
-        channel = _.findKey(state.channels);
-        SlackActions.updateCurrentChannel({ channel, replaceState: true });
-      }
+      SlackActions.updateCurrentChannel({ channel, pushState: false });
     });
   },
   _onCurrentChannelChange() {
