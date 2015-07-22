@@ -5,3 +5,4 @@ config.yml
 /app/public/dist
 /node_modules
 /tmp
+/log
