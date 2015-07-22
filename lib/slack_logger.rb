@@ -2,8 +2,6 @@ require './lib/slack'
 require './lib/db'
 
 class SlackLogger
-  attr_accessor :thread
-
   def initialize()
     start
   end
@@ -66,39 +64,22 @@ class SlackLogger
   end
 
   def start
-    stop
+    begin
+      realtime_thread = spawn_realtime_thread
 
-    @thread = Thread.new {
-      begin
-        realtime_thread = spawn_realtime_thread
+      update_users
+      update_channels
 
-        update_users
-        update_channels
-
-        Channels.find.each do |c|
-          puts "loading messages from #{c[:name]}"
-          fetch_history(c[:id])
-          sleep(1)
-        end
-
-        # realtime event is joined and dont exit current thread
-        realtime_thread.join
-      ensure
-        realtime_thread.kill
+      Channels.find.each do |c|
+        puts "loading messages from #{c[:name]}"
+        fetch_history(c[:id])
+        sleep(1)
       end
-    }
-  end
 
-  def stop
-    unless @thread.nil?
-      @thread.kill
+      # realtime event is joined and dont exit current thread
+      realtime_thread.join
+    ensure
+      realtime_thread.kill
     end
-  end
-
-  def status
-    unless @thread.nil?
-      return @thread.status
-    end
-    nil
   end
 end

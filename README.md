@@ -28,6 +28,7 @@ $ bundle install
 $ npm install
 $ ./node_modules/.bin/gulp
 $ ./node_modules/.bin/bower install
+$ bundle exec sidekiq -r ./lib/sidekiq -d
 $ bundle exec rackup
 ```
 
