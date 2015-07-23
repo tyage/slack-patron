@@ -9,3 +9,8 @@ database:
 
 # Channel that is showed at first
 default_channel: general
+
+# redis server config
+redis:
+  url: redis://localhost:6379
+  namespace: sidekiq

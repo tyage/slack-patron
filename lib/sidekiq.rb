@@ -3,12 +3,13 @@ require 'sidekiq/api'
 require './lib/slack_logger'
 require './lib/slack_import'
 
-Sidekiq.configure_server do |config|
-    config.redis = { url: 'redis://localhost:6379', namespace: 'sidekiq' }
-end
+config = YAML.load_file('./config.yml')
 
-Sidekiq.configure_client do |config|
-    config.redis = { url: 'redis://localhost:6379', namespace: 'sidekiq' }
+Sidekiq.configure_server do |c|
+  c.redis = config['redis']
+end
+Sidekiq.configure_client do |c|
+  c.redis = config['redis']
 end
 
 class LoggerWorker
