@@ -4,9 +4,6 @@ require 'fileutils'
 require './lib/db'
 
 class SlackImport
-  def initialize()
-  end
-
   def import_messages(channel, messages)
     messages.each do |m|
       m['channel'] = channel[:id]

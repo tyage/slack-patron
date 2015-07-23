@@ -15,7 +15,16 @@ class LoggerWorker
   include Sidekiq::Worker
 
   def perform
-    SlackLogger.new
+    # ensure the single worker is running
+    unless already_started?
+      SlackLogger.new.start
+    end
+  end
+
+  def already_started?
+    return Sidekiq::Workers.new.select { |process_id, thread_id, work|
+      work['payload']['class'] == 'LoggerWorker' and work['payload']['jid'] != jid
+    }.length > 0
   end
 end
 

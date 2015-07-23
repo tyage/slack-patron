@@ -2,10 +2,6 @@ require './lib/slack'
 require './lib/db'
 
 class SlackLogger
-  def initialize()
-    start
-  end
-
   def update_users
     users = Slack.users_list['members']
     Users.find.delete_many
