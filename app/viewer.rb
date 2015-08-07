@@ -58,21 +58,6 @@ get '/team.json' do
   Slack.team_info['team'].to_json
 end
 
-=begin
-post '/stop_logger' do
-  slack_logger.stop
-end
-
-post '/start_logger' do
-  slack_logger.start
-end
-
-get '/logger_status.json' do
-  content_type :json
-  slack_logger.status.to_json
-end
-=end
-
 post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
