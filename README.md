@@ -10,6 +10,8 @@ Log and view all Slack messages in your local server.
   - Also, you can import all data with backup file.
 - View these data in web browser.
 
+![https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png](https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png)
+
 ## Requirements
 
 - ruby: 2.1.5p273
@@ -40,11 +42,11 @@ If you are a developer, you watch js, css as below.
 $ ./node_modules/.bin/gulp watch
 ```
 
-### Import Slack backup file in command line
+### Import Slack backup file in CLI
 
-The size of Slack backup file is big and sometimes it is impossible to upload it with patron's page.
+The size of Slack backup file is big and sometimes it is difficult to upload it with patron's page.
 
-But you can import Slack backup file in command line.
+But you can import Slack backup file in CLI.
 
 ```sh
 $ bundle exec ruby app/import.rb PATH_TO_BACKUP_FILE
