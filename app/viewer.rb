@@ -1,13 +1,12 @@
 require 'sinatra'
 require 'json'
+require './lib/sidekiq'
 require './lib/slack'
 require './lib/db'
-require './lib/slack_logger'
-require './lib/slack_import'
 
 config = YAML.load_file('./config.yml')
-slack_logger = SlackLogger.new
-slack_import = SlackImport.new
+
+LoggerWorker.perform_async
 
 configure do
   set :absolute_redirects, false
@@ -63,23 +62,10 @@ get '/team.json' do
   Slack.team_info['team'].to_json
 end
 
-post '/stop_logger' do
-  slack_logger.stop
-end
-
-post '/start_logger' do
-  slack_logger.start
-end
-
-get '/logger_status.json' do
-  content_type :json
-  slack_logger.status.to_json
-end
-
 post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
-  slack_import.import_from_file(exported_file)
+  ImportWorker.perform_async(exported_file)
 end
 
 get '/' do

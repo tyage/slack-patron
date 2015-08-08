@@ -14,6 +14,7 @@ Log and view all Slack messages in your local server.
 
 - ruby: 2.1.5p273
 - mongo db: 2.4.9
+- redis: 3.0.2
 - node.js: v0.10.25
 
 ## Startup
@@ -22,10 +23,12 @@ Copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
 $ mongod # you need to start mongo db server
+$ redis-server # you need to start redis server
 $ bundle install
 $ npm install
 $ ./node_modules/.bin/gulp
 $ ./node_modules/.bin/bower install
+$ bundle exec sidekiq -r ./lib/sidekiq.rb -d -L log/sidekiq.log
 $ bundle exec rackup
 ```
 

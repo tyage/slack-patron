@@ -1,6 +1,8 @@
-require 'yaml'
+require 'sidekiq'
+require 'sidekiq/web'
 require './app/viewer'
 
-config = YAML.load_file('./config.yml')
-
-run Sinatra::Application
+run Rack::URLMap.new(
+  '/' => Sinatra::Application,
+  '/sidekiq' => Sidekiq::Web
+)

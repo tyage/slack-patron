@@ -55,27 +55,6 @@ export default {
       });
     });
   },
-  getLoggerStatus() {
-    let url = generateApiUrl('./logger_status.json');
-    $.get(url).then((status) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_LOGGER_STATUS,
-        status
-      });
-    });
-  },
-  startLogger() {
-    let url = generateApiUrl('./start_logger');
-    $.post(url).then(() => {
-      this.getLoggerStatus();
-    });
-  },
-  stopLogger() {
-    let url = generateApiUrl('./stop_logger');
-    $.post(url).then(() => {
-      this.getLoggerStatus();
-    });
-  },
   importBackup(formData) {
     let url = generateApiUrl('./import_backup');
     $.ajax({
