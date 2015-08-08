@@ -9,6 +9,10 @@ config = YAML.load_file('./config.yml')
 slack_logger = SlackLogger.new
 slack_import = SlackImport.new
 
+configure do
+  set :absolute_redirects, false
+end
+
 def users
   hashed_users = {}
   Users.find.each do |u|
