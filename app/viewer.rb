@@ -10,6 +10,7 @@ LoggerWorker.perform_async
 
 configure do
   set :absolute_redirects, false
+  set :prefixed_redirects, true
 end
 
 def users
