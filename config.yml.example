@@ -14,3 +14,7 @@ default_channel: general
 redis:
   url: redis://localhost:6379
   namespace: sidekiq
+
+# rack config(please modify it)
+rack:
+  secret: slack-patron-secret
