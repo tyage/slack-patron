@@ -2,7 +2,7 @@ var gulp = require('gulp');
 var concat = require('gulp-concat');
 var less = require('gulp-less');
 var gutil = require('gulp-util');
-var webpack = require('gulp-webpack');
+var webpack = require('webpack-stream');
 var webpackConfig = require('./webpack.config.js');
 
 var config = {
