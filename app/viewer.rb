@@ -6,6 +6,7 @@ require './lib/db'
 
 config = YAML.load_file('./config.yml')
 
+# XXX: remove from viewer.rb
 LoggerWorker.perform_async
 
 configure do

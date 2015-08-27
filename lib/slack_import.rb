@@ -12,15 +12,11 @@ class SlackImport
   end
 
   def import_channels(channels)
-    # XXX delete only duplicated users
-    Channels.find.delete_many
-    Channels.insert_many(channels)
+    replace_channels(channels)
   end
 
   def import_users(users)
-    # XXX delete only duplicated channels
-    Users.find.delete_many
-    Users.insert_many(users)
+    replace_users(users)
   end
 
   # format of exported file

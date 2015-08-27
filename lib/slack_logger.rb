@@ -4,16 +4,12 @@ require './lib/db'
 class SlackLogger
   def update_users
     users = Slack.users_list['members']
-    # XXX delete only duplicated users
-    Users.find.delete_many
-    Users.insert_many(users)
+    replace_users(users)
   end
 
   def update_channels
     channels = Slack.channels_list['channels']
-    # XXX delete only duplicated channels
-    Channels.find.delete_many
-    Channels.insert_many(channels)
+    replace_channels(channels)
   end
 
   # log history messages
