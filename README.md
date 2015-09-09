@@ -27,26 +27,36 @@ Copy `config.yml.example` to `config.yml` and edit it.
 $ mongod # you need to start mongo db server
 $ redis-server # you need to start redis server
 $ bundle install
+```
+
+### Start Slack Message logger
+
+```sh
+$ bundle exec ruby app/logger.rb
+```
+
+### Start Slack Message Viewer
+
+```sh
 $ npm install
 $ ./node_modules/.bin/gulp
 $ ./node_modules/.bin/bower install
-$ bundle exec sidekiq -r ./lib/sidekiq.rb -d -L log/sidekiq.log
 $ bundle exec rackup
 ```
 
-### Development
+## For Developer
 
-If you are a developer, you watch js, css as below.
+If you are a developer, you can watch js, css as below.
 
 ```sh
 $ ./node_modules/.bin/gulp watch
 ```
 
-### Import Slack backup file in CLI
+## Import Slack backup file with CLI
 
-The size of Slack backup file is big and sometimes it is difficult to upload it with patron's page.
+The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
-But you can import Slack backup file in CLI.
+You can import Slack backup file with CLI.
 
 ```sh
 $ bundle exec ruby app/import.rb PATH_TO_BACKUP_FILE
