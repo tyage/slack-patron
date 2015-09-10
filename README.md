@@ -29,7 +29,7 @@ $ redis-server # you need to start redis server
 $ bundle install
 ```
 
-### Start Slack Message logger
+### Start Slack Message Logger
 
 ```sh
 $ bundle exec ruby app/logger.rb
