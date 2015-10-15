@@ -21,7 +21,9 @@ gulp.task('js', function() {
 });
 
 gulp.task('css', function() {
-  return gulp.src(config.src + '/css/app.less')
+  var normalizeCSS = './node_modules/normalize.css/normalize.css';
+
+  return gulp.src([config.src + '/css/app.less', normalizeCSS])
     .pipe(concat('app.css'))
     .pipe(less())
     .on('error', function(e) {
