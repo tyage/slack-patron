@@ -14,12 +14,16 @@ class SlackLogger
 
   # log history messages
   def fetch_history(channel)
-    Slack.channels_history(
+    messages = Slack.channels_history(
       channel: channel,
       count: 1000,
-    )['messages'].each do |m|
-      m['channel'] = channel
-      insert_message(m)
+    )['messages']
+
+    unless messages.nil?
+      messages.each do |m|
+        m['channel'] = channel
+        insert_message(m)
+      end
     end
   end
 
