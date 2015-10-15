@@ -40,7 +40,6 @@ $ bundle exec ruby app/logger.rb
 ```sh
 $ npm install
 $ ./node_modules/.bin/gulp
-$ ./node_modules/.bin/bower install
 $ bundle exec rackup
 ```
 
