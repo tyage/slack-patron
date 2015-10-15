@@ -24,42 +24,48 @@ class SlackLogger
   end
 
   # realtime events
-  def spawn_realtime_thread
-    Thread.new {
-      realtime = Slack.realtime
+  def log_realtime
+    realtime = Slack.realtime
 
-      realtime.on :message do |m|
-        puts m
-        insert_message(m)
-      end
+    realtime.on :message do |m|
+      puts m
+      insert_message(m)
+    end
 
-      realtime.on :team_join do |e|
-        puts "new user has joined"
-        update_users
-      end
+    realtime.on :team_join do |e|
+      puts "new user has joined"
+      update_users
+    end
 
-      realtime.on :user_change do |e|
-        puts "user data has changed"
-        update_users
-      end
+    realtime.on :user_change do |e|
+      puts "user data has changed"
+      update_users
+    end
 
-      realtime.on :channel_created do |c|
-        puts "channel has created"
-        update_channels
-      end
+    realtime.on :channel_created do |c|
+      puts "channel has created"
+      update_channels
+    end
 
-      realtime.on :channel_rename do |c|
-        p "channel has renamed"
-        update_channels
-      end
+    realtime.on :channel_rename do |c|
+      puts "channel has renamed"
+      update_channels
+    end
 
-      realtime.start
-    }
+    # if connection closed, restart the realtime logger
+    realtime.on :close do
+      puts "websocket disconnected"
+      log_realtime
+    end
+
+    realtime.start
   end
 
   def start
     begin
-      realtime_thread = spawn_realtime_thread
+      realtime_thread = Thread.new {
+        log_realtime
+      }
 
       update_users
       update_channels
