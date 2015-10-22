@@ -4,13 +4,30 @@
   float: left;
   width: calc(~'100% - @{sidebar-width}');
   .slack-messages-header {
-    height: 53px;
+    @slack-messages-header-height: 53px;
+    height: @slack-messages-header-height;
+    color: #555459;
     .channel-name {
       padding: 0 .1rem 0 1.5rem;
       font-size: 1.4rem;
-      line-height: 53px;
-      color: #555459;
+      line-height: @slack-messages-header-height;
       font-weight: 900;
+      display: inline-block;
+    }
+    .search-form {
+      display: inline-block;
+      float: right;
+      margin: 9px 6px 0 0;
+      input {
+        border-radius: 40px;
+        background: #FFF;
+        border: 1px solid rgba(214,214,214,.61);
+        width: 240px;
+        height: 1.9rem;
+        outline: 0;
+        font-size: 15px;
+        padding: 2px 2rem;
+      }
     }
   }
   .slack-messages-list {

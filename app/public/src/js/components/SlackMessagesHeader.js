@@ -26,6 +26,9 @@ export default React.createClass({
     return (
       <div className="slack-messages-header">
         <div className="channel-name">{channel && channel.name}</div>
+        <div className="search-form">
+          <input type="search" />
+        </div>
       </div>
     );
   }
