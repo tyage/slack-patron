@@ -2,6 +2,7 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
+import SlackMessagesHeader from './SlackMessagesHeader';
 import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
@@ -19,6 +20,9 @@ let getState = () => {
 };
 
 export default React.createClass({
+  _getMessagesList() {
+    return $(this.getDOMNode()).find('.slack-messages-list');
+  },
   _onUserChange() {
     this.setState(getState());
   },
@@ -30,13 +34,13 @@ export default React.createClass({
 
     if (this.state.isLoadingMore) {
       // fix scrollTop when load more messages
-      $(this.getDOMNode()).scrollTop(
+      this._getMessagesList().scrollTop(
         this.currentHeight() - this.state.oldHeight
       );
       this.setState({ isLoadingMore: false });
     } else {
       // go to bottom when channel changed
-      $(this.getDOMNode()).scrollTop(this.currentHeight());
+      this._getMessagesList().scrollTop(this.currentHeight());
     }
   },
   _onCurrentChannelChange() {
@@ -52,7 +56,7 @@ export default React.createClass({
     });
   },
   currentHeight() {
-    return $(this.getDOMNode()).get(0).scrollHeight;
+    return this._getMessagesList().get(0).scrollHeight;
   },
   handleLoadMore() {
     if (this.state.isLoadingMore) {
@@ -86,12 +90,15 @@ export default React.createClass({
 
     return (
       <div className="slack-messages">
-        {
-          this.state.hasMoreMessages &&
-            <div className="slack-messages-load-more {loadMoreClassName}"
-              onClick={this.handleLoadMore}>{loadMoreText}</div>
-        }
-        {createMessage(this.state.messages)}
+        <SlackMessagesHeader />
+        <div className="slack-messages-list">
+          {
+            this.state.hasMoreMessages &&
+              <div className="slack-messages-load-more {loadMoreClassName}"
+                onClick={this.handleLoadMore}>{loadMoreText}</div>
+          }
+          {createMessage(this.state.messages)}
+        </div>
       </div>
     );
   }
