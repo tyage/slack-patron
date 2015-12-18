@@ -89,7 +89,7 @@ export default React.createClass({
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
 
     return (
-      <div className="slack-messages">
+      <div className="channel-messages">
         <SlackMessagesHeader />
         <div className="slack-messages-list">
           {
