@@ -101,6 +101,7 @@ post '/search' do
       ],
       ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s }
     )
+    .sort(ts: -1)
     .limit(params[:limit] || 100)
     .to_a
     .reverse
