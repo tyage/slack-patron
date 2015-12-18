@@ -21,7 +21,7 @@ let getState = () => {
 
 export default React.createClass({
   _getMessagesList() {
-    return $(this.getDOMNode()).find('.slack-messages-list');
+    return $(this.getDOMNode()).find('.messages-list');
   },
   _onUserChange() {
     this.setState(getState());
@@ -91,10 +91,10 @@ export default React.createClass({
     return (
       <div className="channel-messages">
         <SlackMessagesHeader />
-        <div className="slack-messages-list">
+        <div className="messages-list">
           {
             this.state.hasMoreMessages &&
-              <div className="slack-messages-load-more {loadMoreClassName}"
+              <div className="messages-load-more {loadMoreClassName}"
                 onClick={this.handleLoadMore}>{loadMoreText}</div>
           }
           {createMessage(this.state.messages)}

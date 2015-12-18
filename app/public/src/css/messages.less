@@ -1,24 +1,12 @@
 @import "./lib/variable";
 
-.slack-messages {
+.messages {
   float: left;
   width: calc(~'100% - @{sidebar-width}');
-  .slack-messages-header {
-    @slack-messages-header-height: 53px;
-    height: @slack-messages-header-height;
-    color: #555459;
-    .channel-name {
-      padding: 0 .1rem 0 1.5rem;
-      font-size: 1.4rem;
-      line-height: @slack-messages-header-height;
-      font-weight: 900;
-      display: inline-block;
-    }
-  }
-  .slack-messages-list {
+  .messages-list {
     height: calc(~'100% - 53px');
     overflow: auto;
-    .slack-messages-load-more {
+    .messages-load-more {
       text-align: center;
       cursor: pointer;
       background: #259db8;
@@ -60,6 +48,21 @@
           color: #3d3c40;
         }
       }
+    }
+  }
+}
+
+.channel-messages {
+  .slack-messages-header {
+    @slack-messages-header-height: 53px;
+    height: @slack-messages-header-height;
+    color: #555459;
+    .channel-name {
+      padding: 0 .1rem 0 1.5rem;
+      font-size: 1.4rem;
+      line-height: @slack-messages-header-height;
+      font-weight: 900;
+      display: inline-block;
     }
   }
 }
