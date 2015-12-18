@@ -28,10 +28,11 @@ export default React.createClass({
     let botMessage = (message) => {
       let attachment = _.find(message.attachments, (attachment) => attachment.text);
       let text = attachment ? attachment.text : '';
+      let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
-            <img src={message.icons && message.icons.image_48} />
+            <img src={icon} />
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{message.username}</div>
