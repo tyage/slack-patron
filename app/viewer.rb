@@ -81,3 +81,28 @@ end
 get '/:channel' do
   erb :index
 end
+
+post '/search' do
+  word = params[:word]
+
+  content_type :json
+  Messages
+    .find(
+      '$or' => [
+        # normal message
+        { text: Regexp.new(word) },
+        # bot message
+        {
+          attachments: {
+            '$elemMatch' => { text: Regexp.new(word) }
+          },
+          subtype: 'bot_message'
+        }
+      ],
+      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s }
+    )
+    .limit(params[:limit] || 100)
+    .to_a
+    .reverse
+    .to_json
+end
