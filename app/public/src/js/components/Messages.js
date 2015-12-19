@@ -1,9 +1,11 @@
 import React from 'react';
 import ChannelMessages from './ChannelMessages';
 import SlackActions from '../actions/SlackActions';
-import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SlackConstants from '../constants/SlackConstants';
+import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
+import SearchWordStore from '../stores/SearchWordStore';
 import SlackMessageStore from '../stores/SlackMessageStore';
+
 
 let getState = () => {
   return {
@@ -12,10 +14,8 @@ let getState = () => {
 };
 
 export default React.createClass({
-  _onMessageChange() {
-    this.setState({
-      messagesType: SlackMessageStore.getMessagesType()
-    });
+  _onSearchWordChange() {
+    SlackActions.search(SearchWordStore.getSearchWord());
   },
   _onCurrentChannelChange() {
     SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
@@ -24,7 +24,7 @@ export default React.createClass({
     return getState();
   },
   componentDidMount() {
-    SlackMessageStore.addChangeListener(this._onMessageChange);
+    SearchWordStore.addChangeListener(this._onSearchWordChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
   },
   render() {
