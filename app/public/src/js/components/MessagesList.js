@@ -2,7 +2,6 @@ import React from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
-import SlackMessagesHeader from './SlackMessagesHeader';
 import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
 import SlackUserStore from '../stores/SlackUserStore';
@@ -84,16 +83,13 @@ export default React.createClass({
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
 
     return (
-      <div className="channel-messages">
-        <SlackMessagesHeader />
-        <div className="messages-list" ref="messagesList">
-          {
-            this.state.hasMoreMessages &&
-              <div className="messages-load-more {loadMoreClassName}"
-                onClick={this.handleLoadMore}>{loadMoreText}</div>
-          }
-          {createMessage(this.state.messages)}
-        </div>
+      <div className="messages-list" ref="messagesList">
+        {
+          this.state.hasMoreMessages &&
+            <div className="messages-load-more {loadMoreClassName}"
+              onClick={this.handleLoadMore}>{loadMoreText}</div>
+        }
+        {createMessage(this.state.messages)}
       </div>
     );
   }

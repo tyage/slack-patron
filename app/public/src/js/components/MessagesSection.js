@@ -1,5 +1,6 @@
 import React from 'react';
-import ChannelMessages from './ChannelMessages';
+import MessagesList from './MessagesList';
+import SlackMessagesHeader from './SlackMessagesHeader';
 import SlackActions from '../actions/SlackActions';
 import SlackConstants from '../constants/SlackConstants';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
@@ -44,10 +45,20 @@ export default React.createClass({
     let messages = () => {
       switch (this.state.messagesType) {
         case channelMessages:
-          return <ChannelMessages onLoadMoreMessages={loadMoreChannelMessages} />
+          return (
+            <div className="channel-messages">
+              <SlackMessagesHeader />
+              <MessagesList onLoadMoreMessages={loadMoreChannelMessages} />
+            </div>
+          );
           break;
         case searchMessages:
-          return <ChannelMessages onLoadMoreMessages={loadMoreSearchMessages} />
+          return (
+            <div className="channel-messages">
+              <SlackMessagesHeader />
+              <MessagesList onLoadMoreMessages={loadMoreSearchMessages} />
+            </div>
+          );
           break;
         default:
           break;
