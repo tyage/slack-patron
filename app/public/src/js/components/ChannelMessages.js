@@ -73,9 +73,9 @@ export default React.createClass({
     SlackChannelStore.addChangeListener(this._onChannelChange);
   },
   render() {
-    let createMessage = (messages, i) => _.map(messages, (message) => {
+    let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
-          channels={this.state.channels} />;
+          channels={this.state.channels} key={message.ts} />;
       });
     let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
     let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';

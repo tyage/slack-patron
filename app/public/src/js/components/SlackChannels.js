@@ -46,7 +46,7 @@ export default React.createClass({
           classNames.push('selected');
         }
         return (
-          <li className={classNames.join(' ')}>
+          <li className={classNames.join(' ')} key={channel.id}>
             <SlackChannel channel={channel} />
           </li>
         );
