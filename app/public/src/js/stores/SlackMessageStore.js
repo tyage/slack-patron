@@ -34,11 +34,6 @@ SlackDispatcher.register((action) => {
       _hasMoreMessages = action.messages.length > 0;
       slackMessageStore.emitChange();
       break;
-    case SlackConstants.UPDATE_SEARCH_RESULT:
-      _messages = action.messages;
-      _hasMoreMessages = true;
-      slackMessageStore.emitChange();
-      break;
   }
 });
 
