@@ -1,6 +1,6 @@
 import React from 'react';
 import Sidebar from './Sidebar';
-import Messages from './Messages';
+import MessagesSection from './MessagesSection';
 import SearchForm from './SearchForm';
 import SlackActions from '../actions/SlackActions';
 
@@ -13,7 +13,7 @@ export default React.createClass({
     return (
       <div className="slack-patron">
         <Sidebar />
-        <Messages />
+        <MessagesSection />
         <SearchForm />
       </div>
     );
