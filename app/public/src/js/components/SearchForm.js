@@ -13,9 +13,9 @@ export default React.createClass({
   componentDidMount() {
   },
   _onSearch(e) {
-    console.log(this.refs.search.value);
-    console.log(this.refs)
     e.preventDefault();
+
+    SlackActions.search(this.refs.search.value)
   },
   render() {
     return (
