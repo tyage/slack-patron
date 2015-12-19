@@ -20,13 +20,12 @@ let getState = () => {
 };
 
 export default React.createClass({
-  _getMessagesList() {
-    return $(this.getDOMNode()).find('.messages-list');
-  },
   _onUserChange() {
+    // if user information comming, re-render and show user information
     this.setState(getState());
   },
   _onChannelChange() {
+    // if channel information comming, re-render and show channel information
     this.setState(getState());
   },
   _onMessageChange() {
