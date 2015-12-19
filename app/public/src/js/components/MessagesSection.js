@@ -37,17 +37,17 @@ export default React.createClass({
   },
   render() {
     let loadMoreChannelMessages = (minTs) => {
-      SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel(), minTs);
+      SlackActions.getMoreMessages(SlackCurrentChannelStore.getCurrentChannel(), minTs);
     };
     let loadMoreSearchMessages = (minTs) => {
     };
     let messages = () => {
       switch (this.state.messagesType) {
         case channelMessages:
-          return <ChannelMessages onLoadMoreMessages={loadMoreSearchMessages} />
+          return <ChannelMessages onLoadMoreMessages={loadMoreChannelMessages} />
           break;
         case searchMessages:
-          return <ChannelMessages onLoadMoreMessages={loadMoreChannelMessages} />
+          return <ChannelMessages onLoadMoreMessages={loadMoreSearchMessages} />
           break;
         default:
           break;
