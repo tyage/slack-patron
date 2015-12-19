@@ -1,12 +1,26 @@
 import React from 'react';
 
 export default React.createClass({
+  getChannel(id) {
+    let channels = this.props.channels;
+    return channels && channels[id];
+  },
+  getUser(id) {
+    let users = this.props.users;
+    return users && users[id];
+  },
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
-    let channelLink = (id) => `#${this.props.channels[id].name}`;
-    let userLink = (id) => `@${this.props.users[id].name}`;
+    let channelLink = (id) => {
+      let channel = this.getChannel(id);
+      return `#${channel && channel.name}`;
+    };
+    let userLink = (id) => {
+      let user = this.getUser(id);
+      return `@${user && user.name}`;
+    };
     let specialCommand = (command) => `@${command}`;
     let uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
     if (text) {
@@ -28,10 +42,11 @@ export default React.createClass({
     let botMessage = (message) => {
       let attachment = _.find(message.attachments, (attachment) => attachment.text);
       let text = attachment ? attachment.text : '';
+      let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
-            <img src={message.icons && message.icons.image_48} />
+            <img src={icon} />
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{message.username}</div>
@@ -68,8 +83,7 @@ export default React.createClass({
         return botMessage(message);
         break;
       default:
-        let user = this.props.users[this.props.message.user];
-        return normalMessage(message, user);
+        return normalMessage(message, this.getUser(message.user));
         break;
     }
   }
