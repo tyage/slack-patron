@@ -7,7 +7,7 @@ export default React.createClass({
   _onSearch(e) {
     e.preventDefault();
 
-    SlackActions.search(this.refs.search.value)
+    SlackActions.updateSearchWord(this.refs.search.value)
   },
   render() {
     return (

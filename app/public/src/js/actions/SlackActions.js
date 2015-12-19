@@ -65,6 +65,12 @@ export default {
       contentType: false
     });
   },
+  updateSearchWord(word) {
+    SlackDispatcher.dispatch({
+      actionType: SlackConstants.UPDATE_SEARCH_WORD,
+      word
+    });
+  },
   search(word) {
     let url = generateApiUrl('./search');
     $.post(url, { word }).then((messages) => {
