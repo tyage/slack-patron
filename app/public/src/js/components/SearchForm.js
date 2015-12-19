@@ -1,15 +1,7 @@
 import React from 'react';
 import SlackActions from '../actions/SlackActions';
 
-let getState = () => {
-  return {
-  };
-};
-
 export default React.createClass({
-  getInitialState() {
-    return getState();
-  },
   componentDidMount() {
   },
   _onSearch(e) {
