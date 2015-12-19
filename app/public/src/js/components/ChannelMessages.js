@@ -33,13 +33,13 @@ export default React.createClass({
 
     if (this.state.isLoadingMore) {
       // fix scrollTop when load more messages
-      this._getMessagesList().scrollTop(
+      $(this.refs.messagesList).scrollTop(
         this.currentHeight() - this.state.oldHeight
       );
       this.setState({ isLoadingMore: false });
     } else {
       // go to bottom when channel changed
-      this._getMessagesList().scrollTop(this.currentHeight());
+      $(this.refs.messagesList).scrollTop(this.currentHeight());
     }
   },
   getInitialState() {
@@ -49,7 +49,7 @@ export default React.createClass({
     });
   },
   currentHeight() {
-    return this._getMessagesList().get(0).scrollHeight;
+    return this.refs.messagesList.scrollHeight;
   },
   handleLoadMore() {
     if (this.state.isLoadingMore) {
@@ -83,7 +83,7 @@ export default React.createClass({
     return (
       <div className="channel-messages">
         <SlackMessagesHeader />
-        <div className="messages-list">
+        <div className="messages-list" ref="messagesList">
           {
             this.state.hasMoreMessages &&
               <div className="messages-load-more {loadMoreClassName}"
