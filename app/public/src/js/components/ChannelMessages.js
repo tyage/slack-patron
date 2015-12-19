@@ -43,12 +43,6 @@ export default React.createClass({
       this._getMessagesList().scrollTop(this.currentHeight());
     }
   },
-  _onCurrentChannelChange() {
-    // setStateではすぐには更新されない
-    let state = getState();
-    this.setState(state);
-    SlackActions.getMessages(state.currentChannel);
-  },
   getInitialState() {
     return _.merge(getState(), {
       isLoadingMore: false,
@@ -76,7 +70,6 @@ export default React.createClass({
   },
   componentDidMount() {
     SlackMessageStore.addChangeListener(this._onMessageChange);
-    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
     SlackUserStore.addChangeListener(this._onUserChange);
     SlackChannelStore.addChangeListener(this._onChannelChange);
   },

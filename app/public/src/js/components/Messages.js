@@ -15,6 +15,7 @@ export default React.createClass({
     this.setState({
       messagesType: channelMessageType
     });
+    SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
   },
   getInitialState() {
     return getState();
