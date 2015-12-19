@@ -1,5 +1,5 @@
 import React from 'react';
-import _ from 'lodash';
+import SlackActions from '../actions/SlackActions';
 
 let getState = () => {
   return {

@@ -64,5 +64,14 @@ export default {
       processData: false,
       contentType: false
     });
+  },
+  search(word) {
+    let url = generateApiUrl('./search');
+    $.post(url, { word }).then((messages) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.GET_SEARCH_RESULT,
+        messages
+      });
+    });
   }
 };
