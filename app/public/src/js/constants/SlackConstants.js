@@ -5,7 +5,5 @@ export default {
   UPDATE_CHANNELS: Symbol(),
   UPDATE_CURRENT_CHANNEL: Symbol(),
   UPDATE_TEAM_INFO: Symbol(),
-  UPDATE_SEARCH_RESULT: Symbol(),
-  CHANNEL_MESSAGES: Symbol(),
-  SEARCH_MESSAGES: Symbol()
+  UPDATE_SEARCH_WORD: Symbol()
 };
