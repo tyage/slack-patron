@@ -69,7 +69,7 @@ export default {
     let url = generateApiUrl('./search');
     $.post(url, { word }).then((messages) => {
       SlackDispatcher.dispatch({
-        actionType: SlackConstants.GET_SEARCH_RESULT,
+        actionType: SlackConstants.UPDATE_SEARCH_RESULT,
         messages
       });
     });
