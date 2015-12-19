@@ -1,12 +1,19 @@
 import React from 'react';
 
 export default React.createClass({
+  getUser(id) {
+    let users = this.props.users;
+    return users && users[id];
+  },
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
     let channelLink = (id) => `#${this.props.channels[id].name}`;
-    let userLink = (id) => `@${this.props.users[id].name}`;
+    let userLink = (id) => {
+      let user = this.getUser(id);
+      return `@${user && user.name}`;
+    };
     let specialCommand = (command) => `@${command}`;
     let uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
     if (text) {
@@ -69,8 +76,7 @@ export default React.createClass({
         return botMessage(message);
         break;
       default:
-        let user = this.props.users[this.props.message.user];
-        return normalMessage(message, user);
+        return normalMessage(message, this.getUser(message.user));
         break;
     }
   }
