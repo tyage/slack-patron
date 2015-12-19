@@ -11,7 +11,7 @@ let CHANGE_EVENT = Symbol();
 class SlackMessageStore extends EventEmitter {
   getMessages() { return _messages; }
   hasMoreMessages() { return _hasMoreMessages; }
-  messagesType() { return _messagesType; }
+  getMessagesType() { return _messagesType; }
   emitChange() {
     this.emit(CHANGE_EVENT);
   }
