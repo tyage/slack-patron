@@ -20,11 +20,10 @@ export default React.createClass({
   },
   importBackup(e) {
     e.preventDefault();
-    let formData = new FormData(React.findDOMNode(this.refs.importBackup));
+    let formData = new FormData(this.refs.importBackup);
     SlackActions.importBackup(formData);
 
-    let importFile = React.findDOMNode(this.refs.backupFile);
-    importFile.value = "";
+    this.refs.backupFile.value = '';
   },
   render() {
     return (
