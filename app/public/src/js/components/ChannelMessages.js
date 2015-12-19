@@ -72,6 +72,11 @@ export default React.createClass({
     SlackUserStore.addChangeListener(this._onUserChange);
     SlackChannelStore.addChangeListener(this._onChannelChange);
   },
+  componentWillUnmount() {
+    SlackMessageStore.removeChangeListener(this._onMessageChange);
+    SlackUserStore.removeChangeListener(this._onUserChange);
+    SlackChannelStore.removeChangeListener(this._onChannelChange);
+  },
   render() {
     let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
