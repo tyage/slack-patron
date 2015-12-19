@@ -5,7 +5,6 @@ import SlackMessage from './SlackMessage';
 import SlackMessagesHeader from './SlackMessagesHeader';
 import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
-import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SlackUserStore from '../stores/SlackUserStore';
 import SlackChannelStore from '../stores/SlackChannelStore';
 
@@ -13,7 +12,6 @@ let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
     hasMoreMessages: SlackMessageStore.hasMoreMessages(),
-    currentChannel: SlackCurrentChannelStore.getCurrentChannel(),
     users: SlackUserStore.getUsers(),
     channels: SlackChannelStore.getChannels()
   };
@@ -65,7 +63,7 @@ export default React.createClass({
   },
   loadMoreMessages() {
     let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
-    SlackActions.getMoreMessages(this.state.currentChannel, minTs);
+    this.props.onLoadMoreMessages(minTs);
   },
   componentDidMount() {
     SlackMessageStore.addChangeListener(this._onMessageChange);

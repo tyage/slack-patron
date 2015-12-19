@@ -9,12 +9,6 @@ import SlackMessageStore from '../stores/SlackMessageStore';
 let channelMessages = Symbol();
 let searchMessages = Symbol();
 
-let getState = () => {
-  return {
-    messagesType: null
-  };
-};
-
 export default React.createClass({
   _onSearchWordChange() {
     this.setState({
@@ -29,7 +23,9 @@ export default React.createClass({
     SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
   },
   getInitialState() {
-    return getState();
+    return {
+      messagesType: null
+    };
   },
   componentDidMount() {
     SearchWordStore.addChangeListener(this._onSearchWordChange);
@@ -40,17 +36,23 @@ export default React.createClass({
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
   },
   render() {
+    let loadMoreChannelMessages = (minTs) => {
+      SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel(), minTs);
+    };
+    let loadMoreSearchMessages = (minTs) => {
+    };
     let messages = () => {
       switch (this.state.messagesType) {
         case channelMessages:
-          return <ChannelMessages />
+          return <ChannelMessages onLoadMoreMessages={loadMoreSearchMessages} />
           break;
         case searchMessages:
+          return <ChannelMessages onLoadMoreMessages={loadMoreChannelMessages} />
           break;
         default:
           break;
       }
-    }
+    };
     return (
       <div className="messages">
         { messages() }
