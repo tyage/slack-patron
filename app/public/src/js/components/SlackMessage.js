@@ -1,6 +1,10 @@
 import React from 'react';
 
 export default React.createClass({
+  getChannel(id) {
+    let channels = this.props.channels;
+    return channels && channels[id];
+  },
   getUser(id) {
     let users = this.props.users;
     return users && users[id];
@@ -9,7 +13,10 @@ export default React.createClass({
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
-    let channelLink = (id) => `#${this.props.channels[id].name}`;
+    let channelLink = (id) => {
+      let channel = this.getChannel(id);
+      return `#${channel && channel.name}`;
+    };
     let userLink = (id) => {
       let user = this.getUser(id);
       return `@${user && user.name}`;
