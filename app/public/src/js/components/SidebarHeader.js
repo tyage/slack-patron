@@ -22,6 +22,9 @@ export default React.createClass({
   componentDidMount() {
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
   },
+  componentWillUnmount() {
+    SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
+  },
   toggleConfigureWindow() {
     this.setState({
       showConfigureWindow: !this.state.showConfigureWindow

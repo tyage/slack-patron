@@ -20,6 +20,9 @@ export default React.createClass({
   componentDidMount() {
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
   },
+  componentWillUnmount() {
+    SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
+  },
   render() {
     let channel = _.find(this.state.channels, (c) => c.id === this.state.currentChannel);
     return (

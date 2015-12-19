@@ -35,6 +35,10 @@ export default React.createClass({
     SearchWordStore.addChangeListener(this._onSearchWordChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
   },
+  componentWillUnmount() {
+    SearchWordStore.removeChangeListener(this._onSearchWordChange);
+    SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
+  },
   render() {
     let messages = () => {
       switch (this.state.messagesType) {

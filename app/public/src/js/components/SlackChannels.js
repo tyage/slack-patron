@@ -32,12 +32,17 @@ export default React.createClass({
   componentDidMount() {
     SlackChannelStore.addChangeListener(this._onChannelChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
+
     SlackActions.getChannels();
 
     window.addEventListener('popstate', (e) => {
       let channel = SlackCurrentChannelStore.getChannelFromPath();
       SlackActions.updateCurrentChannel({ channel, pushState: false });
     });
+  },
+  componentWillUnmount() {
+    SlackChannelStore.removeChangeListener(this._onChannelChange);
+    SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
   },
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
