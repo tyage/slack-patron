@@ -37,9 +37,11 @@ export default {
     let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
-        messagesType: MessagesType.CHANNEL_MESSAGES,
         messages,
-        channel
+        messagesInfo: {
+          type: MessagesType.CHANNEL_MESSAGES,
+          channel
+        }
       });
     });
 
@@ -50,9 +52,11 @@ export default {
     let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
-        messagesType: MessagesType.CHANNEL_MESSAGES,
         messages,
-        channel
+        messagesInfo: {
+          type: MessagesType.CHANNEL_MESSAGES,
+          channel
+        }
       });
     });
 
@@ -95,9 +99,11 @@ export default {
     let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
-        messagesType: MessagesType.SEARCH_MESSAGES,
         messages,
-        searchWord: word
+        messagesInfo: {
+          type: MessagesType.SEARCH_MESSAGES,
+          searchWord: word
+        }
       });
     });
 
