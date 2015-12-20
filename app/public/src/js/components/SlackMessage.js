@@ -43,7 +43,7 @@ export default React.createClass({
     let channelInfo = (message, showChannel) => {
       let channel = this.getChannel(message.channel);
       if (showChannel && channel) {
-        return <div className="slack-message-date">#{channel && channel.name}</div>;
+        return <div className="slack-message-channel">#{channel.name}</div>;
       }
     };
     let botMessage = (message, showChannel) => {
