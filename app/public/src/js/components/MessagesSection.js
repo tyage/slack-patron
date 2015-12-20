@@ -57,13 +57,14 @@ export default React.createClass({
           break;
         case searchMessages:
           return (
-            <div className="channel-messages">
+            <div className="search-messages">
               <SearchMessagesHeader searchWord={this.state.searchWord} />
               <MessagesList onLoadMoreMessages={loadMoreSearchMessages} />
             </div>
           );
           break;
         default:
+          <div className="loading-messages"></div>
           break;
       }
     };
