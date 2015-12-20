@@ -54,7 +54,6 @@ export default React.createClass({
               <MessagesList onLoadMoreMessages={loadMoreChannelMessages} />
             </div>
           );
-          break;
         case searchMessages:
           return (
             <div className="search-messages">
@@ -62,10 +61,12 @@ export default React.createClass({
               <MessagesList onLoadMoreMessages={loadMoreSearchMessages} />
             </div>
           );
-          break;
         default:
-          <div className="loading-messages"></div>
-          break;
+          return (
+            <div className="loading-messages">
+              <h2 className="title">Now loading...</h2>
+            </div>
+          );
       }
     };
     return (
