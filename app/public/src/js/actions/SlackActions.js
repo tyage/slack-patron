@@ -5,6 +5,17 @@ import MessagesType from '../constants/MessagesType';
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 
+// callback becomes callable if it is passed to this function last time
+let _lastCallback;
+let callableIfLast = (callback) => {
+  _lastCallback = callback;
+  return (...args) => {
+    if (_lastCallback === callback) {
+      callback(...args);
+    }
+  };
+};
+
 export default {
   getChannels() {
     $.get(generateApiUrl('./channels.json')).then((channels) => {
@@ -23,8 +34,7 @@ export default {
     });
   },
   getMessages(channel) {
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url).then((messages) => {
+    let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
         messagesType: MessagesType.CHANNEL_MESSAGES,
@@ -32,10 +42,12 @@ export default {
         channel
       });
     });
+
+    let url = generateApiUrl('./messages/' + channel + '.json');
+    $.post(url).then(updateMessage);
   },
   getMoreMessages(channel, minTs) {
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url, { min_ts: minTs }).then((messages) => {
+    let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
         messagesType: MessagesType.CHANNEL_MESSAGES,
@@ -43,6 +55,9 @@ export default {
         channel
       });
     });
+
+    let url = generateApiUrl('./messages/' + channel + '.json');
+    $.post(url, { min_ts: minTs }).then(updateMessage);
   },
   updateCurrentChannel({ channel, pushState = true, replaceState = false }) {
     SlackDispatcher.dispatch({
@@ -77,8 +92,7 @@ export default {
     });
   },
   search(word) {
-    let url = generateApiUrl('./search');
-    $.post(url, { word }).then((messages) => {
+    let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
         messagesType: MessagesType.SEARCH_MESSAGES,
@@ -86,5 +100,8 @@ export default {
         searchWord: word
       });
     });
+
+    let url = generateApiUrl('./search');
+    $.post(url, { word }).then(updateMessage);
   }
 };

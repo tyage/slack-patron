@@ -11,8 +11,6 @@ import SlackMessageStore from '../stores/SlackMessageStore';
 let channelMessages = Symbol();
 let searchMessages = Symbol();
 
-let isLoading = false;
-
 export default React.createClass({
   _onSearchWordChange() {
     let searchWord = SearchWordStore.getSearchWord();
