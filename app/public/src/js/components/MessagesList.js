@@ -35,7 +35,7 @@ export default React.createClass({
       );
       this.setState({ isLoadingMore: false });
     } else {
-      // go to bottom when channel changed
+      // go to bottom when new messages arrives
       $(this.refs.messagesList).scrollTop(this.currentHeight());
     }
   },
