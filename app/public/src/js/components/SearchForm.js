@@ -8,6 +8,7 @@ export default React.createClass({
     e.preventDefault();
 
     SlackActions.updateSearchWord(this.refs.search.value)
+    // TODO: update URL
   },
   render() {
     return (
