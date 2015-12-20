@@ -18,13 +18,15 @@ export default React.createClass({
   componentDidMount() {
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
   },
+  componentWillUnmount() {
+    SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
+  },
   importBackup(e) {
     e.preventDefault();
-    let formData = new FormData(React.findDOMNode(this.refs.importBackup));
+    let formData = new FormData(this.refs.importBackup);
     SlackActions.importBackup(formData);
 
-    let importFile = React.findDOMNode(this.refs.backupFile);
-    importFile.value = "";
+    this.refs.backupFile.value = '';
   },
   render() {
     return (

@@ -4,7 +4,6 @@ import _ from 'lodash';
 import SlackMessage from './SlackMessage';
 import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
-import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SlackUserStore from '../stores/SlackUserStore';
 import SlackChannelStore from '../stores/SlackChannelStore';
 
@@ -12,7 +11,7 @@ let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
     hasMoreMessages: SlackMessageStore.hasMoreMessages(),
-    currentChannel: SlackCurrentChannelStore.getCurrentChannel(),
+    messagesInfo: SlackMessageStore.getMessagesInfo(),
     users: SlackUserStore.getUsers(),
     channels: SlackChannelStore.getChannels()
   };
@@ -20,9 +19,11 @@ let getState = () => {
 
 export default React.createClass({
   _onUserChange() {
+    // if user information comming, re-render and show user information
     this.setState(getState());
   },
   _onChannelChange() {
+    // if channel information comming, re-render and show channel information
     this.setState(getState());
   },
   _onMessageChange() {
@@ -30,20 +31,16 @@ export default React.createClass({
 
     if (this.state.isLoadingMore) {
       // fix scrollTop when load more messages
-      $(this.getDOMNode()).scrollTop(
+      $(this.refs.messagesList).scrollTop(
         this.currentHeight() - this.state.oldHeight
       );
       this.setState({ isLoadingMore: false });
     } else {
-      // go to bottom when channel changed
-      $(this.getDOMNode()).scrollTop(this.currentHeight());
+      this.scrollToLastMessage();
     }
   },
-  _onCurrentChannelChange() {
-    // setStateではすぐには更新されない
-    let state = getState();
-    this.setState(state);
-    SlackActions.getMessages(state.currentChannel);
+  scrollToLastMessage() {
+    $(this.refs.messagesList).scrollTop(this.currentHeight());
   },
   getInitialState() {
     return _.merge(getState(), {
@@ -52,7 +49,7 @@ export default React.createClass({
     });
   },
   currentHeight() {
-    return $(this.getDOMNode()).get(0).scrollHeight;
+    return this.refs.messagesList.scrollHeight;
   },
   handleLoadMore() {
     if (this.state.isLoadingMore) {
@@ -64,33 +61,46 @@ export default React.createClass({
       oldHeight: this.currentHeight()
     });
 
-    this.loadMoreMessages();
-  },
-  loadMoreMessages() {
     let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
-    SlackActions.getMoreMessages(this.state.currentChannel, minTs);
+    this.props.onLoadMoreMessages(minTs);
   },
   componentDidMount() {
     SlackMessageStore.addChangeListener(this._onMessageChange);
-    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
     SlackUserStore.addChangeListener(this._onUserChange);
     SlackChannelStore.addChangeListener(this._onChannelChange);
+
+    this.scrollToLastMessage();
+  },
+  componentWillUnmount() {
+    SlackMessageStore.removeChangeListener(this._onMessageChange);
+    SlackUserStore.removeChangeListener(this._onUserChange);
+    SlackChannelStore.removeChangeListener(this._onChannelChange);
   },
   render() {
-    let createMessage = (messages, i) => _.map(messages, (message) => {
+    let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
-          channels={this.state.channels} />;
+          channels={this.state.channels} key={message.ts}
+          type={this.state.messagesInfo.type} />;
       });
-    let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
-    let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
+    let loadMoreSection = () => {
+      if (!this.state.hasMoreMessages) {
+        return;
+      }
+
+      if (this.state.isLoadingMore) {
+        return <div className="messages-load-more loading">Loading...</div>;
+      } else {
+        return (
+          <div className="messages-load-more" onClick={this.handleLoadMore}>
+            Load more messages...
+          </div>
+        );
+      }
+    };
 
     return (
-      <div className="slack-messages">
-        {
-          this.state.hasMoreMessages &&
-            <div className="slack-messages-load-more {loadMoreClassName}"
-              onClick={this.handleLoadMore}>{loadMoreText}</div>
-        }
+      <div className="messages-list" ref="messagesList">
+        {loadMoreSection()}
         {createMessage(this.state.messages)}
       </div>
     );

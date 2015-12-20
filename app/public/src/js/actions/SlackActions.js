@@ -1,8 +1,20 @@
 import $ from 'jquery';
 import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import SlackConstants from '../constants/SlackConstants';
+import MessagesType from '../constants/MessagesType';
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
+
+// callback becomes callable if it is passed to this function last time
+let _lastCallback;
+let callableIfLast = (callback) => {
+  _lastCallback = callback;
+  return (...args) => {
+    if (_lastCallback === callback) {
+      callback(...args);
+    }
+  };
+};
 
 export default {
   getChannels() {
@@ -22,22 +34,34 @@ export default {
     });
   },
   getMessages(channel) {
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url).then((messages) => {
+    let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
-        messages
+        messages,
+        messagesInfo: {
+          type: MessagesType.CHANNEL_MESSAGES,
+          channel
+        }
       });
     });
+
+    let url = generateApiUrl('./messages/' + channel + '.json');
+    $.post(url).then(updateMessage);
   },
   getMoreMessages(channel, minTs) {
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url, { min_ts: minTs }).then((messages) => {
+    let updateMessage = callableIfLast((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
-        messages
+        messages,
+        messagesInfo: {
+          type: MessagesType.CHANNEL_MESSAGES,
+          channel
+        }
       });
     });
+
+    let url = generateApiUrl('./messages/' + channel + '.json');
+    $.post(url, { min_ts: minTs }).then(updateMessage);
   },
   updateCurrentChannel({ channel, pushState = true, replaceState = false }) {
     SlackDispatcher.dispatch({
@@ -64,5 +88,41 @@ export default {
       processData: false,
       contentType: false
     });
+  },
+  updateSearchWord(word) {
+    SlackDispatcher.dispatch({
+      actionType: SlackConstants.UPDATE_SEARCH_WORD,
+      word
+    });
+  },
+  search(word) {
+    let updateMessage = callableIfLast((messages) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_MESSAGES,
+        messages,
+        messagesInfo: {
+          type: MessagesType.SEARCH_MESSAGES,
+          searchWord: word
+        }
+      });
+    });
+
+    let url = generateApiUrl('./search');
+    $.post(url, { word }).then(updateMessage);
+  },
+  searchMore(word, minTs) {
+    let updateMessage = callableIfLast((messages) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_MORE_MESSAGES,
+        messages,
+        messagesInfo: {
+          type: MessagesType.SEARCH_MESSAGES,
+          searchWord: word
+        }
+      });
+    });
+
+    let url = generateApiUrl('./search');
+    $.post(url, { word, min_ts: minTs }).then(updateMessage);
   }
 };

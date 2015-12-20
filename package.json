@@ -27,7 +27,8 @@
     "jquery": "^2.1.4",
     "lodash": "^3.10.1",
     "normalize.css": "^3.0.3",
-    "react": "^0.13.3",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
     "webpack": "^1.11.0",
     "webpack-stream": "^2.1.0"
   },
