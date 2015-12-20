@@ -26,8 +26,8 @@ export default React.createClass({
   render() {
     let channel = _.find(this.state.channels, (c) => c.id === this.state.currentChannel);
     return (
-      <div className="slack-messages-header">
-        <div className="channel-name">{channel && channel.name}</div>
+      <div className="messages-header">
+        <div className="title">{channel && channel.name}</div>
       </div>
     );
   }

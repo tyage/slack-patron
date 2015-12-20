@@ -52,17 +52,15 @@
   }
 }
 
-.channel-messages {
-  .slack-messages-header {
-    @slack-messages-header-height: 53px;
-    height: @slack-messages-header-height;
-    color: #555459;
-    .channel-name {
-      padding: 0 .1rem 0 1.5rem;
-      font-size: 1.4rem;
-      line-height: @slack-messages-header-height;
-      font-weight: 900;
-      display: inline-block;
-    }
+.messages-header {
+  @messages-header-height: 53px;
+  height: @messages-header-height;
+  color: #555459;
+  .title {
+    padding: 0 .1rem 0 1.5rem;
+    font-size: 1.4rem;
+    line-height: @messages-header-height;
+    font-weight: 900;
+    display: inline-block;
   }
 }
