@@ -11,20 +11,29 @@ import SlackMessageStore from '../stores/SlackMessageStore';
 let channelMessages = Symbol();
 let searchMessages = Symbol();
 
+let isLoading = false;
+
 export default React.createClass({
   _onSearchWordChange() {
     let searchWord = SearchWordStore.getSearchWord();
     this.setState({
       messagesType: searchMessages,
-      searchWord
+      searchWord,
+      isLoading: true
     });
     SlackActions.search(searchWord);
   },
   _onCurrentChannelChange() {
     this.setState({
-      messagesType: channelMessages
+      messagesType: channelMessages,
+      isLoading: true
     });
     SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
+  },
+  _onMessageChange() {
+    this.setState({
+      isLoading: false
+    });
   },
   getInitialState() {
     return {
@@ -32,10 +41,12 @@ export default React.createClass({
     };
   },
   componentDidMount() {
+    SlackMessageStore.addChangeListener(this._onMessageChange);
     SearchWordStore.addChangeListener(this._onSearchWordChange);
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
   },
   componentWillUnmount() {
+    SlackMessageStore.removeChangeListener(this._onMessageChange);
     SearchWordStore.removeChangeListener(this._onSearchWordChange);
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
   },
@@ -62,16 +73,17 @@ export default React.createClass({
             </div>
           );
         default:
-          return (
-            <div className="loading-messages">
-              <h2 className="title">Now loading...</h2>
-            </div>
-          );
+          break;
       }
     };
+    let loadingMessages = () => (
+      <div className="loading-messages">
+        <h2 className="title">Now loading...</h2>
+      </div>
+    );
     return (
       <div className="messages">
-        { messages() }
+        { this.state.isLoading ? loadingMessages() : messages() }
       </div>
     );
   }
