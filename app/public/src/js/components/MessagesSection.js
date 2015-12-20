@@ -46,6 +46,7 @@ export default React.createClass({
       SlackActions.getMoreMessages(SlackCurrentChannelStore.getCurrentChannel(), minTs);
     };
     let loadMoreSearchMessages = (minTs) => {
+      SlackActions.searchMore(SlackCurrentChannelStore.getCurrentChannel(), minTs);
     };
     let messages = () => {
       let messagesInfo = SlackMessageStore.getMessagesInfo();

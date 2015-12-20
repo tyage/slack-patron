@@ -109,5 +109,20 @@ export default {
 
     let url = generateApiUrl('./search');
     $.post(url, { word }).then(updateMessage);
+  },
+  searchMore(word, minTs) {
+    let updateMessage = callableIfLast((messages) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_MORE_MESSAGES,
+        messages,
+        messagesInfo: {
+          type: MessagesType.SEARCH_MESSAGES,
+          searchWord: word
+        }
+      });
+    });
+
+    let url = generateApiUrl('./search');
+    $.post(url, { word, min_ts: minTs }).then(updateMessage);
   }
 };
