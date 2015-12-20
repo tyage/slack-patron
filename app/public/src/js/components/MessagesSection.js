@@ -3,27 +3,20 @@ import MessagesList from './MessagesList';
 import ChannelMessagesHeader from './ChannelMessagesHeader';
 import SearchMessagesHeader from './SearchMessagesHeader';
 import SlackActions from '../actions/SlackActions';
-import SlackConstants from '../constants/SlackConstants';
+import MessagesType from '../constants/MessagesType';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SearchWordStore from '../stores/SearchWordStore';
 import SlackMessageStore from '../stores/SlackMessageStore';
 
-let channelMessages = Symbol();
-let searchMessages = Symbol();
-
 export default React.createClass({
   _onSearchWordChange() {
-    let searchWord = SearchWordStore.getSearchWord();
     this.setState({
-      messagesType: searchMessages,
-      searchWord,
       isLoading: true
     });
-    SlackActions.search(searchWord);
+    SlackActions.search(SearchWordStore.getSearchWord());
   },
   _onCurrentChannelChange() {
     this.setState({
-      messagesType: channelMessages,
       isLoading: true
     });
     SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
@@ -35,7 +28,7 @@ export default React.createClass({
   },
   getInitialState() {
     return {
-      messagesType: null
+      isLoading: true
     };
   },
   componentDidMount() {
@@ -55,18 +48,19 @@ export default React.createClass({
     let loadMoreSearchMessages = (minTs) => {
     };
     let messages = () => {
-      switch (this.state.messagesType) {
-        case channelMessages:
+      let messagesInfo = SlackMessageStore.getMessagesInfo();
+      switch (messagesInfo.type) {
+        case MessagesType.CHANNEL_MESSAGES:
           return (
             <div className="channel-messages">
               <ChannelMessagesHeader />
               <MessagesList onLoadMoreMessages={loadMoreChannelMessages} />
             </div>
           );
-        case searchMessages:
+        case MessagesType.SEARCH_MESSAGES:
           return (
             <div className="search-messages">
-              <SearchMessagesHeader searchWord={this.state.searchWord} />
+              <SearchMessagesHeader searchWord={messagesInfo.searchWord} />
               <MessagesList onLoadMoreMessages={loadMoreSearchMessages} />
             </div>
           );
