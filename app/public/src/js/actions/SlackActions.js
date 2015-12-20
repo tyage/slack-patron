@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import SlackConstants from '../constants/SlackConstants';
+import MessagesType from '../constants/MessagesType';
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 
@@ -26,7 +27,9 @@ export default {
     $.post(url).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
-        messages
+        messagesType: MessagesType.CHANNEL_MESSAGES,
+        messages,
+        channel
       });
     });
   },
@@ -35,7 +38,9 @@ export default {
     $.post(url, { min_ts: minTs }).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
-        messages
+        messagesType: MessagesType.CHANNEL_MESSAGES,
+        messages,
+        channel
       });
     });
   },
@@ -76,7 +81,9 @@ export default {
     $.post(url, { word }).then((messages) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
-        messages
+        messagesType: MessagesType.SEARCH_MESSAGES,
+        messages,
+        searchWord: word
       });
     });
   }
