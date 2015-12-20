@@ -35,9 +35,11 @@ export default React.createClass({
       );
       this.setState({ isLoadingMore: false });
     } else {
-      // go to bottom when new messages arrives
-      $(this.refs.messagesList).scrollTop(this.currentHeight());
+      this.scrollToLastMessage();
     }
+  },
+  scrollToLastMessage() {
+    $(this.refs.messagesList).scrollTop(this.currentHeight());
   },
   getInitialState() {
     return _.merge(getState(), {
@@ -58,9 +60,6 @@ export default React.createClass({
       oldHeight: this.currentHeight()
     });
 
-    this.loadMoreMessages();
-  },
-  loadMoreMessages() {
     let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
     this.props.onLoadMoreMessages(minTs);
   },
@@ -68,6 +67,8 @@ export default React.createClass({
     SlackMessageStore.addChangeListener(this._onMessageChange);
     SlackUserStore.addChangeListener(this._onUserChange);
     SlackChannelStore.addChangeListener(this._onChannelChange);
+
+    this.scrollToLastMessage();
   },
   componentWillUnmount() {
     SlackMessageStore.removeChangeListener(this._onMessageChange);
