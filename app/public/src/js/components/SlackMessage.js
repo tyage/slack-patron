@@ -1,4 +1,5 @@
 import React from 'react';
+import MessagesType from '../constants/MessagesType';
 
 export default React.createClass({
   getChannel(id) {
@@ -39,7 +40,13 @@ export default React.createClass({
         __html: this.formatText(text) || ''
       };
     };
-    let botMessage = (message) => {
+    let channelInfo = (message, showChannel) => {
+      let channel = this.getChannel(message.channel);
+      if (showChannel && channel) {
+        return <div className="slack-message-date">#{channel && channel.name}</div>;
+      }
+    };
+    let botMessage = (message, showChannel) => {
       let attachment = _.find(message.attachments, (attachment) => attachment.text);
       let text = attachment ? attachment.text : '';
       let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
@@ -51,13 +58,14 @@ export default React.createClass({
           <div className="slack-message-content">
             <div className="slack-message-user-name">{message.username}</div>
             <div className="slack-message-date">{this.formatDate(message.ts)}</div>
+            {channelInfo(message, showChannel)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
           </div>
         </div>
       );
     };
-    let normalMessage = (message, user) => {
+    let normalMessage = (message, user, showChannel) => {
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
@@ -66,6 +74,7 @@ export default React.createClass({
           <div className="slack-message-content">
             <div className="slack-message-user-name">{user && user.name}</div>
             <div className="slack-message-date">{this.formatDate(message.ts)}</div>
+            {channelInfo(message, showChannel)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(message.text)}></div>
           </div>
@@ -78,12 +87,13 @@ export default React.createClass({
     }
 
     let message = this.props.message;
+    let showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
     switch (this.props.message.subtype) {
       case 'bot_message':
-        return botMessage(message);
+        return botMessage(message, showChannel);
         break;
       default:
-        return normalMessage(message, this.getUser(message.user));
+        return normalMessage(message, this.getUser(message.user), showChannel);
         break;
     }
   }
