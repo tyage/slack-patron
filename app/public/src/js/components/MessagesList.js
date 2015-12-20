@@ -80,16 +80,25 @@ export default React.createClass({
         return <SlackMessage message={message} users={this.state.users}
           channels={this.state.channels} key={message.ts} />;
       });
-    let loadMoreClassName = this.state.isLoadingMore ? 'loading' : '';
-    let loadMoreText = this.state.isLoadingMore ? 'Loading...' : 'Load more messages...';
+    let loadMoreSection = () => {
+      if (!this.state.hasMoreMessages) {
+        return;
+      }
+
+      if (this.state.isLoadingMore) {
+        return <div className="messages-load-more loading">Loading...</div>;
+      } else {
+        return (
+          <div className="messages-load-more" onClick={this.handleLoadMore}>
+            Load more messages...
+          </div>
+        );
+      }
+    };
 
     return (
       <div className="messages-list" ref="messagesList">
-        {
-          this.state.hasMoreMessages &&
-            <div className="messages-load-more {loadMoreClassName}"
-              onClick={this.handleLoadMore}>{loadMoreText}</div>
-        }
+        {loadMoreSection()}
         {createMessage(this.state.messages)}
       </div>
     );
