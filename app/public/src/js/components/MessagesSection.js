@@ -1,6 +1,7 @@
 import React from 'react';
 import MessagesList from './MessagesList';
-import SlackMessagesHeader from './SlackMessagesHeader';
+import ChannelMessagesHeader from './ChannelMessagesHeader';
+import SearchMessagesHeader from './SearchMessagesHeader';
 import SlackActions from '../actions/SlackActions';
 import SlackConstants from '../constants/SlackConstants';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
@@ -12,10 +13,12 @@ let searchMessages = Symbol();
 
 export default React.createClass({
   _onSearchWordChange() {
+    let searchWord = SearchWordStore.getSearchWord();
     this.setState({
-      messagesType: searchMessages
+      messagesType: searchMessages,
+      searchWord
     });
-    SlackActions.search(SearchWordStore.getSearchWord());
+    SlackActions.search(searchWord);
   },
   _onCurrentChannelChange() {
     this.setState({
@@ -47,7 +50,7 @@ export default React.createClass({
         case channelMessages:
           return (
             <div className="channel-messages">
-              <SlackMessagesHeader />
+              <ChannelMessagesHeader />
               <MessagesList onLoadMoreMessages={loadMoreChannelMessages} />
             </div>
           );
@@ -55,7 +58,7 @@ export default React.createClass({
         case searchMessages:
           return (
             <div className="channel-messages">
-              <SlackMessagesHeader />
+              <SearchMessagesHeader searchWord={this.state.searchWord} />
               <MessagesList onLoadMoreMessages={loadMoreSearchMessages} />
             </div>
           );
