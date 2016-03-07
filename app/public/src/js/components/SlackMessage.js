@@ -48,7 +48,7 @@ export default React.createClass({
     };
     let botMessage = (message, showChannel) => {
       let attachment = _.find(message.attachments, (attachment) => attachment.text);
-      let text = attachment ? attachment.text : '';
+      let text = attachment ? attachment.text : message.text;
       let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return (
         <div className="slack-message">
