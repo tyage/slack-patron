@@ -12,9 +12,28 @@ class SlackLogger
     replace_channels(channels)
   end
 
+  def update_groups
+    groups = Slack.groups_list['groups']
+    replace_channels(groups)
+  end
+
   # log history messages
-  def fetch_history(channel)
+  def fetch_channels_history(channel)
     messages = Slack.channels_history(
+      channel: channel,
+      count: 1000,
+    )['messages']
+
+    unless messages.nil?
+      messages.each do |m|
+        m['channel'] = channel
+        insert_message(m)
+      end
+    end
+  end
+
+  def fetch_groups_history(channel)
+    messages = Slack.groups_history(
       channel: channel,
       count: 1000,
     )['messages']
@@ -73,10 +92,15 @@ class SlackLogger
 
       update_users
       update_channels
+      update_groups
 
       Channels.find.each do |c|
         puts "loading messages from #{c[:name]}"
-        fetch_history(c[:id])
+        if c[:is_channel]
+          fetch_channels_history(c[:id])
+        elsif c[:is_group]
+          fetch_groups_history(c[:id])
+        end
         sleep(1)
       end
 

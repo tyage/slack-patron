@@ -48,6 +48,22 @@
         padding: 0 .5rem 0 1rem;
         font-size: 1rem;
       }
+      p:before {
+        display: inline-block;
+        width: 1em;
+        text-align: center;
+        font-weight: bold;
+      }
+    }
+    li.channel {
+      p:before {
+        content: '#';
+      }
+    }
+    li.group {
+      p:before {
+        content: '@';
+      }
     }
   }
 }

@@ -50,6 +50,11 @@ export default React.createClass({
         if (this.state.currentChannel === channel.id) {
           classNames.push('selected');
         }
+        if ('is_channel' in channel) {
+            classNames.push('channel');
+        } else if ('is_group' in channel) {
+            classNames.push('group');
+        }
         return (
           <li className={classNames.join(' ')} key={channel.id}>
             <SlackChannel channel={channel} />
