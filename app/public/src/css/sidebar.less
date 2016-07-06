@@ -29,41 +29,65 @@
       }
     }
   }
-  .slack-channels {
-    color: #ab9ba9;
-    overflow: auto;
+  .sidebar-body {
+    padding: 12px 0 0 0;
+    overflow: hidden;
     height: calc(~'100% - @{sidebar-header-height}');
-    li {
-      text-shadow: 0 1px 1px rgba(0,0,0,0.25);
-      cursor: pointer;
-      &:hover {
-        background: #3e313c;
-      }
-      &.selected {
-        background: rgb(76, 150, 137);
-        color: white;
-      }
-      p {
-        line-height: 1.5rem;
-        padding: 0 .5rem 0 1rem;
-        font-size: 1rem;
-      }
-      p:before {
-        display: inline-block;
-        width: 1em;
-        text-align: center;
-        font-weight: bold;
+    &:hover {
+      overflow: auto;
+    }
+    .slack-channels {
+      margin: 0 0 32px 0;
+    }
+    .slack-channels, .slack-ims {
+      .list {
+        color: #ab9ba9;
+        li {
+          text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+          cursor: pointer;
+          &:hover {
+            background: #3e313c;
+          }
+          &.selected {
+            background: rgb(76, 150, 137);
+            color: white;
+          }
+          p {
+            line-height: 1.5rem;
+            padding: 0 .5rem 0 1rem;
+            font-size: 1rem;
+            &:before {
+              content: ' ';
+              margin: 0 0 -4px 0;
+              display: inline-block;
+              width: 1em;
+              text-align: center;
+              font-weight: bold;
+            }
+          }
+        }
+        li.channel {
+          p:before {
+            content: '#';
+          }
+        }
+        li.group {
+          p:before {
+            content: '$';
+          }
+        }
+        li.im {
+          p:before {
+            content: '@';
+          }
+        }
       }
     }
-    li.channel {
-      p:before {
-        content: '#';
-      }
-    }
-    li.group {
-      p:before {
-        content: '@';
-      }
+    h3 {
+       margin: 0 0 4px;
+       color: #ab9ba9;
+       padding: 0 .5rem 0 1rem;
+       font-size: .8rem;
     }
   }
 }

@@ -27,6 +27,16 @@ def channels
   hashed_channels
 end
 
+def ims
+  hashed_users = users
+  hashed_ims = {}
+  Ims.find.each do |c|
+    hashed_ims[c[:id]] = c
+    hashed_ims[c[:id]][:name] = hashed_users[c[:user]][:name]
+  end
+  hashed_ims.sort_by {|k, v| v[:name] }.to_h
+end
+
 def messages(params)
   Messages
     .find(
@@ -46,6 +56,11 @@ end
 get '/channels.json' do
   content_type :json
   channels.to_json
+end
+
+get '/ims.json' do
+  content_type :json
+  ims.to_json
 end
 
 post '/messages/:channel.json' do

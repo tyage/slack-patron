@@ -38,6 +38,9 @@
         position: relative;
         word-wrap: break-word;
         white-space: pre-wrap;
+        &:last-child {
+          margin-bottom: 15px;
+        }
         .slack-message-user-image {
           position: absolute;
           top: 3px;
@@ -63,6 +66,8 @@
             padding-right: .25rem;
           }
           .slack-message-text {
+            margin-top: -6px;
+            line-height: 22px;
             color: #3d3c40;
           }
         }

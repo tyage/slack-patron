@@ -25,6 +25,16 @@ def replace_channels(channels)
   end
 end
 
+Ims = db['ims']
+Ims.indexes.create_one({ :id => 1 }, :unique => true)
+def replace_ims(ims)
+  unless ims.nil?
+    ids = ims.map{ |im| im['id'] }
+    Ims.find(id: { '$in' => ids }).delete_many
+    Ims.insert_many(ims)
+  end
+end
+
 Messages = db['messages']
 Messages.indexes.create_one({ :ts => 1 }, :unique => true)
 def insert_message(message)
