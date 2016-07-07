@@ -14,6 +14,11 @@ export default React.createClass({
     return new Date(date * 1000).toLocaleString();
   },
   formatText(text) {
+    let entity = (str) => {
+      return str.replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+    };
     let channelLink = (id) => {
       let channel = this.getChannel(id);
       return `#${channel && channel.name}`;
@@ -30,7 +35,7 @@ export default React.createClass({
         .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
-        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(uri));
+        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)));
     }
     return text;
   },

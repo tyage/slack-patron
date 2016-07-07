@@ -33,6 +33,7 @@
     padding: 12px 0 0 0;
     overflow: hidden;
     height: calc(~'100% - @{sidebar-header-height}');
+    border-right: 4px solid transparent;
     &:hover {
       overflow: auto;
     }
@@ -40,6 +41,7 @@
       margin: 0 0 32px 0;
     }
     .slack-channels, .slack-ims {
+      width: @sidebar-width - 12px;
       .list {
         color: #ab9ba9;
         li {

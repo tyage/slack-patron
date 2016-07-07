@@ -67,6 +67,21 @@ class SlackLogger
       update_channels
     end
 
+    realtime.on :group_joined do |c|
+      puts "group has joined"
+      update_groups
+    end
+
+    realtime.on :group_rename do |c|
+      puts "group has renamed"
+      update_groups
+    end
+
+    realtime.on :im_created do |c|
+      puts "direct message has created"
+      update_ims
+    end
+
     # if connection closed, restart the realtime logger
     realtime.on :close do
       puts "websocket disconnected"
