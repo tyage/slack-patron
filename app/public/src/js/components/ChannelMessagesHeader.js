@@ -6,6 +6,7 @@ import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 let getState = () => {
   return {
     channels: SlackChannelStore.getChannels(),
+    ims: SlackChannelStore.getIms(),
     currentChannel: SlackCurrentChannelStore.getCurrentChannel()
   };
 };
@@ -24,10 +25,19 @@ export default React.createClass({
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
   },
   render() {
-    let channel = _.find(this.state.channels, (c) => c.id === this.state.currentChannel);
+    let channels = Object.assign({}, this.state.channels, this.state.ims);
+    let channel = _.find(channels, (c) => c.id === this.state.currentChannel);
+    let prefix = '';
+    if ('is_channel' in channel) {
+        prefix = '#';
+    } else if ('is_group' in channel) {
+        prefix = '$';
+    } else if ('is_im' in channel) {
+        prefix = '@';
+    }
     return (
       <div className="messages-header">
-        <div className="title">{channel && channel.name}</div>
+        <div className="title">{prefix}{channel && channel.name}</div>
       </div>
     );
   }

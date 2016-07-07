@@ -8,6 +8,7 @@ import SlackActions from '../actions/SlackActions';
 let getState = () => {
   return {
     channels: SlackChannelStore.getChannels(),
+    ims: SlackChannelStore.getIms(),
     currentChannel: SlackCurrentChannelStore.getCurrentChannel()
   };
 };
@@ -34,6 +35,7 @@ export default React.createClass({
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
 
     SlackActions.getChannels();
+    SlackActions.getIms();
 
     window.addEventListener('popstate', (e) => {
       let channel = SlackCurrentChannelStore.getChannelFromPath();
@@ -54,6 +56,8 @@ export default React.createClass({
             classNames.push('channel');
         } else if ('is_group' in channel) {
             classNames.push('group');
+        } else if ('is_im' in channel) {
+            classNames.push('im');
         }
         return (
           <li className={classNames.join(' ')} key={channel.id}>
@@ -63,9 +67,20 @@ export default React.createClass({
       });
 
     return (
-      <ul className="slack-channels">
-        {createChannelList(this.state.channels)}
-      </ul>
+      <div className="sidebar-body">
+        <div className="slack-channels">
+          <h3>CHANNELS({Object.keys(this.state.channels).length})</h3>
+          <ul className="list">
+            {createChannelList(this.state.channels)}
+          </ul>
+        </div>
+        <div className="slack-ims">
+          <h3>DIRECT MESSAGES({Object.keys(this.state.ims).length})</h3>
+          <ul className="list">
+            {createChannelList(this.state.ims)}
+          </ul>
+        </div>
+      </div>
     );
   }
 });

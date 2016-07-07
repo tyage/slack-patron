@@ -25,6 +25,14 @@ export default {
       });
     });
   },
+  getIms() {
+    $.get(generateApiUrl('./ims.json')).then((ims) => {
+      SlackDispatcher.dispatch({
+        actionType: SlackConstants.UPDATE_IMS,
+        ims
+      });
+    });
+  },
   getUsers() {
     $.get(generateApiUrl('./users.json')).then((users) => {
       SlackDispatcher.dispatch({
