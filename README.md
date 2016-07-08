@@ -39,7 +39,7 @@ $ bundle exec ruby app/logger.rb
 
 ```sh
 $ npm install
-$ ./node_modules/.bin/gulp
+$ npm run build
 $ bundle exec rackup
 ```
 
@@ -48,7 +48,7 @@ $ bundle exec rackup
 If you are a developer, you can watch js, css as below.
 
 ```sh
-$ ./node_modules/.bin/gulp watch
+$ npm run watch
 ```
 
 ## Import Slack backup file with CLI
