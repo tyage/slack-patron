@@ -16,7 +16,7 @@ Log and view all Slack messages.
 
 Copy `config.yml.example` to `config.yml` and edit it.
 
-Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379` with docker-compose.
+Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379`.
 
 ```sh
 $ docker-compose up -d
