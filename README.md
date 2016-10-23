@@ -1,6 +1,6 @@
 # Slack patron
 
-Log and view all Slack messages in your local server.
+Log and view all Slack messages.
 
 ![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)
 
@@ -15,6 +15,8 @@ Log and view all Slack messages in your local server.
 ## Use with docker
 
 Copy `config.yml.example` to `config.yml` and edit it.
+
+Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379` with docker-compose.
 
 ```sh
 $ docker-compose up -d
@@ -55,7 +57,7 @@ $ bundle exec rackup viewer/config.ru
 
 ## Import Slack backup file with CLI
 
-** * This may not work with docker **
+** * This may not work with docker now... **
 
 The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
