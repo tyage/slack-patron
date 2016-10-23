@@ -22,7 +22,7 @@ Copy `config.yml.example` to `config.yml` and edit it.
 
 ```sh
 $ docker-compose up -d
-$ open http://localhost:19292
+$ open http://localhost:9292
 ```
 
 ## Use without docker

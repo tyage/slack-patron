@@ -15,7 +15,7 @@ services:
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
     ports:
-     - "19292:9292"
+     - "9292:9292"
     links:
      - redis
      - mongo
