@@ -1,6 +1,6 @@
 require 'sidekiq'
 require 'sidekiq/web'
-require './app/viewer'
+require './viewer/viewer'
 
 config = YAML.load_file('./config.yml')
 

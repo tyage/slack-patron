@@ -73,6 +73,7 @@ end
 
 get '/team.json' do
   content_type :json
+  # TODO: cache in redis or mongodb?
   Slack.team_info['team'].to_json
 end
 

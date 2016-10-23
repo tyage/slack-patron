@@ -4,7 +4,7 @@ slack:
 
 # Config for mongodb
 database:
-  uri: localhost:27017
+  uri: mongo:27017
   database: slack_logger
 
 # Channel that is showed at first
@@ -12,7 +12,7 @@ default_channel: general
 
 # redis server config
 redis:
-  url: redis://localhost:6379
+  url: redis://redis:6379
   namespace: sidekiq
 
 # rack config(please modify it)

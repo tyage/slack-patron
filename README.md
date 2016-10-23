@@ -1,6 +1,6 @@
 # Slack patron
 
-Log and view all Slack messages in your local server.
+Log and view all Slack messages.
 
 ![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)
 
@@ -10,16 +10,29 @@ Log and view all Slack messages in your local server.
   - Also, you can import all data with backup file.
 - View these data in web browser.
 
-![https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png](https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png)
+![https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png](https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png)
 
-## Requirements
+## Use with docker
+
+Copy `config.yml.example` to `config.yml` and edit it.
+
+Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379`.
+
+```sh
+$ docker-compose up -d
+$ open http://localhost:19292
+```
+
+## Use without docker
+
+### Requirements
 
 - ruby: 2.1.5p273
 - mongo db: 2.4.9
 - redis: 3.0.2
 - node.js: v0.10.25
 
-## Startup
+### Startup
 
 Copy `config.yml.example` to `config.yml` and edit it.
 
@@ -29,34 +42,27 @@ $ redis-server # you need to start redis server
 $ bundle install
 ```
 
-### Start Slack Message Logger
+#### Start Slack Message Logger
 
 ```sh
-$ bundle exec ruby app/logger.rb
+$ bundle exec ruby logger/logger.rb
 ```
 
-### Start Slack Message Viewer
+#### Start Slack Message Viewer
 
 ```sh
-$ npm install
-$ npm run build
-$ bundle exec rackup
-```
-
-## For Developer
-
-If you are a developer, you can watch js, css as below.
-
-```sh
-$ npm run watch
+$ ./viewer/setup.sh
+$ bundle exec rackup viewer/config.ru
 ```
 
 ## Import Slack backup file with CLI
+
+** * This may not work with docker now... **
 
 The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
 You can import Slack backup file with CLI.
 
 ```sh
-$ bundle exec ruby app/import.rb PATH_TO_BACKUP_FILE
+$ bundle exec ruby import.rb PATH_TO_BACKUP_FILE
 ```

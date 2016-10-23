@@ -1,0 +1,27 @@
+version: '2'
+services:
+  logger:
+    build:
+      context: ./
+      dockerfile: ./logger/Dockerfile
+    container_name: slack-patron-logger
+    links:
+     - redis
+     - mongo
+
+  viewer:
+    build:
+      context: ./
+      dockerfile: ./viewer/Dockerfile
+    container_name: slack-patron-viewer
+    ports:
+     - "19292:9292"
+    links:
+     - redis
+     - mongo
+
+  redis:
+    image: redis
+
+  mongo:
+    image: mongo

@@ -1,6 +1,6 @@
 {
   "name": "slack-patron",
-  "version": "1.5.0",
+  "version": "1.6.0",
   "description": "![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)",
   "main": "index.js",
   "scripts": {
