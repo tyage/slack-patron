@@ -19,7 +19,7 @@ RUN set -x \
 	bundle install && \
 	./viewer/setup.sh
 
-COPY config.yml ${SRCDIR}/config.yml
+COPY ../config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
 CMD ["bundle", "exec", "rackup", "viewer/config.ru"]

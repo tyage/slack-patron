@@ -17,7 +17,7 @@ RUN set -x \
 	git checkout ${BRANCH} && \
 	bundle install
 
-COPY config.yml ${SRCDIR}/config.yml
+COPY ../config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
 CMD ["bundle", "exec", "ruby", "logger/logger.rb"]
