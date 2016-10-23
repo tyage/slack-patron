@@ -32,15 +32,14 @@ $ bundle install
 ### Start Slack Message Logger
 
 ```sh
-$ bundle exec ruby app/logger.rb
+$ bundle exec ruby logger/logger.rb
 ```
 
 ### Start Slack Message Viewer
 
 ```sh
-$ npm install
-$ npm run build
-$ bundle exec rackup
+$ ./viewer/setup.sh
+$ bundle exec rackup viewer/config.ru
 ```
 
 ## For Developer
@@ -48,6 +47,7 @@ $ bundle exec rackup
 If you are a developer, you can watch js, css as below.
 
 ```sh
+$ cd ./viewer
 $ npm run watch
 ```
 
@@ -58,5 +58,5 @@ The size of Slack backup file is big and sometimes it is difficult to upload it 
 You can import Slack backup file with CLI.
 
 ```sh
-$ bundle exec ruby app/import.rb PATH_TO_BACKUP_FILE
+$ bundle exec ruby import.rb PATH_TO_BACKUP_FILE
 ```
