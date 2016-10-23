@@ -18,7 +18,7 @@ PR is welcome!!
 
 Copy `config.yml.example` to `config.yml` and edit it.
 
-Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379`.
+**Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379`.**
 
 ```sh
 $ docker-compose up -d
@@ -59,7 +59,7 @@ $ bundle exec rackup viewer/config.ru
 
 ## Import Slack backup file with CLI
 
-** * This may not work with docker now... **
+**Notice: This may not work with docker now...**
 
 The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
