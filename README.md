@@ -2,6 +2,8 @@
 
 Log and view all Slack messages.
 
+PR is welcome!!
+
 ![http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png](http://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)
 
 ## What Slack patron do?
