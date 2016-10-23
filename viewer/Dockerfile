@@ -11,14 +11,15 @@ RUN set -x \
 		git \
 		build-base \
 		openssl \
-		node && \
+		nodejs && \
 	echo 'gem: --no-document' >> /etc/gemrc && \
-	git clone ${REPOSITORY} ${SRCDIR} --depth=1 && \
+	git clone ${REPOSITORY} ${SRCDIR} && \
 	cd ${SRCDIR} && \
 	git checkout ${BRANCH} && \
-	bundle install
+	bundle install && \
+	./viewer/setup.sh
 
 COPY config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
-CMD ["bundle", "exec", "ruby", "app/logger.rb"]
+CMD ["bundle", "exec", "rackup", "viewer/config.ru"]

@@ -12,7 +12,7 @@ RUN set -x \
 		build-base \
 		openssl && \
 	echo 'gem: --no-document' >> /etc/gemrc && \
-	git clone ${REPOSITORY} ${SRCDIR} --depth=1 && \
+	git clone ${REPOSITORY} ${SRCDIR} && \
 	cd ${SRCDIR} && \
 	git checkout ${BRANCH} && \
 	bundle install
@@ -20,4 +20,4 @@ RUN set -x \
 COPY config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
-CMD ["bundle", "exec", "ruby", "app/logger.rb"]
+CMD ["bundle", "exec", "ruby", "logger/logger.rb"]
