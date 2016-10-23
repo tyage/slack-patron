@@ -10,16 +10,27 @@ Log and view all Slack messages in your local server.
   - Also, you can import all data with backup file.
 - View these data in web browser.
 
-![https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png](https://i.gyazo.com/721ef8987963c2acf20112fc033029cc.png)
+![https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png](https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png)
 
-## Requirements
+## Use with docker
+
+Copy `config.yml.example` to `config.yml` and edit it.
+
+```sh
+$ docker-compose up -d
+$ open http://localhost:19292
+```
+
+## Use without docker
+
+### Requirements
 
 - ruby: 2.1.5p273
 - mongo db: 2.4.9
 - redis: 3.0.2
 - node.js: v0.10.25
 
-## Startup
+### Startup
 
 Copy `config.yml.example` to `config.yml` and edit it.
 
@@ -29,29 +40,22 @@ $ redis-server # you need to start redis server
 $ bundle install
 ```
 
-### Start Slack Message Logger
+#### Start Slack Message Logger
 
 ```sh
 $ bundle exec ruby logger/logger.rb
 ```
 
-### Start Slack Message Viewer
+#### Start Slack Message Viewer
 
 ```sh
 $ ./viewer/setup.sh
 $ bundle exec rackup viewer/config.ru
 ```
 
-## For Developer
-
-If you are a developer, you can watch js, css as below.
-
-```sh
-$ cd ./viewer
-$ npm run watch
-```
-
 ## Import Slack backup file with CLI
+
+** * This may not work with docker **
 
 The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
