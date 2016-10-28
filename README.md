@@ -30,9 +30,11 @@ You can edit `config.yml` for more configuration.
 
 ## 2-A. Deploy with docker
 
+If you want to deploy with docker, what you should do is just type these command!
+
 ```sh
 $ docker-compose up -d
-$ open http://localhost:9292
+$ open http://localhost:9292 # open http://localhost:9292 in your browser
 ```
 
 ## 2-B. Deploy without docker
@@ -65,6 +67,7 @@ $ bundle exec ruby ./logger/logger.rb
 ```sh
 $ ./viewer/setup.sh
 $ bundle exec rackup ./viewer/config.ru
+$ open http://localhost:9292 # open http://localhost:9292 in your browser
 ```
 
 ## 3. Import Slack backup file
