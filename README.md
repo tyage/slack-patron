@@ -18,7 +18,7 @@ PR is welcome!!
 
 This app needs access token from Slack.
 
-Get access token from [here](https://slack-patron.herokuapp.com/).
+Get access token from [here](https://slack-patron.herokuapp.com/) (or use [test token](https://api.slack.com/docs/oauth-test-tokens)).
 
 Then, generate `config.yml` with this command:
 
