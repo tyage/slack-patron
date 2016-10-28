@@ -14,18 +14,28 @@ PR is welcome!!
 
 ![https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png](https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png)
 
-## Use with docker
+## Setup
 
-Copy `config.yml.example` to `config.yml` and edit it.
+This app needs access token from Slack.
 
-**Notice: database uri should be `mongo:27017` and redis uri should be `redis://redis:6379`.**
+Get access token from [here](https://slack-patron.herokuapp.com/).
+
+Then, generate `config.yml` with this command:
+
+```sh
+$ ruby ./bin/init.rb --token=YOUR_ACCESS_TOKEN
+```
+
+You can edit `config.yml` for more configuration.
+
+## Deploy with docker
 
 ```sh
 $ docker-compose up -d
 $ open http://localhost:9292
 ```
 
-## Use without docker
+## Deploy without docker
 
 ### Requirements
 
@@ -34,9 +44,7 @@ $ open http://localhost:9292
 - redis: 3.0.2
 - node.js: v0.10.25
 
-### Startup
-
-Copy `config.yml.example` to `config.yml` and edit it.
+### Setup
 
 ```sh
 $ mongod # you need to start mongo db server
@@ -47,24 +55,24 @@ $ bundle install
 #### Start Slack Message Logger
 
 ```sh
-$ bundle exec ruby logger/logger.rb
+$ bundle exec ruby ./logger/logger.rb
 ```
 
 #### Start Slack Message Viewer
 
 ```sh
 $ ./viewer/setup.sh
-$ bundle exec rackup viewer/config.ru
+$ bundle exec rackup ./viewer/config.ru
 ```
 
 ## Import Slack backup file with CLI
 
-**Notice: This may not work with docker now...**
+**Notice: This function is not enabled with docker now...**
 
 The size of Slack backup file is big and sometimes it is difficult to upload it with patron's webpage.
 
 You can import Slack backup file with CLI.
 
 ```sh
-$ bundle exec ruby import.rb PATH_TO_BACKUP_FILE
+$ bundle exec ruby ./bin/import.rb PATH_TO_BACKUP_FILE
 ```
