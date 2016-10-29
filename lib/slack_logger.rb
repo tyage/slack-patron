@@ -1,5 +1,10 @@
+require 'yaml'
 require './lib/slack'
 require './lib/db'
+
+config = YAML.load_file('./config.yml')
+enable_private_channel = config['logger']['enable_private_channel']
+enable_direct_message = config['logger']['enable_direct_message']
 
 class SlackLogger
   def update_users
@@ -67,19 +72,23 @@ class SlackLogger
       update_channels
     end
 
-    realtime.on :group_joined do |c|
-      puts "group has joined"
-      update_groups
+    if enable_private_channel
+      realtime.on :group_joined do |c|
+        puts "group has joined"
+        update_groups
+      end
+
+      realtime.on :group_rename do |c|
+        puts "group has renamed"
+        update_groups
+      end
     end
 
-    realtime.on :group_rename do |c|
-      puts "group has renamed"
-      update_groups
-    end
-
-    realtime.on :im_created do |c|
-      puts "direct message has created"
-      update_ims
+    if enable_direct_message
+      realtime.on :im_created do |c|
+        puts "direct message has created"
+        update_ims
+      end
     end
 
     # if connection closed, restart the realtime logger
@@ -99,22 +108,24 @@ class SlackLogger
 
       update_users
       update_channels
-      update_groups
-      update_ims
+      update_groups if enable_private_channel
+      update_ims if enable_direct_message
 
       Channels.find.each do |c|
         puts "loading messages from #{c[:name]}"
         if c[:is_channel]
           fetch_history(:channels_history, c[:id])
-        elsif c[:is_group]
+        elsif c[:is_group] && enable_private_channel
           fetch_history(:groups_history, c[:id])
         end
         sleep(1)
       end
 
-      Ims.find.each do |i|
-        fetch_history(:im_history, i[:id])
-        sleep(1)
+      if enable_direct_message
+        Ims.find.each do |i|
+          fetch_history(:im_history, i[:id])
+          sleep(1)
+        end
       end
 
       # realtime event is joined and dont exit current thread
