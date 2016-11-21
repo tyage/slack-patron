@@ -8,6 +8,10 @@ config = {
     'token' => nil
   },
   'default_channel' => 'general',
+  'logger' => {
+    'enable_private_channel' => true,
+    'enable_direct_message' => true
+  },
   'database' => {
     'uri' => 'mongo:27017',
     'database' => 'slack_logger'

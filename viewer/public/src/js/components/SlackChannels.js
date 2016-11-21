@@ -53,11 +53,11 @@ export default React.createClass({
           classNames.push('selected');
         }
         if ('is_channel' in channel) {
-            classNames.push('channel');
+          classNames.push('channel');
         } else if ('is_group' in channel) {
-            classNames.push('group');
+          classNames.push('group');
         } else if ('is_im' in channel) {
-            classNames.push('im');
+          classNames.push('im');
         }
         return (
           <li className={classNames.join(' ')} key={channel.id}>
