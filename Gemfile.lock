@@ -39,7 +39,7 @@ GEM
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     hitimes (1.2.3)
-    json (1.8.3)
+    json (1.8.6)
     mongo (2.1.2)
       bson (~> 3.0)
     multi_json (1.11.2)
@@ -78,3 +78,6 @@ DEPENDENCIES
   sidekiq
   sinatra
   slack-api!
+
+BUNDLED WITH
+   1.14.6
