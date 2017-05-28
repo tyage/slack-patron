@@ -7,6 +7,14 @@ ENABLE_PRIVATE_CHANNEL = config['logger']['enable_private_channel']
 ENABLE_DIRECT_MESSAGE = config['logger']['enable_direct_message']
 
 class SlackLogger
+  def is_private_channel(channel_name)
+    channel_name[0] == 'G'
+  end
+
+  def is_direct_message(channel_name)
+    channel_name[0] == 'D'
+  end
+
   def update_users
     users = Slack.users_list['members']
     replace_users(users)
@@ -48,6 +56,13 @@ class SlackLogger
     realtime = Slack.realtime
 
     realtime.on :message do |m|
+      if !ENABLE_PRIVATE_CHANNEL and is_private_channel(m['channel'])
+        next
+      end
+      if !ENABLE_DIRECT_MESSAGE and is_direct_message(m['channel'])
+        next
+      end
+
       puts m
       insert_message(m)
     end
