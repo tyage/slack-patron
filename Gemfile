@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'slack-api', :github => 'tyage/slack-ruby-gem'
+gem 'slack-api'
 gem 'sinatra'
 gem 'rubyzip'
 gem 'mongo'
