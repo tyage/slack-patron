@@ -5,7 +5,7 @@ ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
 ARG BRANCH="master"
 ARG SRCDIR="/usr/local/slack-patron"
 
-RUN set -x \
+RUN set -x && \
 	apk upgrade --update && \
 	apk add --update \
 		git \
