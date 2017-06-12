@@ -27,6 +27,11 @@ export default React.createClass({
   render() {
     let channels = Object.assign({}, this.state.channels, this.state.ims);
     let channel = _.find(channels, (c) => c.id === this.state.currentChannel);
+
+    if (!channel) {
+      return null;
+    }
+
     let prefix = '';
     if ('is_channel' in channel) {
         prefix = '#';
@@ -35,9 +40,10 @@ export default React.createClass({
     } else if ('is_im' in channel) {
         prefix = '@';
     }
+
     return (
       <div className="messages-header">
-        <div className="title">{prefix}{channel && channel.name}</div>
+        <div className="title">{prefix}{channel.name}</div>
       </div>
     );
   }
