@@ -10,7 +10,7 @@ import SlackChannelStore from '../stores/SlackChannelStore';
 let getState = () => {
   return {
     messages: SlackMessageStore.getMessages(),
-    hasMoreMessages: SlackMessageStore.hasMoreMessages(),
+    hasMoreMessage: SlackMessageStore.hasMoreMessage(),
     messagesInfo: SlackMessageStore.getMessagesInfo(),
     users: SlackUserStore.getUsers(),
     channels: SlackChannelStore.getChannels()
@@ -83,7 +83,7 @@ export default React.createClass({
           type={this.state.messagesInfo.type} />;
       });
     let loadMoreSection = () => {
-      if (!this.state.hasMoreMessages) {
+      if (!this.state.hasMoreMessage) {
         return;
       }
 

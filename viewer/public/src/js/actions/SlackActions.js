@@ -42,10 +42,11 @@ export default {
     });
   },
   getMessages(channel) {
-    let updateMessage = callableIfLast((messages) => {
+    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
         messages,
+        hasMoreMessage,
         messagesInfo: {
           type: MessagesType.CHANNEL_MESSAGES,
           channel
@@ -57,10 +58,11 @@ export default {
     $.post(url).then(updateMessage);
   },
   getMoreMessages(channel, minTs) {
-    let updateMessage = callableIfLast((messages) => {
+    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
         messages,
+        hasMoreMessage,
         messagesInfo: {
           type: MessagesType.CHANNEL_MESSAGES,
           channel

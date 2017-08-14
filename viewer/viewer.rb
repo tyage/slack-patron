@@ -38,14 +38,17 @@ def ims
 end
 
 def messages(params)
-  Messages
+  limit = params[:limit] || 100
+  all_messages = Messages
     .find(
       channel: params[:channel],
       ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
       hidden: { '$ne' => true }
     )
     .sort(ts: -1)
-    .limit(params[:limit] || 100)
+    .limit(limit + 1)
+  has_more_message = all_messages.count > limit
+  return all_messages, has_more_message
 end
 
 get '/users.json' do
@@ -65,10 +68,11 @@ end
 
 post '/messages/:channel.json' do
   content_type :json
-  messages(params)
-    .to_a
-    .reverse
-    .to_json
+  all_messages, has_more_message = messages(params)
+  {
+    messages: all_messages.to_a.reverse,
+    has_more_message: has_more_message
+  }.to_json
 end
 
 get '/team.json' do

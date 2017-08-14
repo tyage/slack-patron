@@ -3,14 +3,14 @@ import { EventEmitter } from 'events';
 import SlackConstants from '../constants/SlackConstants';
 
 let _messages = [];
-let _hasMoreMessages = true;
+let _hasMoreMessage = true;
 let _messagesInfo = {};
 
 let CHANGE_EVENT = Symbol();
 
 class SlackMessageStore extends EventEmitter {
   getMessages() { return _messages; }
-  hasMoreMessages() { return _hasMoreMessages; }
+  hasMoreMessage() { return _hasMoreMessage; }
   getMessagesInfo() { return _messagesInfo; }
   emitChange() {
     this.emit(CHANGE_EVENT);
@@ -28,13 +28,13 @@ SlackDispatcher.register((action) => {
   switch(action.actionType) {
     case SlackConstants.UPDATE_MESSAGES:
       _messages = action.messages;
-      _hasMoreMessages = true;
+      _hasMoreMessage = action.hasMoreMessage;
       _messagesInfo = action.messagesInfo;
       slackMessageStore.emitChange();
       break;
     case SlackConstants.UPDATE_MORE_MESSAGES:
       _messages = [...action.messages, ..._messages];
-      _hasMoreMessages = action.messages.length > 0;
+      _hasMoreMessage = action.hasMoreMessage;
       _messagesInfo = action.messagesInfo;
       slackMessageStore.emitChange();
       break;
