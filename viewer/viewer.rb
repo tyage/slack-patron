@@ -39,16 +39,30 @@ end
 
 def messages(params)
   limit = params[:limit] || 100
+  condition = {
+    ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
+    hidden: { '$ne' => true }
+  }
+  condition[:channel] = params[:channel] unless params[:channel].nil?
+  condition['$or'] = [
+    # normal message
+    { text: Regexp.new(params[:search]) },
+    # bot message
+    {
+      attachments: {
+        '$elemMatch' => { text: Regexp.new(params[:search]) }
+      },
+      subtype: 'bot_message'
+    }
+  ] unless params[:search].nil?
+
   all_messages = Messages
-    .find(
-      channel: params[:channel],
-      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
-      hidden: { '$ne' => true }
-    )
+    .find(condition)
     .sort(ts: -1)
     .limit(limit + 1)
   has_more_message = all_messages.count > limit
-  return all_messages, has_more_message
+
+  return all_messages.limit(limit), has_more_message
 end
 
 get '/users.json' do
@@ -67,8 +81,12 @@ get '/ims.json' do
 end
 
 post '/messages/:channel.json' do
+  all_messages, has_more_message = messages(
+    channel: params[:channel],
+    min_ts: params[:min_ts]
+  )
+
   content_type :json
-  all_messages, has_more_message = messages(params)
   {
     messages: all_messages.to_a.reverse,
     has_more_message: has_more_message
@@ -77,7 +95,7 @@ end
 
 get '/team.json' do
   content_type :json
-  # TODO: cache in redis or mongodb?
+  # TODO: cache in redis or mongodb or in memory?
   Slack.team_info['team'].to_json
 end
 
@@ -103,27 +121,14 @@ get '/:channel' do
 end
 
 post '/search' do
-  word = params[:word]
+  all_messages, has_more_message = messages(
+    search: params[:word],
+    min_ts: params[:min_ts]
+  )
 
   content_type :json
-  Messages
-    .find(
-      '$or' => [
-        # normal message
-        { text: Regexp.new(word) },
-        # bot message
-        {
-          attachments: {
-            '$elemMatch' => { text: Regexp.new(word) }
-          },
-          subtype: 'bot_message'
-        }
-      ],
-      ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s }
-    )
-    .sort(ts: -1)
-    .limit(params[:limit] || 100)
-    .to_a
-    .reverse
-    .to_json
+  {
+    messages: all_messages.to_a.reverse,
+    has_more_message: has_more_message
+  }.to_json
 end
