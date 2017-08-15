@@ -106,10 +106,11 @@ export default {
     });
   },
   search(word) {
-    let updateMessage = callableIfLast((messages) => {
+    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MESSAGES,
         messages,
+        hasMoreMessage,
         messagesInfo: {
           type: MessagesType.SEARCH_MESSAGES,
           searchWord: word
@@ -121,10 +122,11 @@ export default {
     $.post(url, { word }).then(updateMessage);
   },
   searchMore(word, minTs) {
-    let updateMessage = callableIfLast((messages) => {
+    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_MORE_MESSAGES,
         messages,
+        hasMoreMessage,
         messagesInfo: {
           type: MessagesType.SEARCH_MESSAGES,
           searchWord: word
