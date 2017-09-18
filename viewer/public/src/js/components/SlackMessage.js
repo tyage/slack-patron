@@ -4,7 +4,13 @@ import MessagesType from '../constants/MessagesType';
 export default React.createClass({
   getChannel(id) {
     let channels = this.props.channels;
-    return channels && channels[id];
+    let ims = this.props.ims;
+    if (channels && channels[id]) {
+      return channels[id];
+    }
+    if (ims && ims[id]) {
+      return ims[id];
+    }
   },
   getUser(id) {
     let users = this.props.users;
