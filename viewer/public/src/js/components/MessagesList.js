@@ -6,6 +6,7 @@ import SlackActions from '../actions/SlackActions';
 import SlackMessageStore from '../stores/SlackMessageStore';
 import SlackUserStore from '../stores/SlackUserStore';
 import SlackChannelStore from '../stores/SlackChannelStore';
+import SlackTeamStore from '../stores/SlackTeamStore';
 
 let getState = () => {
   return {
@@ -13,7 +14,8 @@ let getState = () => {
     hasMoreMessage: SlackMessageStore.hasMoreMessage(),
     messagesInfo: SlackMessageStore.getMessagesInfo(),
     users: SlackUserStore.getUsers(),
-    channels: SlackChannelStore.getChannels()
+    channels: SlackChannelStore.getChannels(),
+    teamInfo: SlackTeamStore.getTeamInfo()
   };
 };
 
@@ -38,6 +40,9 @@ export default React.createClass({
     } else {
       this.scrollToLastMessage();
     }
+  },
+  _onTeamInfoChange() {
+    this.setState(getState());
   },
   scrollToLastMessage() {
     $(this.refs.messagesList).scrollTop(this.currentHeight());
@@ -68,6 +73,7 @@ export default React.createClass({
     SlackMessageStore.addChangeListener(this._onMessageChange);
     SlackUserStore.addChangeListener(this._onUserChange);
     SlackChannelStore.addChangeListener(this._onChannelChange);
+    SlackTeamStore.addChangeListener(this._onTeamInfoChange);
 
     this.scrollToLastMessage();
   },
@@ -75,10 +81,12 @@ export default React.createClass({
     SlackMessageStore.removeChangeListener(this._onMessageChange);
     SlackUserStore.removeChangeListener(this._onUserChange);
     SlackChannelStore.removeChangeListener(this._onChannelChange);
+    SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
   },
   render() {
     let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
+          teamInfo={this.state.teamInfo}
           channels={this.state.channels} key={message.ts}
           type={this.state.messagesInfo.type} />;
       });

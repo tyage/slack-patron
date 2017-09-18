@@ -39,6 +39,10 @@ export default React.createClass({
     }
     return text;
   },
+  messageLink(teamInfo, message) {
+    const messageId = message.ts.replace('.', '');
+    return `https://${teamInfo.domain}.slack.com/messages/${message.channel}/p${messageId}`;
+  },
   render() {
     let createMarkup = (text) => {
       return {
@@ -51,7 +55,14 @@ export default React.createClass({
         return <div className="slack-message-channel">#{channel.name}</div>;
       }
     };
-    let botMessage = (message, showChannel) => {
+    let messageDate = (teamInfo, message) => {
+      return (
+        <div className="slack-message-date">
+          <a href={this.messageLink(teamInfo, message)} target="_blank">{this.formatDate(message.ts)}</a>
+        </div>
+      );
+    };
+    let botMessage = (teamInfo, message, showChannel) => {
       let attachment = _.find(message.attachments, (attachment) => attachment.text);
       let text = attachment ? attachment.text : message.text;
       let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
@@ -62,7 +73,7 @@ export default React.createClass({
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{message.username}</div>
-            <div className="slack-message-date">{this.formatDate(message.ts)}</div>
+            {messageDate(teamInfo, message)}
             {channelInfo(message, showChannel)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
@@ -70,7 +81,7 @@ export default React.createClass({
         </div>
       );
     };
-    let normalMessage = (message, user, showChannel) => {
+    let normalMessage = (teamInfo, message, user, showChannel) => {
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
@@ -78,7 +89,7 @@ export default React.createClass({
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{user && user.name}</div>
-            <div className="slack-message-date">{this.formatDate(message.ts)}</div>
+            {messageDate(teamInfo, message)}
             {channelInfo(message, showChannel)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(message.text)}></div>
@@ -95,10 +106,10 @@ export default React.createClass({
     let showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
     switch (this.props.message.subtype) {
       case 'bot_message':
-        return botMessage(message, showChannel);
+        return botMessage(this.props.teamInfo, message, showChannel);
         break;
       default:
-        return normalMessage(message, this.getUser(message.user), showChannel);
+        return normalMessage(this.props.teamInfo, message, this.getUser(message.user), showChannel);
         break;
     }
   }
