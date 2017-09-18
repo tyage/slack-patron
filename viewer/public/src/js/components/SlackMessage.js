@@ -1,4 +1,5 @@
 import React from 'react';
+import ChannelName from './ChannelName';
 import MessagesType from '../constants/MessagesType';
 
 export default React.createClass({
@@ -58,7 +59,11 @@ export default React.createClass({
     let channelInfo = (message, showChannel) => {
       let channel = this.getChannel(message.channel);
       if (showChannel && channel) {
-        return <div className="slack-message-channel">#{channel.name}</div>;
+        return (
+          <div className="slack-message-channel">
+            <ChannelName channel={channel} />
+          </div>
+        );
       }
     };
     let messageDate = (teamInfo, message) => {
