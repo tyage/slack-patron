@@ -1,8 +1,6 @@
 import React from 'react';
 
 export default React.createClass({
-  componentDidMount() {
-  },
   render() {
     const channel = this.props.channel;
     const classNames = ['channel-name'];
