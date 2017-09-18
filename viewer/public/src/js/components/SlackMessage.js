@@ -1,5 +1,6 @@
 import React from 'react';
 import ChannelName from './ChannelName';
+import SlackActions from '../actions/SlackActions';
 import MessagesType from '../constants/MessagesType';
 
 export default React.createClass({
@@ -50,6 +51,10 @@ export default React.createClass({
     const messageId = message.ts.replace('.', '');
     return `https://${teamInfo.domain}.slack.com/messages/${message.channel}/p${messageId}`;
   },
+  handleClickChannel(e) {
+    SlackActions.updateCurrentChannel({ channel: this.props.message.channel });
+    e.preventDefault();
+  },
   render() {
     let createMarkup = (text) => {
       return {
@@ -61,7 +66,9 @@ export default React.createClass({
       if (showChannel && channel) {
         return (
           <div className="slack-message-channel">
-            <ChannelName channel={channel} />
+            <a href="#" onClick={this.handleClickChannel}>
+              <ChannelName channel={channel} />
+            </a>
           </div>
         );
       }
