@@ -15,6 +15,7 @@ let getState = () => {
     messagesInfo: SlackMessageStore.getMessagesInfo(),
     users: SlackUserStore.getUsers(),
     channels: SlackChannelStore.getChannels(),
+    ims: SlackChannelStore.getIms(),
     teamInfo: SlackTeamStore.getTeamInfo()
   };
 };
@@ -87,7 +88,9 @@ export default React.createClass({
     let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
           teamInfo={this.state.teamInfo}
-          channels={this.state.channels} key={message.ts}
+          channels={this.state.channels}
+          ims={this.state.ims}
+          key={message.ts}
           type={this.state.messagesInfo.type} />;
       });
     let loadMoreSection = () => {
