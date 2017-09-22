@@ -22,12 +22,12 @@ gulp.task('css', () => {
     .pipe(concat('app.css'))
     .pipe(less())
     .on('error', (e) => console.error(e))
-    .pipe(gulp.dest('build'));
+    .pipe(gulp.dest('public/build'));
 });
 
 gulp.task('watch', () => {
-  gulp.watch('/src/**', ['js']);
-  gulp.watch('/css/**', ['css']);
+  gulp.watch('/public/src/**', ['js']);
+  gulp.watch('/public/css/**', ['css']);
 });
 
 gulp.task('default', ['js', 'css'], () => {

@@ -1,7 +1,7 @@
 module.exports = {
   entry: './public/js/app.js',
   output: {
-    filename: './build/app.js'
+    filename: './public/build/app.js'
   },
   devtool: 'inline-source-map',
   module: {
