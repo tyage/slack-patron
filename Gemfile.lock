@@ -2,8 +2,6 @@ GEM
   remote: https://rubygems.org/
   specs:
     bson (4.2.2)
-    concurrent-ruby (1.0.5)
-    connection_pool (2.2.1)
     eventmachine (1.2.5)
     faraday (0.13.0)
       multipart-post (>= 1.2, < 3)
@@ -21,15 +19,7 @@ GEM
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
-    redis (3.3.3)
-    redis-namespace (1.5.2)
-      redis (~> 3.0, >= 3.0.4)
     rubyzip (1.2.1)
-    sidekiq (5.0.4)
-      concurrent-ruby (~> 1.0)
-      connection_pool (~> 2.2, >= 2.2.0)
-      rack-protection (>= 1.5.0)
-      redis (~> 3.3, >= 3.3.3)
     sinatra (2.0.0)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -51,9 +41,7 @@ PLATFORMS
 DEPENDENCIES
   json
   mongo
-  redis-namespace
   rubyzip
-  sidekiq
   sinatra
   slack-api
 

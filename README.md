@@ -39,20 +39,18 @@ $ open http://localhost:9292 # open http://localhost:9292 in your browser
 
 ## 2-B. Deploy without docker
 
-You should edit `config.yml` to specify the location of mongo, redis server.
+You should edit `config.yml` to specify the location of mongo.
 
 ### Requirements
 
 - ruby: 2.1.5p273
 - mongo db: 2.4.9
-- redis: 3.0.2
 - node.js: v0.10.25
 
 ### 2-B-1. Setup
 
 ```sh
 $ mongod # you need to start mongo db server
-$ redis-server # you need to start redis server
 $ bundle install
 ```
 
