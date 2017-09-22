@@ -26,7 +26,7 @@ gulp.task('css', () => {
 });
 
 gulp.task('watch', () => {
-  gulp.watch('/public/src/**', ['js']);
+  gulp.watch('/public/js/**', ['js']);
   gulp.watch('/public/css/**', ['css']);
 });
 
