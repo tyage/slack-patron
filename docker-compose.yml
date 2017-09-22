@@ -6,6 +6,7 @@ services:
       dockerfile: ./logger/Dockerfile
     container_name: slack-patron-logger
     links:
+     - redis
      - mongo
 
   viewer:
@@ -16,7 +17,11 @@ services:
     ports:
      - "9292:9292"
     links:
+     - redis
      - mongo
+
+  redis:
+    image: redis
 
   mongo:
     image: mongo
