@@ -16,6 +16,10 @@ config = {
     'uri' => 'mongo:27017',
     'database' => 'slack_logger'
   },
+  'redis' => {
+    'url' => 'redis://redis:6379',
+    'namespace' => 'sidekiq'
+  },
   'rack' => {
     'secret' => SecureRandom.hex
   }

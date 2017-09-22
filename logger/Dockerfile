@@ -20,4 +20,4 @@ RUN set -x && \
 COPY ./config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
-CMD bundle exec ruby logger/logger.rb
+CMD bundle exec ruby logger/logger.rb && tail -f logs/sidekiq.log

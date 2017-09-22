@@ -1,3 +1,8 @@
+require 'sidekiq'
+require 'sidekiq/web'
 require './viewer/viewer'
 
-run Sinatra::Application
+run Rack::URLMap.new(
+  '/' => Sinatra::Application,
+  '/sidekiq' => Sidekiq::Web
+)
