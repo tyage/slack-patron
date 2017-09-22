@@ -12,7 +12,7 @@ PR is welcome!!
   - Also, you can import all data with backup file.
 - View these data in web browser.
 
-![https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png](https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png)
+![](https://i.gyazo.com/84143f0b371bc0c023c64075b5d83734.png)
 
 ## 1. Setup
 
