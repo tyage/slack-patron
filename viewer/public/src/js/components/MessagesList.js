@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
@@ -20,15 +20,22 @@ let getState = () => {
   };
 };
 
-export default React.createClass({
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = _.merge(getState(), {
+      isLoadingMore: false,
+      oldHeight: 0
+    });
+  }
   _onUserChange() {
     // if user information comming, re-render and show user information
     this.setState(getState());
-  },
+  }
   _onChannelChange() {
     // if channel information comming, re-render and show channel information
     this.setState(getState());
-  },
+  }
   _onMessageChange() {
     this.setState(getState());
 
@@ -41,22 +48,16 @@ export default React.createClass({
     } else {
       this.scrollToLastMessage();
     }
-  },
+  }
   _onTeamInfoChange() {
     this.setState(getState());
-  },
+  }
   scrollToLastMessage() {
     $(this.refs.messagesList).scrollTop(this.currentHeight());
-  },
-  getInitialState() {
-    return _.merge(getState(), {
-      isLoadingMore: false,
-      oldHeight: 0
-    });
-  },
+  }
   currentHeight() {
     return this.refs.messagesList.scrollHeight;
-  },
+  }
   handleLoadMore() {
     if (this.state.isLoadingMore) {
       return;
@@ -69,7 +70,7 @@ export default React.createClass({
 
     let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
     this.props.onLoadMoreMessages(minTs);
-  },
+  }
   componentDidMount() {
     SlackMessageStore.addChangeListener(this._onMessageChange);
     SlackUserStore.addChangeListener(this._onUserChange);
@@ -77,13 +78,13 @@ export default React.createClass({
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
 
     this.scrollToLastMessage();
-  },
+  }
   componentWillUnmount() {
     SlackMessageStore.removeChangeListener(this._onMessageChange);
     SlackUserStore.removeChangeListener(this._onUserChange);
     SlackChannelStore.removeChangeListener(this._onChannelChange);
     SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
-  },
+  }
   render() {
     let createMessage = (messages) => _.map(messages, (message) => {
         return <SlackMessage message={message} users={this.state.users}
@@ -116,4 +117,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

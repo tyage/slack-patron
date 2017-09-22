@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import MessagesList from './MessagesList';
 import ChannelMessagesHeader from './ChannelMessagesHeader';
 import SearchMessagesHeader from './SearchMessagesHeader';
@@ -8,39 +8,40 @@ import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
 import SearchWordStore from '../stores/SearchWordStore';
 import SlackMessageStore from '../stores/SlackMessageStore';
 
-export default React.createClass({
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoading: true
+    };
+  }
   _onSearchWordChange() {
     this.setState({
       isLoading: true
     });
     SlackActions.search(SearchWordStore.getSearchWord());
-  },
+  }
   _onCurrentChannelChange() {
     this.setState({
       isLoading: true
     });
     SlackActions.getMessages(SlackCurrentChannelStore.getCurrentChannel());
-  },
+  }
   _onMessageChange() {
     this.setState({
       isLoading: false
     });
-  },
-  getInitialState() {
-    return {
-      isLoading: true
-    };
-  },
+  }
   componentDidMount() {
-    SlackMessageStore.addChangeListener(this._onMessageChange);
-    SearchWordStore.addChangeListener(this._onSearchWordChange);
-    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
-  },
+    SlackMessageStore.addChangeListener(this._onMessageChange.bind(this));
+    SearchWordStore.addChangeListener(this._onSearchWordChange.bind(this));
+    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange.bind(this));
+  }
   componentWillUnmount() {
     SlackMessageStore.removeChangeListener(this._onMessageChange);
     SearchWordStore.removeChangeListener(this._onSearchWordChange);
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
-  },
+  }
   render() {
     let loadMoreChannelMessages = (minTs) => {
       SlackActions.getMoreMessages(SlackCurrentChannelStore.getCurrentChannel(), minTs);
@@ -80,4 +81,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

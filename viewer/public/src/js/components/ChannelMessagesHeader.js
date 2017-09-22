@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import SlackChannelStore from '../stores/SlackChannelStore';
 import SlackCurrentChannelStore from '../stores/SlackCurrentChannelStore';
@@ -11,19 +11,20 @@ let getState = () => {
   };
 };
 
-export default React.createClass({
-  getInitialState() {
-    return getState();
-  },
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = getState();
+  }
   _onCurrentChannelChange() {
     this.setState(getState());
-  },
+  }
   componentDidMount() {
     SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
-  },
+  }
   componentWillUnmount() {
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
-  },
+  }
   render() {
     let channels = Object.assign({}, this.state.channels, this.state.ims);
     let channel = _.find(channels, (c) => c.id === this.state.currentChannel);
@@ -47,4 +48,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import SlackTeamStore from '../stores/SlackTeamStore';
 import SlackActions from '../actions/SlackActions';
@@ -10,26 +10,27 @@ let getState = () => {
   };
 };
 
-export default React.createClass({
-  getInitialState() {
-    return _.merge(getState(), {
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = _.merge(getState(), {
       showConfigureWindow: null
     });
-  },
+  }
   _onTeamInfoChange() {
     this.setState(getState());
-  },
+  }
   componentDidMount() {
-    SlackTeamStore.addChangeListener(this._onTeamInfoChange);
-  },
+    SlackTeamStore.addChangeListener(this._onTeamInfoChange.bind(this));
+  }
   componentWillUnmount() {
     SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
-  },
+  }
   toggleConfigureWindow() {
     this.setState({
       showConfigureWindow: !this.state.showConfigureWindow
     });
-  },
+  }
   render() {
     return (
       <div>
@@ -46,4 +47,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

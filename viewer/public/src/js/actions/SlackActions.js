@@ -1,7 +1,7 @@
 import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
-import fetch from 'whatwg-fetch'
+import 'whatwg-fetch'
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 

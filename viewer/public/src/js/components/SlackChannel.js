@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { Component } from 'react';
 import SlackActions from '../actions/SlackActions';
 import ChannelName from './ChannelName';
 
-export default React.createClass({
+export default class extends Component {
   handleClick() {
     SlackActions.updateCurrentChannel({ channel: this.props.channel.id });
-  },
+  }
   render() {
     return (
       <p onClick={this.handleClick}>
@@ -13,4 +13,4 @@ export default React.createClass({
       </p>
     )
   }
-});
+}

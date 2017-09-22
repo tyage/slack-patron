@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import SlackChannel from './SlackChannel';
 import SlackChannelStore from '../stores/SlackChannelStore';
@@ -13,10 +13,11 @@ let getState = () => {
   };
 };
 
-export default React.createClass({
-  getInitialState() {
-    return getState();
-  },
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = getState();
+  }
   _onChannelChange() {
     let state = getState();
     this.setState(state);
@@ -26,13 +27,13 @@ export default React.createClass({
       let channel = SlackCurrentChannelStore.getChannelFromPath();
       SlackActions.updateCurrentChannel({ channel, pushState: false });
     });
-  },
+  }
   _onCurrentChannelChange() {
     this.setState(getState());
-  },
+  }
   componentDidMount() {
-    SlackChannelStore.addChangeListener(this._onChannelChange);
-    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange);
+    SlackChannelStore.addChangeListener(this._onChannelChange.bind(this));
+    SlackCurrentChannelStore.addChangeListener(this._onCurrentChannelChange.bind(this));
 
     SlackActions.getChannels();
     SlackActions.getIms();
@@ -41,11 +42,11 @@ export default React.createClass({
       let channel = SlackCurrentChannelStore.getChannelFromPath();
       SlackActions.updateCurrentChannel({ channel, pushState: false });
     });
-  },
+  }
   componentWillUnmount() {
     SlackChannelStore.removeChangeListener(this._onChannelChange);
     SlackCurrentChannelStore.removeChangeListener(this._onCurrentChannelChange);
-  },
+  }
   render() {
     let createChannelList = (channels) => _.map(channels, (channel) => {
         let className = '';
@@ -76,4 +77,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

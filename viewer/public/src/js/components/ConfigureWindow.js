@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import SlackActions from '../actions/SlackActions';
 import SlackTeamStore from '../stores/SlackTeamStore';
 
@@ -8,26 +8,27 @@ let getState = () => {
   };
 };
 
-export default React.createClass({
-  getInitialState() {
-    return getState();
-  },
+export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = getState();
+  }
   _onTeamInfoChange() {
     this.setState(getState());
-  },
+  }
   componentDidMount() {
     SlackTeamStore.addChangeListener(this._onTeamInfoChange);
-  },
+  }
   componentWillUnmount() {
     SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
-  },
+  }
   importBackup(e) {
     e.preventDefault();
     let formData = new FormData(this.refs.importBackup);
     SlackActions.importBackup(formData);
 
     this.refs.backupFile.value = '';
-  },
+  }
   render() {
     return (
       <div>
@@ -50,4 +51,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

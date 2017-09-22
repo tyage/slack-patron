@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default React.createClass({
+export default class extends Component {
   render() {
     const channel = this.props.channel;
     const classNames = ['channel-name'];
@@ -13,4 +13,4 @@ export default React.createClass({
     }
     return <span className={classNames.join(' ')}>{channel.name}</span>;
   }
-});
+}

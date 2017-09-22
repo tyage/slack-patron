@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Component } from 'react';
 
-export default React.createClass({
+export default class extends Component {
   render() {
     return (
       <div className="messages-header">
@@ -8,4 +8,4 @@ export default React.createClass({
       </div>
     );
   }
-});
+}

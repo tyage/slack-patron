@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ChannelName from './ChannelName';
 import SlackActions from '../actions/SlackActions';
 import MessagesType from '../constants/MessagesType';
 
-export default React.createClass({
+export default class extends Component {
   getChannel(id) {
     let channels = this.props.channels;
     let ims = this.props.ims;
@@ -13,14 +13,14 @@ export default React.createClass({
     if (ims && ims[id]) {
       return ims[id];
     }
-  },
+  }
   getUser(id) {
     let users = this.props.users;
     return users && users[id];
-  },
+  }
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
-  },
+  }
   formatText(text) {
     let entity = (str) => {
       return str.replace(/"/g, "&quot;")
@@ -46,15 +46,15 @@ export default React.createClass({
         .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)));
     }
     return text;
-  },
+  }
   messageLink(teamInfo, message) {
     const messageId = message.ts.replace('.', '');
     return `https://${teamInfo.domain}.slack.com/messages/${message.channel}/p${messageId}`;
-  },
+  }
   handleClickChannel(e) {
     SlackActions.updateCurrentChannel({ channel: this.props.message.channel });
     e.preventDefault();
-  },
+  }
   render() {
     let createMarkup = (text) => {
       return {
@@ -131,4 +131,4 @@ export default React.createClass({
         break;
     }
   }
-});
+}
