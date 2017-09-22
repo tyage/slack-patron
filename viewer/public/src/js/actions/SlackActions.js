@@ -1,7 +1,7 @@
-import $ from 'jquery';
 import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
+import fetch from 'whatwg-fetch'
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 
@@ -16,9 +16,13 @@ let callableIfLast = (callback) => {
   };
 };
 
+const fetchJSON = (url, params) => {
+  return fetch(url, params).then(res => res.json());
+};
+
 export default {
   getChannels() {
-    $.get(generateApiUrl('./channels.json')).then((channels) => {
+    fetchJSON(generateApiUrl('./channels.json')).then((channels) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_CHANNELS,
         channels
@@ -26,7 +30,7 @@ export default {
     });
   },
   getIms() {
-    $.get(generateApiUrl('./ims.json')).then((ims) => {
+    fetchJSON(generateApiUrl('./ims.json')).then((ims) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_IMS,
         ims
@@ -34,7 +38,7 @@ export default {
     });
   },
   getUsers() {
-    $.get(generateApiUrl('./users.json')).then((users) => {
+    fetchJSON(generateApiUrl('./users.json')).then((users) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_USERS,
         users
@@ -55,7 +59,7 @@ export default {
     });
 
     let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url).then(updateMessage);
+    fetchJSON(url, { method: 'POST' }).then(updateMessage);
   },
   getMoreMessages(channel, minTs) {
     let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
@@ -71,7 +75,14 @@ export default {
     });
 
     let url = generateApiUrl('./messages/' + channel + '.json');
-    $.post(url, { min_ts: minTs }).then(updateMessage);
+    const params = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: `min_ts=${minTs}` // TODO: post json format
+    };
+    fetchJSON(url, params).then(updateMessage);
   },
   updateCurrentChannel({ channel, pushState = true, replaceState = false }) {
     SlackDispatcher.dispatch({
@@ -82,7 +93,7 @@ export default {
   },
   getTeamInfo() {
     let url = generateApiUrl('./team.json');
-    $.get(url).then((teamInfo) => {
+    fetchJSON(url).then((teamInfo) => {
       SlackDispatcher.dispatch({
         actionType: SlackConstants.UPDATE_TEAM_INFO,
         teamInfo
@@ -91,12 +102,9 @@ export default {
   },
   importBackup(formData) {
     let url = generateApiUrl('./import_backup');
-    $.ajax({
-      url,
+    fetchJSON(url, {
       method: 'post',
-      data: formData,
-      processData: false,
-      contentType: false
+      body: formData
     });
   },
   updateSearchWord(word) {
@@ -119,7 +127,14 @@ export default {
     });
 
     let url = generateApiUrl('./search');
-    $.post(url, { word }).then(updateMessage);
+    const params = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: `word=${encodeURIComponent(word)}` // TODO: post json format
+    };
+    fetchJSON(url, params).then(updateMessage);
   },
   searchMore(word, minTs) {
     let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
@@ -135,6 +150,13 @@ export default {
     });
 
     let url = generateApiUrl('./search');
-    $.post(url, { word, min_ts: minTs }).then(updateMessage);
+    const params = {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+      },
+      body: `word=${encodeURIComponent(word)}&min_ts=${minTs}` // TODO: post json format
+    };
+    fetchJSON(url, params).then(updateMessage);
   }
 };
