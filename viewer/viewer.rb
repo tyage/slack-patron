@@ -102,6 +102,7 @@ end
 post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
+  # TODO: show progress when import
   SlackImport.new.import_from_file(exported_file)
 end
 
