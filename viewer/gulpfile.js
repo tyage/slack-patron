@@ -1,5 +1,6 @@
 var gulp = require('gulp');
 var concat = require('gulp-concat');
+const plumber = require('gulp-plumber')
 var less = require('gulp-less');
 var gutil = require('gulp-util');
 var webpack = require('webpack-stream');
@@ -12,11 +13,9 @@ var config = {
 
 gulp.task('js', function() {
   return gulp.src('')
+    .pipe(plumber())
     .pipe(webpack(webpackConfig))
-    .on('error', function(e) {
-      gutil.log(gutil.colors.red(e));
-      this.emit('end');
-    })
+    .on('error', (e) => console.error(e))
     .pipe(gulp.dest(''));
 });
 
@@ -24,12 +23,10 @@ gulp.task('css', function() {
   var normalizeCSS = './node_modules/normalize.css/normalize.css';
 
   return gulp.src([config.src + '/css/app.less', normalizeCSS])
+    .pipe(plumber())
     .pipe(concat('app.css'))
     .pipe(less())
-    .on('error', function(e) {
-      gutil.log(gutil.colors.red(e));
-      this.emit('end');
-    })
+    .on('error', (e) => console.error(e))
     .pipe(gulp.dest(config.dist + '/css'));
 });
 
