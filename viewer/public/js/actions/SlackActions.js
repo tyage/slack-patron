@@ -1,4 +1,3 @@
-import SlackDispatcher from '../dispatcher/SlackDispatcher';
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
 import 'whatwg-fetch'
@@ -38,12 +37,14 @@ export default {
     });
   },
   getUsers() {
-    fetchJSON(generateApiUrl('./users.json')).then((users) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_USERS,
-        users
-      });
-    });
+    return (dispatch) => (
+      fetchJSON(generateApiUrl('./users.json')).then((users) => {
+        dispatch({
+          type: SlackConstants.UPDATE_USERS,
+          users
+        });
+      })
+    );
   },
   getMessages(channel) {
     let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
@@ -92,13 +93,14 @@ export default {
     });
   },
   getTeamInfo() {
-    let url = generateApiUrl('./team.json');
-    fetchJSON(url).then((teamInfo) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_TEAM_INFO,
-        teamInfo
-      });
-    });
+    return (dispatch) => (
+      fetchJSON(generateApiUrl('./team.json')).then((teamInfo) => {
+        dispatch({
+          type: SlackConstants.UPDATE_TEAM_INFO,
+          teamInfo
+        });
+      })
+    );
   },
   importBackup(formData) {
     let url = generateApiUrl('./import_backup');

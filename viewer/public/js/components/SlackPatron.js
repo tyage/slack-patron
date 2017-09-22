@@ -1,23 +1,10 @@
-import React, { Component } from 'react';
-import { Route, Switch } from 'react-router';
-import { HashRouter } from 'react-router-dom';
+import React from 'react';
 import Sidebar from './Sidebar';
-import MessagesSection from './MessagesSection';
-import SearchForm from './SearchForm';
-import SlackActions from '../actions/SlackActions';
+//import MessagesSection from './MessagesSection';
+//import SearchForm from './SearchForm';
 
-export default class extends Component {
-  componentDidMount() {
-    SlackActions.getUsers();
-    SlackActions.getTeamInfo();
-  }
-  render() {
-    return (
-      <div className="slack-patron">
-        <Sidebar />
-        <MessagesSection />
-        <SearchForm />
-      </div>
-    );
-  }
-}
+export default () => (
+  <div className="slack-patron">
+    <Sidebar />
+  </div>
+);

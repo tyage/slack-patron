@@ -1,30 +1,19 @@
-import React, { Component } from 'react';
-import _ from 'lodash';
-import SlackTeamStore from '../stores/SlackTeamStore';
-import SlackActions from '../actions/SlackActions';
+import React from 'react';
+import { connect } from 'react-redux'
 import ConfigureWindow from './ConfigureWindow';
 
-let getState = () => {
+const mapStateToProps = state => {
   return {
-    teamInfo: SlackTeamStore.getTeamInfo()
+    teamInfo: state.teamInfo
   };
 };
 
-export default class extends Component {
+class SidebarHeader extends React.Component {
   constructor(props) {
     super(props);
-    this.state = _.merge(getState(), {
+    this.state = {
       showConfigureWindow: null
-    });
-  }
-  _onTeamInfoChange() {
-    this.setState(getState());
-  }
-  componentDidMount() {
-    SlackTeamStore.addChangeListener(this._onTeamInfoChange.bind(this));
-  }
-  componentWillUnmount() {
-    SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
+    };
   }
   toggleConfigureWindow() {
     this.setState({
@@ -36,7 +25,7 @@ export default class extends Component {
       <div>
         <div className="sidebar-header">
           <div className="team-info" onClick={this.toggleConfigureWindow}>
-            <span className="team-name">{this.state.teamInfo.name}</span>
+            <span className="team-name">{this.props.teamInfo.name}</span>
             <p className="configure-toggler"></p>
           </div>
         </div>
@@ -48,3 +37,5 @@ export default class extends Component {
     );
   }
 }
+
+export default connect(mapStateToProps)(SidebarHeader);
