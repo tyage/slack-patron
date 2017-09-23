@@ -106,11 +106,11 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  getMoreMessages(channel, minTs) {
+  getMoreMessages(channel, { isLoadingPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
-          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          type: isLoadingPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
           messages,
           hasMoreMessage
         });
@@ -120,9 +120,9 @@ export default {
       const params = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
         },
-        body: `max_ts=${minTs}` // TODO: post as json format
+        body: `${isLoadingPast ? 'max_ts' : 'min_ts'}=${limitTs}`
       };
       fetchJSON(url, params).then(updateMessage);
     };

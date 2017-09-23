@@ -24,8 +24,11 @@ class MessagesList extends React.Component {
     this.setState({ isLoadingMore: true });
     this.oldHeight = this.currentHeight();
 
-    const minTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
-    this.props.onLoadMoreMessages(minTs);
+    const oldTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
+    this.props.onLoadMoreMessages({
+      isLoadingPast: true,
+      limitTs: oldTs
+    });
   }
   componentDidMount() {
     this.scrollToLastMessage();
@@ -83,7 +86,7 @@ class MessagesList extends React.Component {
           messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
     const loadMoreSection = () => {
-      if (!this.props.hasMoreMessage) {
+      if (!this.props.hasMorePastMessage) {
         return;
       }
 
@@ -110,7 +113,8 @@ class MessagesList extends React.Component {
 const mapStateToProps = state => {
   return {
     messages: state.messages.messages,
-    hasMoreMessage: state.messages.hasMoreMessage,
+    hasMorePastMessage: state.messages.hasMorePastMessage,
+    hasMoreFutureMessage: state.messages.hasMoreFutureMessage,
     messagesInfo: state.messages.messagesInfo,
     users: state.users,
     channels: state.channels.channels,
