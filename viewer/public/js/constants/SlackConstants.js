@@ -1,5 +1,6 @@
 export default {
   UPDATE_MESSAGES: Symbol(),
+  START_UPDATE_MESSAGES: Symbol(),
   UPDATE_MORE_MESSAGES: Symbol(),
   UPDATE_USERS: Symbol(),
   UPDATE_CHANNELS: Symbol(),

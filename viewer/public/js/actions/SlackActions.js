@@ -52,6 +52,10 @@ export default {
   },
   getMessages(channel) {
     return dispatch => {
+      dispatch({
+        type: SlackConstants.START_UPDATE_MESSAGES
+      });
+
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
           type: SlackConstants.UPDATE_MESSAGES,
