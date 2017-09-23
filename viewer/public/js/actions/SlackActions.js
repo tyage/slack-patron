@@ -23,7 +23,7 @@ const fetchJSON = (url, params) => {
 export default {
   getChannels() {
     return dispatch => (
-      fetchJSON(generateApiUrl('/channels.json')).then((channels) => {
+      fetchJSON(generateApiUrl('channels.json')).then((channels) => {
         dispatch({
           type: SlackConstants.UPDATE_CHANNELS,
           channels
@@ -33,7 +33,7 @@ export default {
   },
   getIms() {
     return dispatch => (
-      fetchJSON(generateApiUrl('/ims.json')).then((ims) => {
+      fetchJSON(generateApiUrl('ims.json')).then((ims) => {
         dispatch({
           type: SlackConstants.UPDATE_IMS,
           ims
@@ -43,7 +43,7 @@ export default {
   },
   getUsers() {
     return dispatch => (
-      fetchJSON(generateApiUrl('/users.json')).then((users) => {
+      fetchJSON(generateApiUrl('users.json')).then((users) => {
         dispatch({
           type: SlackConstants.UPDATE_USERS,
           users
@@ -69,13 +69,13 @@ export default {
         });
       });
 
-      const url = generateApiUrl('/messages/' + channel + '.json');
+      const url = generateApiUrl('messages/' + channel + '.json');
       const params = {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `ts=${ts}` // TODO: post as json format
+        body: ts ? `ts=${ts}` : '' // TODO: post as json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -90,7 +90,7 @@ export default {
         });
       });
 
-      const url = generateApiUrl('/messages/' + channel + '.json');
+      const url = generateApiUrl('messages/' + channel + '.json');
       const params = {
         method: 'POST',
         headers: {
@@ -103,7 +103,7 @@ export default {
   },
   getTeamInfo() {
     return (dispatch) => (
-      fetchJSON(generateApiUrl('/team.json')).then((teamInfo) => {
+      fetchJSON(generateApiUrl('team.json')).then((teamInfo) => {
         dispatch({
           type: SlackConstants.UPDATE_TEAM_INFO,
           teamInfo
@@ -113,7 +113,7 @@ export default {
   },
   importBackup(formData) {
     return dispatch => {
-      const url = generateApiUrl('/import_backup');
+      const url = generateApiUrl('import_backup');
       fetchJSON(url, {
         method: 'post',
         body: formData
@@ -141,7 +141,7 @@ export default {
         });
       });
 
-      const url = generateApiUrl('/search');
+      const url = generateApiUrl('search');
       const params = {
         method: 'POST',
         headers: {
@@ -162,7 +162,7 @@ export default {
         });
       });
 
-      const url = generateApiUrl('/search');
+      const url = generateApiUrl('search');
       const params = {
         method: 'POST',
         headers: {
