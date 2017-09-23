@@ -73,27 +73,25 @@ export default {
     };
   },
   getMoreMessages(channel, minTs) {
-    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_MORE_MESSAGES,
-        messages,
-        hasMoreMessage,
-        messagesInfo: {
-          type: MessagesType.CHANNEL_MESSAGES,
-          channel
-        }
+    return dispatch => {
+      const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          messages,
+          hasMoreMessage
+        });
       });
-    });
 
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    const params = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: `min_ts=${minTs}` // TODO: post json format
+      const url = generateApiUrl('./messages/' + channel + '.json');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `min_ts=${minTs}` // TODO: post as json format
+      };
+      fetchJSON(url, params).then(updateMessage);
     };
-    fetchJSON(url, params).then(updateMessage);
   },
   updateCurrentChannel({ channel, pushState = true, replaceState = false }) {
     SlackDispatcher.dispatch({

@@ -15,6 +15,6 @@ const channels = (state = { channels: [], ims: [] }, action) => {
     default:
       return state;
   }
-}
+};
 
 export default channels;

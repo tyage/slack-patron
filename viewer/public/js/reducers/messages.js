@@ -1,6 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 
-const users = (state = { messages: [], hasMoreMessage: true, messagesInfo: {} }, action) => {
+const messages = (state = { messages: [], hasMoreMessage: true, messagesInfo: {} }, action) => {
   switch (action.type) {
     case SlackConstants.UPDATE_MESSAGES:
       return {
@@ -8,9 +8,15 @@ const users = (state = { messages: [], hasMoreMessage: true, messagesInfo: {} },
         hasMoreMessage: action.hasMoreMessage,
         messagesInfo: action.messagesInfo
       };
+    case SlackConstants.UPDATE_MORE_MESSAGES:
+      return {
+        ...state,
+        messages: [...action.messages, ...state.messages],
+        hasMoreMessage: action.hasMoreMessage
+      };
     default:
       return state;
   }
-}
+};
 
-export default users;
+export default messages;

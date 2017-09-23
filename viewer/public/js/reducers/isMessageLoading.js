@@ -9,6 +9,6 @@ const channels = (state = false, action) => {
     default:
       return state;
   }
-}
+};
 
 export default channels;

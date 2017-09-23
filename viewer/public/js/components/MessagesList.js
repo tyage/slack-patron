@@ -7,8 +7,7 @@ class MessagesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadingMore: false,
-      oldHeight: 0
+      isLoadingMore: false
     };
   }
   scrollToLastMessage() {
@@ -22,33 +21,35 @@ class MessagesList extends React.Component {
       return;
     }
 
-    this.setState({
-      isLoadingMore: true,
-      oldHeight: this.currentHeight()
-    });
+    this.setState({ isLoadingMore: true });
+    this.oldHeight = this.currentHeight();
 
-    let minTs = (this.state.messages.length > 0) && this.state.messages[0].ts;
+    const minTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
     this.props.onLoadMoreMessages(minTs);
   }
   componentDidMount() {
     this.scrollToLastMessage();
   }
   componentDidUpdate() {
-    if (this.scrollAfterUpdate) {
+    if (this.scrollBackAfterUpdate) {
+      // fix scrollTop when load more messages
+      $(this.refs.messagesList).scrollTop(
+        this.currentHeight() - (this.oldHeight || 0)
+      );
+      this.scrollBackAfterUpdate = false;
+    }
+    if (this.scrollToLastMessageAfterUpdate) {
       this.scrollToLastMessage();
-      this.scrollAfterUpdate = false;
+      this.scrollToLastMessageAfterUpdate = false;
     }
   }
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoadingMore) {
-      // fix scrollTop when load more messages
-      $(this.refs.messagesList).scrollTop(
-        this.currentHeight() - this.state.oldHeight
-      );
+    if (this.state.isLoadingMore && nextProps.messages !== this.props.messages) {
+      this.scrollBackAfterUpdate = true;
       this.setState({ isLoadingMore: false });
     }
     if (nextProps.messagesInfo !== this.props.messagesInfo) {
-      this.scrollAfterUpdate = true;
+      this.scrollToLastMessageAfterUpdate = true;
     }
   }
   render() {
@@ -69,7 +70,7 @@ class MessagesList extends React.Component {
         return <div className="messages-load-more loading">Loading...</div>;
       } else {
         return (
-          <div className="messages-load-more" onClick={this.handleLoadMore}>
+          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this)}>
             Load more messages...
           </div>
         );
