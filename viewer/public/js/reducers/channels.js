@@ -1,6 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 
-const channels = (state = {}, action) => {
+const channels = (state = { channels: [], ims: [] }, action) => {
   switch (action.type) {
     case SlackConstants.UPDATE_CHANNELS:
       return {

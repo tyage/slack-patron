@@ -12,6 +12,8 @@ const store = createStore(slackPatron, applyMiddleware(thunkMiddleware));
 // initialize data
 store.dispatch(SlackActions.getUsers());
 store.dispatch(SlackActions.getTeamInfo());
+store.dispatch(SlackActions.getChannels());
+store.dispatch(SlackActions.getIms());
 
 render(
   <Provider store={store}>

@@ -1,16 +1,10 @@
-import React, { Component } from 'react';
-import SlackActions from '../actions/SlackActions';
+import React from 'react';
 import ChannelName from './ChannelName';
 
-export default class extends Component {
-  handleClick() {
-    SlackActions.updateCurrentChannel({ channel: this.props.channel.id });
-  }
-  render() {
-    return (
-      <p onClick={this.handleClick}>
-        <ChannelName channel={this.props.channel} />
-      </p>
-    )
-  }
-}
+const SlackChannel = ({ channel }) => (
+  <p>
+    <ChannelName channel={channel} />
+  </p>
+);
+
+export default SlackChannel;

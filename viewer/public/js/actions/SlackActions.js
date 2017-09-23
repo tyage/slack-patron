@@ -21,20 +21,24 @@ const fetchJSON = (url, params) => {
 
 export default {
   getChannels() {
-    fetchJSON(generateApiUrl('./channels.json')).then((channels) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_CHANNELS,
-        channels
-      });
-    });
+    return (dispatch) => (
+      fetchJSON(generateApiUrl('./channels.json')).then((channels) => {
+        dispatch({
+          type: SlackConstants.UPDATE_CHANNELS,
+          channels
+        });
+      })
+    );
   },
   getIms() {
-    fetchJSON(generateApiUrl('./ims.json')).then((ims) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_IMS,
-        ims
-      });
-    });
+    return (dispatch) => (
+      fetchJSON(generateApiUrl('./ims.json')).then((ims) => {
+        dispatch({
+          type: SlackConstants.UPDATE_IMS,
+          ims
+        });
+      })
+    );
   },
   getUsers() {
     return (dispatch) => (
