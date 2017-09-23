@@ -7,7 +7,8 @@ class MessagesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadingMore: false
+      isLoadingMore: false,
+      isLoadingPast: false
     };
   }
   scrollToLastMessage() {
@@ -21,14 +22,18 @@ class MessagesList extends React.Component {
       return;
     }
 
-    this.setState({ isLoadingMore: true });
-    this.oldHeight = this.currentHeight();
+    this.setState({
+      isLoadingMore: true,
+      isLoadingPast: isPast
+    });
+    this.previousHeight = this.currentHeight();
+    this.previousTop = $(this.refs.messagesList).scrollTop();
 
     const oldestTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
     const latestTs = (this.props.messages.length > 0) && this.props.messages[this.props.messages.length - 1].ts;
     this.props.onLoadMoreMessages({
       isPast,
-      limitTs: isPast ? oldest : latestTs
+      limitTs: isPast ? oldestTs : latestTs
     });
   }
   componentDidMount() {
@@ -37,9 +42,15 @@ class MessagesList extends React.Component {
   componentDidUpdate() {
     if (this.scrollBackAfterUpdate) {
       // fix scrollTop when load more messages
-      $(this.refs.messagesList).scrollTop(
-        this.currentHeight() - (this.oldHeight || 0)
-      );
+      if (this.state.isLoadingPast) {
+        $(this.refs.messagesList).scrollTop(
+          this.currentHeight() - (this.previousHeight || 0)
+        );
+      } else {
+        $(this.refs.messagesList).scrollTop(
+          (this.previousTop || 0)
+        );
+      }
       this.scrollBackAfterUpdate = false;
     }
     if (this.scrollToLastMessageAfterUpdate) {
@@ -94,7 +105,7 @@ class MessagesList extends React.Component {
         return;
       }
 
-      if (this.state.isLoadingMore) {
+      if (this.state.isLoadingMore && this.state.isLoadingPast === isPast) {
         return <div className="messages-load-more loading">Loading...</div>;
       } else {
         return (
