@@ -51,7 +51,37 @@ export default {
       })
     );
   },
-  getMessages(channel, ts) {
+  getAroundMessages(channel, ts) {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.START_UPDATE_MESSAGES
+      });
+
+      const updateMessage = callableIfLast(({ messages, has_more_past_message: hasMorePastMessage, has_more_future_message: hasMoreFutureMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMorePastMessage,
+          hasMoreFutureMessage,
+          messagesInfo: {
+            type: MessagesType.CHANNEL_MESSAGES,
+            channel
+          }
+        });
+      });
+
+      const url = generateApiUrl('around_messages/' + channel + '.json');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `ts=${ts}` // TODO: post as json format
+      };
+      fetchJSON(url, params).then(updateMessage);
+    };
+  },
+  getMessages(channel) {
     return dispatch => {
       dispatch({
         type: SlackConstants.START_UPDATE_MESSAGES
@@ -61,7 +91,7 @@ export default {
         dispatch({
           type: SlackConstants.UPDATE_MESSAGES,
           messages,
-          hasMoreMessage,
+          hasMorePastMessage: hasMoreMessage,
           messagesInfo: {
             type: MessagesType.CHANNEL_MESSAGES,
             channel
@@ -71,20 +101,16 @@ export default {
 
       const url = generateApiUrl('messages/' + channel + '.json');
       const params = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: ts ? `ts=${ts}` : '' // TODO: post as json format
+        method: 'POST'
       };
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  getMoreMessages(channel, minTs) {
+  getMoreMessages(channel, { isPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
-          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          type: isPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
           messages,
           hasMoreMessage
         });
@@ -94,9 +120,9 @@ export default {
       const params = {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
         },
-        body: `min_ts=${minTs}` // TODO: post as json format
+        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}`
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -133,7 +159,7 @@ export default {
         dispatch({
           type: SlackConstants.UPDATE_MESSAGES,
           messages,
-          hasMoreMessage,
+          hasMorePastMessage: hasMoreMessage,
           messagesInfo: {
             type: MessagesType.SEARCH_MESSAGES,
             searchWord: word
@@ -152,11 +178,11 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  searchMore(word, minTs) {
+  searchMore(word, { isPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
-          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          type: isPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
           messages,
           hasMoreMessage,
         });
@@ -168,7 +194,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `word=${encodeURIComponent(word)}&min_ts=${minTs}` // TODO: post json format
+        body: `word=${encodeURIComponent(word)}&${isPast ? 'max_ts' : 'min_ts'}=${limitTs}` // TODO: post json format
       };
       fetchJSON(url, params).then(updateMessage);
     };

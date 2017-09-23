@@ -7,7 +7,8 @@ class MessagesList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadingMore: false
+      isLoadingMore: false,
+      isLoadingPast: false
     };
   }
   scrollToLastMessage() {
@@ -16,16 +17,24 @@ class MessagesList extends React.Component {
   currentHeight() {
     return this.refs.messagesList.scrollHeight;
   }
-  handleLoadMore() {
+  handleLoadMore(isPast) {
     if (this.state.isLoadingMore) {
       return;
     }
 
-    this.setState({ isLoadingMore: true });
-    this.oldHeight = this.currentHeight();
+    this.setState({
+      isLoadingMore: true,
+      isLoadingPast: isPast
+    });
+    this.previousHeight = this.currentHeight();
+    this.previousTop = $(this.refs.messagesList).scrollTop();
 
-    const minTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
-    this.props.onLoadMoreMessages(minTs);
+    const oldestTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
+    const latestTs = (this.props.messages.length > 0) && this.props.messages[this.props.messages.length - 1].ts;
+    this.props.onLoadMoreMessages({
+      isPast,
+      limitTs: isPast ? oldestTs : latestTs
+    });
   }
   componentDidMount() {
     this.scrollToLastMessage();
@@ -33,9 +42,15 @@ class MessagesList extends React.Component {
   componentDidUpdate() {
     if (this.scrollBackAfterUpdate) {
       // fix scrollTop when load more messages
-      $(this.refs.messagesList).scrollTop(
-        this.currentHeight() - (this.oldHeight || 0)
-      );
+      if (this.state.isLoadingPast) {
+        $(this.refs.messagesList).scrollTop(
+          this.currentHeight() - (this.previousHeight || 0)
+        );
+      } else {
+        $(this.refs.messagesList).scrollTop(
+          (this.previousTop || 0)
+        );
+      }
       this.scrollBackAfterUpdate = false;
     }
     if (this.scrollToLastMessageAfterUpdate) {
@@ -82,16 +97,19 @@ class MessagesList extends React.Component {
           selected={message.ts === this.props.scrollToTs}
           messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
-    const loadMoreSection = () => {
-      if (!this.props.hasMoreMessage) {
+    const loadMoreSection = (isPast) => {
+      if (isPast && !this.props.hasMorePastMessage) {
+        return;
+      }
+      if (!isPast && !this.props.hasMoreFutureMessage) {
         return;
       }
 
-      if (this.state.isLoadingMore) {
+      if (this.state.isLoadingMore && this.state.isLoadingPast === isPast) {
         return <div className="messages-load-more loading">Loading...</div>;
       } else {
         return (
-          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this)}>
+          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this, isPast)}>
             Load more messages...
           </div>
         );
@@ -100,8 +118,9 @@ class MessagesList extends React.Component {
 
     return (
       <div className="messages-list" ref="messagesList">
-        {loadMoreSection()}
+        {loadMoreSection(true)}
         {createMessages(this.props.messages)}
+        {loadMoreSection(false)}
       </div>
     );
   }
@@ -110,7 +129,8 @@ class MessagesList extends React.Component {
 const mapStateToProps = state => {
   return {
     messages: state.messages.messages,
-    hasMoreMessage: state.messages.hasMoreMessage,
+    hasMorePastMessage: state.messages.hasMorePastMessage,
+    hasMoreFutureMessage: state.messages.hasMoreFutureMessage,
     messagesInfo: state.messages.messagesInfo,
     users: state.users,
     channels: state.channels.channels,

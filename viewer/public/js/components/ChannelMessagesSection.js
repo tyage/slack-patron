@@ -37,11 +37,15 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    loadMoreChannelMessages: channel => minTs => {
-      dispatch(SlackActions.getMoreMessages(channel, minTs));
+    loadMoreChannelMessages: channel => params => {
+      dispatch(SlackActions.getMoreMessages(channel, params));
     },
     loadChannelMessages: (channel, ts) => {
-      dispatch(SlackActions.getMessages(channel, ts));
+      if (ts) {
+        dispatch(SlackActions.getAroundMessages(channel, ts));
+      } else {
+        dispatch(SlackActions.getMessages(channel));
+      }
     }
   };
 };
