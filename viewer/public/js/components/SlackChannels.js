@@ -1,13 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { NavLink } from 'react-router-dom';
 import { Route } from 'react-router';
-import _ from 'lodash';
-import SlackChannel from './SlackChannel';
+import ChannelName from './ChannelName';
 
 const SlackChannels = ({ channels, ims }) => {
-  const createChannelList = (channels) => _.map(channels, (channel) => (
+  const createChannelList = (channels) => channels.map(channel => (
       <li key={channel.id}>
-        <SlackChannel channel={channel} />
+        <NavLink to={ `/${channel.id}` }>
+          <ChannelName channel={channel} />
+        </NavLink>
       </li>
     ));
 
