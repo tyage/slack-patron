@@ -13,7 +13,9 @@ import reducers from './reducers';
 import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
-const history = createHistory();
+const history = createHistory({
+  basename: document.getElementById('basename').getAttribute('href')
+});
 const middleware = routerMiddleware(history);
 
 const store = createStore(
