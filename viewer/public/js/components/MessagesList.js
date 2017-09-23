@@ -53,6 +53,7 @@ class MessagesList extends React.Component {
     }
   }
   componentWillReceiveProps(nextProps) {
+    // TODO: create reducer which manage scroll state
     // loading more
     if (this.state.isLoadingMore && nextProps.messages !== this.props.messages) {
       this.scrollBackAfterUpdate = true;

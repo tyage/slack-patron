@@ -1,16 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 
-export default class extends Component {
+const channelTypeToClassName = {
+  C: 'channel',
+  G: 'group',
+  D: 'im'
+};
+
+export default class extends React.Component {
   render() {
     const channel = this.props.channel;
-    const classNames = ['channel-name'];
-    if ('is_channel' in channel) {
-      classNames.push('channel');
-    } else if ('is_group' in channel) {
-      classNames.push('group');
-    } else if ('is_im' in channel) {
-      classNames.push('im');
-    }
+    const channelType = channel.id[0];
+    const classNames = ['channel-name', channelTypeToClassName[channelType]];
     return <span className={classNames.join(' ')}>{channel.name}</span>;
   }
 }
