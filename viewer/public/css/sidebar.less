@@ -1,0 +1,82 @@
+@import "./lib/variable";
+
+.sidebar {
+  width: @sidebar-width;
+  height: calc(~'100% - 20px');
+  float: left;
+  background: #4d394b;
+  padding: 0 0 20px 0;
+  .sidebar-header {
+    height: @sidebar-header-height;
+    position: relative;
+    &:hover {
+      background: #3e313c;
+    }
+    .team-info {
+      cursor: pointer;
+      position: relative;
+      color: #fff;
+      font-size: 1.125rem;
+      padding: 0 1rem;
+      line-height: @sidebar-header-height;
+      .configure-toggler {
+        position: absolute;
+        right: 1.25rem;
+        top: 0;
+        &:before {
+          content: '>';
+        }
+      }
+    }
+  }
+  .sidebar-body {
+    padding: 12px 0 0 0;
+    overflow: hidden;
+    height: calc(~'100% - @{sidebar-header-height}');
+    border-right: 4px solid transparent;
+    &:hover {
+      overflow: auto;
+    }
+    .slack-channels {
+      margin: 0 0 32px 0;
+    }
+    .slack-channels, .slack-ims {
+      width: @sidebar-width - 12px;
+      .list {
+        color: #ab9ba9;
+        a {
+          text-shadow: 0 1px 1px rgba(0,0,0,0.25);
+          cursor: pointer;
+          display: block;
+          line-height: 1.5rem;
+          padding: 0 .5rem 0 1rem;
+          font-size: 1rem;
+          text-decoration: none;
+          color: #ab9ba9;
+          &:hover {
+            background: #3e313c;
+            text-decoration: none;
+          }
+          &:before {
+            content: ' ';
+            margin: 0 0 -4px 0;
+            display: inline-block;
+            width: 1em;
+            text-align: center;
+            font-weight: bold;
+          }
+          &.active {
+            background: rgb(76, 150, 137);
+            color: white;
+          }
+        }
+      }
+    }
+    h3 {
+       margin: 0 0 4px;
+       color: #ab9ba9;
+       padding: 0 .5rem 0 1rem;
+       font-size: .8rem;
+    }
+  }
+}

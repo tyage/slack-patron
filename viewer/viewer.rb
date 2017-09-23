@@ -37,12 +37,37 @@ def ims
   hashed_ims.sort_by {|k, v| v[:name] }.to_h
 end
 
-def messages(params)
-  limit = params[:limit] || 100
+# return messages around ts
+def around_messages(ts, params)
+  limit = (params[:limit] || 100) / 2
   condition = {
-    ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
     hidden: { '$ne' => true }
   }
+  condition[:channel] = params[:channel] unless params[:channel].nil?
+
+  before_condition = condition.merge({
+    ts: { '$lt' => ts }
+  })
+  before_messages = Messages.find(before_condition).sort(ts: -1).limit(limit + 1)
+
+  after_condition = condition.merge({
+    ts: { '$gte' => ts }
+  })
+  after_messages = Messages.find(after_condition).sort(ts: 1).limit(limit + 1)
+
+  all_messages = before_messages.limit(limit).to_a.reverse + after_messages.to_a
+  has_more_message = before_messages.count > limit
+
+  return all_messages, has_more_message
+end
+def messages(params)
+  return around_messages(params[:ts], params) unless params[:ts].nil?
+
+  limit = params[:limit] || 100
+  condition = {
+    hidden: { '$ne' => true }
+  }
+  condition[:ts] = { '$lt' => params[:min_ts] } unless params[:min_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
   condition['$or'] = [
     # normal message
@@ -62,7 +87,7 @@ def messages(params)
     .limit(limit + 1)
   has_more_message = all_messages.count > limit
 
-  return all_messages.limit(limit), has_more_message
+  return all_messages.limit(limit).to_a.reverse, has_more_message
 end
 
 get '/users.json' do
@@ -83,12 +108,13 @@ end
 post '/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
-    min_ts: params[:min_ts]
+    min_ts: params[:min_ts],
+    ts: params[:ts]
   )
 
   content_type :json
   {
-    messages: all_messages.to_a.reverse,
+    messages: all_messages,
     has_more_message: has_more_message
   }.to_json
 end
@@ -120,6 +146,12 @@ end
 get '/:channel' do
   erb :index
 end
+get '/:channel/:ts' do
+  erb :index
+end
+get '/search/:search_word' do
+  erb :index
+end
 
 post '/search' do
   all_messages, has_more_message = messages(
@@ -129,7 +161,7 @@ post '/search' do
 
   content_type :json
   {
-    messages: all_messages.to_a.reverse,
+    messages: all_messages,
     has_more_message: has_more_message
   }.to_json
 end

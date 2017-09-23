@@ -1,19 +1,18 @@
 module.exports = {
-  entry: './public/src/js/app.js',
+  entry: './public/js/app.js',
   output: {
-    filename: './public/dist/js/app.js'
+    filename: './public/build/app.js'
   },
   devtool: 'inline-source-map',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+        }
       }
     ]
-  },
-  resolve: {
-    extensions: ['', '.js']
   }
 };

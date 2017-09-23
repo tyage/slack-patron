@@ -1,42 +1,34 @@
-var gulp = require('gulp');
-var concat = require('gulp-concat');
-var less = require('gulp-less');
-var gutil = require('gulp-util');
-var webpack = require('webpack-stream');
-var webpackConfig = require('./webpack.config.js');
+const gulp = require('gulp');
+const concat = require('gulp-concat');
+const plumber = require('gulp-plumber')
+const less = require('gulp-less');
+const gutil = require('gulp-util');
+const webpack = require('webpack-stream');
+const webpackConfig = require('./webpack.config.js');
 
-var config = {
-  src: 'public/src',
-  dist: 'public/dist'
-};
-
-gulp.task('js', function() {
-  return gulp.src('')
+gulp.task('js', () => (
+  gulp.src('')
+    .pipe(plumber())
     .pipe(webpack(webpackConfig))
-    .on('error', function(e) {
-      gutil.log(gutil.colors.red(e));
-      this.emit('end');
-    })
-    .pipe(gulp.dest(''));
-});
+    .on('error', (e) => console.error(e))
+    .pipe(gulp.dest(''))
+));
 
-gulp.task('css', function() {
-  var normalizeCSS = './node_modules/normalize.css/normalize.css';
+gulp.task('css', () => {
+  const normalizeCSS = './node_modules/normalize.css/normalize.css';
 
-  return gulp.src([config.src + '/css/app.less', normalizeCSS])
+  return gulp.src(['./public/css/app.less', normalizeCSS])
+    .pipe(plumber())
     .pipe(concat('app.css'))
     .pipe(less())
-    .on('error', function(e) {
-      gutil.log(gutil.colors.red(e));
-      this.emit('end');
-    })
-    .pipe(gulp.dest(config.dist + '/css'));
+    .on('error', (e) => console.error(e))
+    .pipe(gulp.dest('./public/build'));
 });
 
-gulp.task('watch', function() {
-  gulp.watch(config.src + '/js/**', ['js']);
-  gulp.watch(config.src + '/css/**', ['css']);
+gulp.task('watch', () => {
+  gulp.watch('./public/js/**', ['js']);
+  gulp.watch('./public/css/**', ['css']);
 });
 
-gulp.task('default', ['js', 'css'], function() {
+gulp.task('default', ['js', 'css'], () => {
 });
