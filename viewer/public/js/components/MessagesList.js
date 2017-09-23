@@ -1,56 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
+import { connect } from 'react-redux'
 import $ from 'jquery';
 import _ from 'lodash';
 import SlackMessage from './SlackMessage';
-import SlackActions from '../actions/SlackActions';
-import SlackMessageStore from '../stores/SlackMessageStore';
-import SlackUserStore from '../stores/SlackUserStore';
-import SlackChannelStore from '../stores/SlackChannelStore';
-import SlackTeamStore from '../stores/SlackTeamStore';
 
-let getState = () => {
-  return {
-    messages: SlackMessageStore.getMessages(),
-    hasMoreMessage: SlackMessageStore.hasMoreMessage(),
-    messagesInfo: SlackMessageStore.getMessagesInfo(),
-    users: SlackUserStore.getUsers(),
-    channels: SlackChannelStore.getChannels(),
-    ims: SlackChannelStore.getIms(),
-    teamInfo: SlackTeamStore.getTeamInfo()
-  };
-};
-
-export default class extends Component {
+class MessagesList extends React.Component {
   constructor(props) {
     super(props);
-    this.state = _.merge(getState(), {
+    this.state = {
       isLoadingMore: false,
       oldHeight: 0
-    });
-  }
-  _onUserChange() {
-    // if user information comming, re-render and show user information
-    this.setState(getState());
-  }
-  _onChannelChange() {
-    // if channel information comming, re-render and show channel information
-    this.setState(getState());
-  }
-  _onMessageChange() {
-    this.setState(getState());
-
-    if (this.state.isLoadingMore) {
-      // fix scrollTop when load more messages
-      $(this.refs.messagesList).scrollTop(
-        this.currentHeight() - this.state.oldHeight
-      );
-      this.setState({ isLoadingMore: false });
-    } else {
-      this.scrollToLastMessage();
-    }
-  }
-  _onTeamInfoChange() {
-    this.setState(getState());
+    };
   }
   scrollToLastMessage() {
     $(this.refs.messagesList).scrollTop(this.currentHeight());
@@ -72,30 +32,30 @@ export default class extends Component {
     this.props.onLoadMoreMessages(minTs);
   }
   componentDidMount() {
-    SlackMessageStore.addChangeListener(this._onMessageChange);
-    SlackUserStore.addChangeListener(this._onUserChange);
-    SlackChannelStore.addChangeListener(this._onChannelChange);
-    SlackTeamStore.addChangeListener(this._onTeamInfoChange);
-
     this.scrollToLastMessage();
   }
-  componentWillUnmount() {
-    SlackMessageStore.removeChangeListener(this._onMessageChange);
-    SlackUserStore.removeChangeListener(this._onUserChange);
-    SlackChannelStore.removeChangeListener(this._onChannelChange);
-    SlackTeamStore.removeChangeListener(this._onTeamInfoChange);
+  componentWillReceiveProps() {
+    if (this.state.isLoadingMore) {
+      // fix scrollTop when load more messages
+      $(this.refs.messagesList).scrollTop(
+        this.currentHeight() - this.state.oldHeight
+      );
+      this.setState({ isLoadingMore: false });
+    } else {
+      this.scrollToLastMessage();
+    }
   }
   render() {
     let createMessage = (messages) => _.map(messages, (message) => {
-        return <SlackMessage message={message} users={this.state.users}
-          teamInfo={this.state.teamInfo}
-          channels={this.state.channels}
-          ims={this.state.ims}
+        return <SlackMessage message={message} users={this.props.users}
+          teamInfo={this.props.teamInfo}
+          channels={this.props.channels}
+          ims={this.props.ims}
           key={message.ts}
-          type={this.state.messagesInfo.type} />;
+          type={this.props.messagesInfo.type} />;
       });
-    let loadMoreSection = () => {
-      if (!this.state.hasMoreMessage) {
+    const loadMoreSection = () => {
+      if (!this.props.hasMoreMessage) {
         return;
       }
 
@@ -113,8 +73,21 @@ export default class extends Component {
     return (
       <div className="messages-list" ref="messagesList">
         {loadMoreSection()}
-        {createMessage(this.state.messages)}
+        {createMessage(this.props.messages)}
       </div>
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    messages: state.messages,
+    hasMoreMessage: state.hasMoreMessage,
+    users: state.users,
+    channels: state.channels,
+    ims: state.ims,
+    teamInfo: state.teamInfo
+  };
+};
+
+export default connect(mapStateToProps)(MessagesList);
