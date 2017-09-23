@@ -16,7 +16,7 @@ class MessagesList extends React.Component {
   currentHeight() {
     return this.refs.messagesList.scrollHeight;
   }
-  handleLoadMore() {
+  handleLoadMore(isPast) {
     if (this.state.isLoadingMore) {
       return;
     }
@@ -24,10 +24,11 @@ class MessagesList extends React.Component {
     this.setState({ isLoadingMore: true });
     this.oldHeight = this.currentHeight();
 
-    const oldTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
+    const oldestTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
+    const latestTs = (this.props.messages.length > 0) && this.props.messages[this.props.messages.length - 1].ts;
     this.props.onLoadMoreMessages({
-      isLoadingPast: true,
-      limitTs: oldTs
+      isPast,
+      limitTs: isPast ? oldest : latestTs
     });
   }
   componentDidMount() {
@@ -85,8 +86,11 @@ class MessagesList extends React.Component {
           selected={message.ts === this.props.scrollToTs}
           messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
-    const loadMoreSection = () => {
-      if (!this.props.hasMorePastMessage) {
+    const loadMoreSection = (isPast) => {
+      if (isPast && !this.props.hasMorePastMessage) {
+        return;
+      }
+      if (!isPast && !this.props.hasMoreFutureMessage) {
         return;
       }
 
@@ -94,7 +98,7 @@ class MessagesList extends React.Component {
         return <div className="messages-load-more loading">Loading...</div>;
       } else {
         return (
-          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this)}>
+          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this, isPast)}>
             Load more messages...
           </div>
         );
@@ -103,8 +107,9 @@ class MessagesList extends React.Component {
 
     return (
       <div className="messages-list" ref="messagesList">
-        {loadMoreSection()}
+        {loadMoreSection(true)}
         {createMessages(this.props.messages)}
+        {loadMoreSection(false)}
       </div>
     );
   }

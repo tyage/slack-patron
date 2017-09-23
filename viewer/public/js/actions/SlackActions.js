@@ -91,7 +91,7 @@ export default {
         dispatch({
           type: SlackConstants.UPDATE_MESSAGES,
           messages,
-          hasMoreMessage,
+          hasMorePastMessage: hasMoreMessage,
           messagesInfo: {
             type: MessagesType.CHANNEL_MESSAGES,
             channel
@@ -106,11 +106,11 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  getMoreMessages(channel, { isLoadingPast, limitTs }) {
+  getMoreMessages(channel, { isPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
-          type: isLoadingPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
+          type: isPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
           messages,
           hasMoreMessage
         });
@@ -122,7 +122,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
         },
-        body: `${isLoadingPast ? 'max_ts' : 'min_ts'}=${limitTs}`
+        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}`
       };
       fetchJSON(url, params).then(updateMessage);
     };

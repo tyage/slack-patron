@@ -5,7 +5,8 @@ const messages = (state = { messages: [], hasMorePastMessage: false, hasMoreFutu
     case SlackConstants.UPDATE_MESSAGES:
       return {
         messages: action.messages,
-        hasMorePastMessage: action.hasMoreMessage,
+        hasMorePastMessage: action.hasMorePastMessage,
+        hasMoreFutureMessage: action.hasMoreFutureMessage,
         messagesInfo: action.messagesInfo
       };
     case SlackConstants.UPDATE_MORE_PAST_MESSAGES:
