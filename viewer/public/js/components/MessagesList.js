@@ -46,7 +46,7 @@ class MessagesList extends React.Component {
       const node = this.tsToNode[this.props.scrollToTs];
       if (node) {
         $(this.refs.messagesList).scrollTop(
-          $(node).offset().top + $(this.refs.messagesList).height() / 2
+          $(node).offset().top - $(this.refs.messagesList).height() / 2
         );
       }
       this.scrollToTsAfterUpdate = false;
@@ -78,6 +78,7 @@ class MessagesList extends React.Component {
           ims={this.props.ims}
           key={message.ts}
           type={this.props.messagesInfo.type}
+          selected={message.ts === this.props.scrollToTs}
           messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
     const loadMoreSection = () => {

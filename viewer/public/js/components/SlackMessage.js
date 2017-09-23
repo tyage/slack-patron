@@ -62,9 +62,13 @@ export default class extends Component {
     };
     const SlackMessagePrototype = ({ message, icon, username, showChannel, teamInfo, text }) => {
       const channel = this.getChannel(message.channel);
+      const classNames = ['slack-message'];
+      if (this.props.selected) {
+        classNames.push('selected');
+      }
 
       return (
-        <div className="slack-message" ref={this.props.messageRef}>
+        <div className={ classNames.join(' ') } ref={this.props.messageRef}>
           <div className="slack-message-user-image">
             <img src={icon} />
           </div>
