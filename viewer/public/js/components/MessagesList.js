@@ -92,8 +92,8 @@ const mapStateToProps = state => {
     hasMoreMessage: state.messages.hasMoreMessage,
     messagesInfo: state.messages.messagesInfo,
     users: state.users,
-    channels: state.channels,
-    ims: state.ims,
+    channels: state.channels.channels,
+    ims: state.channels.ims,
     teamInfo: state.teamInfo
   };
 };
