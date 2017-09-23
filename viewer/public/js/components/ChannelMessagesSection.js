@@ -1,14 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import ChannelMessagesHeader from './ChannelMessagesHeader';
+//import MessagesList from './MessagesList';
 
-const ChannelMessagesSection = ({ channel, loadMoreChannelMessages }) => (
-  <div className="channel-messages">
-    <ChannelMessagesHeader />
-    <MessagesList onLoadMoreMessages={loadMoreChannelMessages(channel)} />
-  </div>
-);
+const ChannelMessagesSection = ({ loadMoreChannelMessages, match }) => {
+  const channel = match.params.channel;
+  return (
+    <div className="channel-messages">
+      <ChannelMessagesHeader currentChannelId={ channel } />
+      { "<MessagesList onLoadMoreMessages={loadMoreChannelMessages(channel)} />" }
+    </div>
+  );
+};
 
+const mapStateToProps = state => {
+  return {
+    router: state.router
+  };
+};
 const mapDispatchToProps = dispatch => {
   return {
     loadMoreChannelMessages: channel => minTs => {
@@ -17,4 +26,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(ChannelMessagesSection);
+export default connect(mapStateToProps, mapDispatchToProps)(ChannelMessagesSection);
