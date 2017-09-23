@@ -41,7 +41,11 @@ const mapDispatchToProps = dispatch => {
       dispatch(SlackActions.getMoreMessages(channel, minTs));
     },
     loadChannelMessages: (channel, ts) => {
-      dispatch(SlackActions.getMessages(channel, ts));
+      if (ts) {
+        dispatch(SlackActions.getAroundMessages(channel, ts));
+      } else {
+        dispatch(SlackActions.getMessages(channel));
+      }
     }
   };
 };

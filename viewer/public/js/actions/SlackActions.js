@@ -51,7 +51,37 @@ export default {
       })
     );
   },
-  getMessages(channel, ts) {
+  getAroundMessages(channel, ts) {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.START_UPDATE_MESSAGES
+      });
+
+      const updateMessage = callableIfLast(({ messages, has_more_past_message: hasMorePastMessage, has_more_future_message: hasMoreFutureMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMorePastMessage,
+          hasMoreFutureMessage,
+          messagesInfo: {
+            type: MessagesType.CHANNEL_MESSAGES,
+            channel
+          }
+        });
+      });
+
+      const url = generateApiUrl('around_messages/' + channel + '.json');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `ts=${ts}` // TODO: post as json format
+      };
+      fetchJSON(url, params).then(updateMessage);
+    };
+  },
+  getMessages(channel) {
     return dispatch => {
       dispatch({
         type: SlackConstants.START_UPDATE_MESSAGES
@@ -71,11 +101,7 @@ export default {
 
       const url = generateApiUrl('messages/' + channel + '.json');
       const params = {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-        },
-        body: ts ? `ts=${ts}` : '' // TODO: post as json format
+        method: 'POST'
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -96,7 +122,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `min_ts=${minTs}` // TODO: post as json format
+        body: `max_ts=${minTs}` // TODO: post as json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -168,7 +194,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `word=${encodeURIComponent(word)}&min_ts=${minTs}` // TODO: post json format
+        body: `word=${encodeURIComponent(word)}&max_ts=${minTs}` // TODO: post json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
