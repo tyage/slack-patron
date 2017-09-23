@@ -60,64 +60,57 @@ export default class extends Component {
         __html: this.formatText(text) || ''
       };
     };
-    const messageDate = (message) => (
-      <div className="slack-message-date">
-        <Link to={this.messageLink(message)}>
-          {this.formatDate(message.ts)}
-        </Link>
-      </div>
-    );
-    const channelInfo = (message, showChannel) => {
+    const SlackMessagePrototype = ({ message, icon, username, showChannel, teamInfo, text }) => {
       const channel = this.getChannel(message.channel);
-      if (showChannel && channel) {
-        return (
-          <div className="slack-message-channel">
-            <Link to={ `/${channel.id}` }>
-              <ChannelName channel={channel} />
-            </Link>
-          </div>
-        );
-      }
-    };
-    const originalLink = (teamInfo, message) => (
-      <a href={this.messageLink(teamInfo, message)} target="_blank">original</a>
-    );
-    const botMessage = (teamInfo, message, showChannel) => {
-      const attachment = _.find(message.attachments, (attachment) => attachment.text);
-      const text = attachment ? attachment.text : message.text;
-      const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
+
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
             <img src={icon} />
           </div>
           <div className="slack-message-content">
-            <div className="slack-message-user-name">{message.username}</div>
-            {messageDate(message)}
-            {channelInfo(message, showChannel)}
-            {originalLink(teamInfo, message)}
+            <div className="slack-message-user-name">{username}</div>
+            <div className="slack-message-date">
+              <Link to={this.messageLink(message)}>
+                {this.formatDate(message.ts)}
+              </Link>
+            </div>
+            { showChannel && channel ? (
+                <div className="slack-message-channel">
+                  <Link to={ `/${channel.id}` }>
+                    <ChannelName channel={channel} />
+                  </Link>
+                </div>
+              ) : null }
+            <a href={this.messageLink(teamInfo, message)} target="_blank">original</a>
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
           </div>
         </div>
       );
     };
+    const botMessage = (teamInfo, message, showChannel) => {
+      const attachment = _.find(message.attachments, (attachment) => attachment.text);
+      const text = attachment ? attachment.text : message.text;
+      const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
+      return <SlackMessagePrototype
+          message={message}
+          icon={icon}
+          username={message.username}
+          showChannel={showChannel}
+          teamInfo={teamInfo}
+          text={text}
+        />
+    };
     const normalMessage = (teamInfo, message, user, showChannel) => {
-      return (
-        <div className="slack-message">
-          <div className="slack-message-user-image">
-            <img src={user && user.profile.image_48} />
-          </div>
-          <div className="slack-message-content">
-            <div className="slack-message-user-name">{user && user.name}</div>
-            {messageDate(message)}
-            {channelInfo(message, showChannel)}
-            {originalLink(teamInfo, message)}
-            <div className="slack-message-text"
-              dangerouslySetInnerHTML={createMarkup(message.text)}></div>
-          </div>
-        </div>
-      );
+      return <SlackMessagePrototype
+          message={message}
+          icon={user && user.profile.image_48}
+          username={user && user.name}
+          showChannel={showChannel}
+          teamInfo={teamInfo}
+          text={message.text}
+        />
     };
 
     if (this.props.message.hidden) {
