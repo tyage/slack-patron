@@ -6,5 +6,6 @@ import Sidebar from './Sidebar';
 export default () => (
   <div className="slack-patron">
     <Sidebar />
+    <MessagesSection />
   </div>
 );

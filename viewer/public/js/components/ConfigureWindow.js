@@ -2,19 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'
 import SlackActions from '../actions/SlackActions';
 
-const mapStateToProps = state => {
-  return {
-    teamInfo: state.teamInfo
-  };
-};
-const mapDispatchToProps = dispatch => {
-  return {
-    importBackup: (formData) => {
-      dispatch(SlackActions.importBackup(formData));
-    }
-  };
-};
-
 class ConfigureWindow extends React.Component {
   importBackup(e) {
     e.preventDefault();
@@ -45,5 +32,18 @@ class ConfigureWindow extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    teamInfo: state.teamInfo
+  };
+};
+const mapDispatchToProps = dispatch => {
+  return {
+    importBackup: (formData) => {
+      dispatch(SlackActions.importBackup(formData));
+    }
+  };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConfigureWindow);

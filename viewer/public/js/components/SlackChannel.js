@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom';
 import ChannelName from './ChannelName';
 
+// TODO: remove this component merge it into SlackChannels or make this pure component
 const SlackChannel = ({ channel }) => (
   <NavLink to={ `/${channel.id}` }>
     <ChannelName channel={channel} />
