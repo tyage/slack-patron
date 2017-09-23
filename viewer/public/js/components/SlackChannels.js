@@ -4,16 +4,8 @@ import { Route } from 'react-router';
 import _ from 'lodash';
 import SlackChannel from './SlackChannel';
 
-const mapStateToProps = state => {
-  return {
-    channels: state.channels.channels,
-    ims: state.channels.ims,
-    router: state.router
-  };
-};
-
 const SlackChannels = ({ channels, ims }) => {
-  let createChannelList = (channels) => _.map(channels, (channel) => (
+  const createChannelList = (channels) => _.map(channels, (channel) => (
       <li key={channel.id}>
         <SlackChannel channel={channel} />
       </li>
@@ -35,6 +27,14 @@ const SlackChannels = ({ channels, ims }) => {
       </div>
     </div>
   );
+};
+
+const mapStateToProps = state => {
+  return {
+    channels: state.channels.channels,
+    ims: state.channels.ims,
+    router: state.router
+  };
 };
 
 export default connect(mapStateToProps)(SlackChannels);

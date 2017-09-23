@@ -2,12 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux'
 import ConfigureWindow from './ConfigureWindow';
 
-const mapStateToProps = state => {
-  return {
-    teamInfo: state.teamInfo
-  };
-};
-
 class SidebarHeader extends React.Component {
   constructor(props) {
     super(props);
@@ -37,5 +31,11 @@ class SidebarHeader extends React.Component {
     );
   }
 }
+
+const mapStateToProps = state => {
+  return {
+    teamInfo: state.teamInfo
+  };
+};
 
 export default connect(mapStateToProps)(SidebarHeader);
