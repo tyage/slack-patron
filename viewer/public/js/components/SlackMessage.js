@@ -5,8 +5,8 @@ import MessagesType from '../constants/MessagesType';
 
 export default class extends Component {
   getChannel(id) {
-    let channels = this.props.channels;
-    let ims = this.props.ims;
+    const channels = this.props.channels;
+    const ims = this.props.ims;
     if (channels && channels[id]) {
       return channels[id];
     }
@@ -15,28 +15,28 @@ export default class extends Component {
     }
   }
   getUser(id) {
-    let users = this.props.users;
+    const users = this.props.users;
     return users && users[id];
   }
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   }
   formatText(text) {
-    let entity = (str) => {
+    const entity = (str) => {
       return str.replace(/"/g, "&quot;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
     };
-    let channelLink = (id) => {
-      let channel = this.getChannel(id);
+    const channelLink = (id) => {
+      const channel = this.getChannel(id);
       return `#${channel && channel.name}`;
     };
-    let userLink = (id) => {
-      let user = this.getUser(id);
+    const userLink = (id) => {
+      const user = this.getUser(id);
       return `@${user && user.name}`;
     };
-    let specialCommand = (command) => `@${command}`;
-    let uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
+    const specialCommand = (command) => `@${command}`;
+    const uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
     if (text) {
       return text.replace(/<#([0-9A-Za-z]+)>/, (m, id) => channelLink(id))
         .replace(/<#([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => channelLink(id))
@@ -47,18 +47,28 @@ export default class extends Component {
     }
     return text;
   }
-  messageLink(teamInfo, message) {
+  messageLink(message) {
+    return `/${message.channel}/${message.ts}`;
+  }
+  originalMessageLink(teamInfo, message) {
     const messageId = message.ts.replace('.', '');
     return `https://${teamInfo.domain}.slack.com/messages/${message.channel}/p${messageId}`;
   }
   render() {
-    let createMarkup = (text) => {
+    const createMarkup = (text) => {
       return {
         __html: this.formatText(text) || ''
       };
     };
-    let channelInfo = (message, showChannel) => {
-      let channel = this.getChannel(message.channel);
+    const messageDate = (message) => (
+      <div className="slack-message-date">
+        <Link to={this.messageLink(message)}>
+          {this.formatDate(message.ts)}
+        </Link>
+      </div>
+    );
+    const channelInfo = (message, showChannel) => {
+      const channel = this.getChannel(message.channel);
       if (showChannel && channel) {
         return (
           <div className="slack-message-channel">
@@ -69,17 +79,13 @@ export default class extends Component {
         );
       }
     };
-    let messageDate = (teamInfo, message) => {
-      return (
-        <div className="slack-message-date">
-          <a href={this.messageLink(teamInfo, message)} target="_blank">{this.formatDate(message.ts)}</a>
-        </div>
-      );
-    };
-    let botMessage = (teamInfo, message, showChannel) => {
-      let attachment = _.find(message.attachments, (attachment) => attachment.text);
-      let text = attachment ? attachment.text : message.text;
-      let icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
+    const originalLink = (teamInfo, message) => (
+      <a href={this.messageLink(teamInfo, message)} target="_blank">original</a>
+    );
+    const botMessage = (teamInfo, message, showChannel) => {
+      const attachment = _.find(message.attachments, (attachment) => attachment.text);
+      const text = attachment ? attachment.text : message.text;
+      const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
@@ -87,15 +93,16 @@ export default class extends Component {
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{message.username}</div>
-            {messageDate(teamInfo, message)}
+            {messageDate(message)}
             {channelInfo(message, showChannel)}
+            {originalLink(teamInfo, message)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
           </div>
         </div>
       );
     };
-    let normalMessage = (teamInfo, message, user, showChannel) => {
+    const normalMessage = (teamInfo, message, user, showChannel) => {
       return (
         <div className="slack-message">
           <div className="slack-message-user-image">
@@ -103,8 +110,9 @@ export default class extends Component {
           </div>
           <div className="slack-message-content">
             <div className="slack-message-user-name">{user && user.name}</div>
-            {messageDate(teamInfo, message)}
+            {messageDate(message)}
             {channelInfo(message, showChannel)}
+            {originalLink(teamInfo, message)}
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(message.text)}></div>
           </div>
@@ -116,8 +124,8 @@ export default class extends Component {
       return null;
     }
 
-    let message = this.props.message;
-    let showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
+    const message = this.props.message;
+    const showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
     switch (this.props.message.subtype) {
       case 'bot_message':
         return botMessage(this.props.teamInfo, message, showChannel);

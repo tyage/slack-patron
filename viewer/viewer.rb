@@ -120,7 +120,10 @@ end
 get '/:channel' do
   erb :index
 end
-get '/search/:searchWord' do
+get '/:channel/:ts' do
+  erb :index
+end
+get '/search/:search_word' do
   erb :index
 end
 

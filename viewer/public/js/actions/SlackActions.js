@@ -51,7 +51,7 @@ export default {
       })
     );
   },
-  getMessages(channel) {
+  getMessages(channel, ts) {
     return dispatch => {
       dispatch({
         type: SlackConstants.START_UPDATE_MESSAGES
@@ -70,7 +70,14 @@ export default {
       });
 
       const url = generateApiUrl('/messages/' + channel + '.json');
-      fetchJSON(url, { method: 'POST' }).then(updateMessage);
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `ts=${ts}` // TODO: post as json format
+      };
+      fetchJSON(url, params).then(updateMessage);
     };
   },
   getMoreMessages(channel, minTs) {

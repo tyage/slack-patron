@@ -6,15 +6,18 @@ import SlackActions from '../actions/SlackActions';
 
 class ChannelMessagesSection extends React.Component {
   componentDidMount() {
-    this.initialzeData(this.props.match.params.channel);
+    this.initialzeData(this.props.match.params.channel, this.props.match.params.ts);
   }
   componentWillReceiveProps(nextProps) {
-    if (this.props.match.params.channel !== nextProps.match.params.channel) {
-      this.initialzeData(nextProps.match.params.channel);
+    if (
+      this.props.match.params.channel !== nextProps.match.params.channel ||
+      this.props.match.params.ts !== nextProps.match.params.ts
+    ) {
+      this.initialzeData(nextProps.match.params.channel, nextProps.match.params.ts);
     }
   }
-  initialzeData(channel) {
-    this.props.loadChannelMessages(channel);
+  initialzeData(channel, ts) {
+    this.props.loadChannelMessages(channel, ts);
   }
   render() {
     const channel = this.props.match.params.channel;
@@ -37,8 +40,8 @@ const mapDispatchToProps = dispatch => {
     loadMoreChannelMessages: channel => minTs => {
       dispatch(SlackActions.getMoreMessages(channel, minTs));
     },
-    loadChannelMessages: channel => {
-      dispatch(SlackActions.getMessages(channel));
+    loadChannelMessages: (channel, ts) => {
+      dispatch(SlackActions.getMessages(channel, ts));
     }
   };
 };

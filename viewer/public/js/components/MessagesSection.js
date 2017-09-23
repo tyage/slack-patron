@@ -13,6 +13,7 @@ const MessagesSection = ({ isMessageLoading }) => (
       ) : null }
     <Switch>
       <Route path="/search/:searchWord" component={ SearchMessagesSection } />
+      <Route path="/:channel/:ts" component={ ChannelMessagesSection } />
       <Route path="/:channel" component={ ChannelMessagesSection } />
     </Switch>
   </div>
