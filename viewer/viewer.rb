@@ -64,7 +64,7 @@ def messages(params)
     .limit(limit + 1)
   has_more_message = all_messages.count > limit
   return_messages = all_messages.limit(limit).to_a
-  return_messages = return_messages.reverse if params[:max_ts].nil?
+  return_messages = return_messages.reverse if params[:min_ts].nil?
 
   return return_messages, has_more_message
 end
