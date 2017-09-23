@@ -22,7 +22,7 @@ const fetchJSON = (url, params) => {
 export default {
   getChannels() {
     return (dispatch) => (
-      fetchJSON(generateApiUrl('./channels.json')).then((channels) => {
+      fetchJSON(generateApiUrl('/channels.json')).then((channels) => {
         dispatch({
           type: SlackConstants.UPDATE_CHANNELS,
           channels
@@ -32,7 +32,7 @@ export default {
   },
   getIms() {
     return (dispatch) => (
-      fetchJSON(generateApiUrl('./ims.json')).then((ims) => {
+      fetchJSON(generateApiUrl('/ims.json')).then((ims) => {
         dispatch({
           type: SlackConstants.UPDATE_IMS,
           ims
@@ -42,7 +42,7 @@ export default {
   },
   getUsers() {
     return (dispatch) => (
-      fetchJSON(generateApiUrl('./users.json')).then((users) => {
+      fetchJSON(generateApiUrl('/users.json')).then((users) => {
         dispatch({
           type: SlackConstants.UPDATE_USERS,
           users
@@ -68,7 +68,7 @@ export default {
         });
       });
 
-      const url = generateApiUrl('./messages/' + channel + '.json');
+      const url = generateApiUrl('/messages/' + channel + '.json');
       fetchJSON(url, { method: 'POST' }).then(updateMessage);
     };
   },
@@ -82,7 +82,7 @@ export default {
         });
       });
 
-      const url = generateApiUrl('./messages/' + channel + '.json');
+      const url = generateApiUrl('/messages/' + channel + '.json');
       const params = {
         method: 'POST',
         headers: {
@@ -93,16 +93,9 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  updateCurrentChannel({ channel, pushState = true, replaceState = false }) {
-    SlackDispatcher.dispatch({
-      actionType: SlackConstants.UPDATE_CURRENT_CHANNEL,
-      currentChannel: channel,
-      option: { pushState, replaceState }
-    });
-  },
   getTeamInfo() {
     return (dispatch) => (
-      fetchJSON(generateApiUrl('./team.json')).then((teamInfo) => {
+      fetchJSON(generateApiUrl('/team.json')).then((teamInfo) => {
         dispatch({
           type: SlackConstants.UPDATE_TEAM_INFO,
           teamInfo
@@ -111,7 +104,7 @@ export default {
     );
   },
   importBackup(formData) {
-    let url = generateApiUrl('./import_backup');
+    let url = generateApiUrl('/import_backup');
     fetchJSON(url, {
       method: 'post',
       body: formData
@@ -124,49 +117,53 @@ export default {
     });
   },
   search(word) {
-    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_MESSAGES,
-        messages,
-        hasMoreMessage,
-        messagesInfo: {
-          type: MessagesType.SEARCH_MESSAGES,
-          searchWord: word
-        }
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.START_UPDATE_MESSAGES
       });
-    });
 
-    let url = generateApiUrl('./search');
-    const params = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: `word=${encodeURIComponent(word)}` // TODO: post json format
+      const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMoreMessage,
+          messagesInfo: {
+            type: MessagesType.SEARCH_MESSAGES,
+            searchWord: word
+          }
+        });
+      });
+
+      const url = generateApiUrl('/search');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `word=${encodeURIComponent(word)}` // TODO: post json format
+      };
+      fetchJSON(url, params).then(updateMessage);
     };
-    fetchJSON(url, params).then(updateMessage);
   },
   searchMore(word, minTs) {
-    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_MORE_MESSAGES,
-        messages,
-        hasMoreMessage,
-        messagesInfo: {
-          type: MessagesType.SEARCH_MESSAGES,
-          searchWord: word
-        }
+    return dispatch => {
+      const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          messages,
+          hasMoreMessage,
+        });
       });
-    });
 
-    let url = generateApiUrl('./search');
-    const params = {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
-      },
-      body: `word=${encodeURIComponent(word)}&min_ts=${minTs}` // TODO: post json format
+      const url = generateApiUrl('/search');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        body: `word=${encodeURIComponent(word)}&min_ts=${minTs}` // TODO: post json format
+      };
+      fetchJSON(url, params).then(updateMessage);
     };
-    fetchJSON(url, params).then(updateMessage);
   }
 };

@@ -120,6 +120,9 @@ end
 get '/:channel' do
   erb :index
 end
+get '/search/:searchWord' do
+  erb :index
+end
 
 post '/search' do
   all_messages, has_more_message = messages(
