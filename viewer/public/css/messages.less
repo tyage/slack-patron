@@ -5,6 +5,7 @@
   float: left;
   height: 100%;
   width: calc(~'100% - @{sidebar-width}');
+  position: relative;
   .channel-messages, .search-messages {
     height: 100%;
     .messages-header {
@@ -84,9 +85,11 @@
 }
 
 .loading-messages {
-  position: relative;
+  position: absolute;
   height: 100%;
   width: 100%;
+  z-index: 10;
+  background: white;
   .title {
     color: #555459;
     font-size: 1.4rem;
