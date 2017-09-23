@@ -14,7 +14,7 @@ class SearchForm extends React.Component {
     return (
       <div className="search-form-wrapper">
         <form className="search-form" onSubmit={this.onSearch.bind(this)}>
-          <input type="search" ref="search" defaultValue={searchWord} />
+          <input type="search" ref="search" defaultValue={searchWord} placeholder="Search" />
         </form>
       </div>
     );
