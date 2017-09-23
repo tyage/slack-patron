@@ -157,8 +157,10 @@ end
 post '/search' do
   all_messages, has_more_message = messages(
     search: params[:word],
+    max_ts: params[:max_ts],
     min_ts: params[:min_ts]
   )
+  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
   content_type :json
   {
