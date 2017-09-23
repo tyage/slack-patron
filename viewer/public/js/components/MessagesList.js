@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import $ from 'jquery';
-import _ from 'lodash';
 import SlackMessage from './SlackMessage';
 
 class MessagesList extends React.Component {
@@ -34,26 +33,33 @@ class MessagesList extends React.Component {
   componentDidMount() {
     this.scrollToLastMessage();
   }
-  componentWillReceiveProps() {
+  componentDidUpdate() {
+    if (this.scrollAfterUpdate) {
+      this.scrollToLastMessage();
+      this.scrollAfterUpdate = false;
+    }
+  }
+  componentWillReceiveProps(nextProps) {
     if (this.state.isLoadingMore) {
       // fix scrollTop when load more messages
       $(this.refs.messagesList).scrollTop(
         this.currentHeight() - this.state.oldHeight
       );
       this.setState({ isLoadingMore: false });
-    } else {
-      this.scrollToLastMessage();
+    }
+    if (nextProps.messagesInfo !== this.props.messagesInfo) {
+      this.scrollAfterUpdate = true;
     }
   }
   render() {
-    let createMessage = (messages) => _.map(messages, (message) => {
-        return <SlackMessage message={message} users={this.props.users}
+    const createMessages = (messages) => messages.map(message => (
+        <SlackMessage message={message} users={this.props.users}
           teamInfo={this.props.teamInfo}
           channels={this.props.channels}
           ims={this.props.ims}
           key={message.ts}
-          type={this.props.messagesInfo.type} />;
-      });
+          type={this.props.messagesInfo.type} />
+      ));
     const loadMoreSection = () => {
       if (!this.props.hasMoreMessage) {
         return;
@@ -73,7 +79,7 @@ class MessagesList extends React.Component {
     return (
       <div className="messages-list" ref="messagesList">
         {loadMoreSection()}
-        {createMessage(this.props.messages)}
+        {createMessages(this.props.messages)}
       </div>
     );
   }
