@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Route, Switch } from 'react-router';
 import SlackActions from '../actions/SlackActions';
 
 class SearchForm extends React.Component {
@@ -9,10 +10,11 @@ class SearchForm extends React.Component {
     this.props.updateSearchWord(this.refs.search.value);
   }
   render() {
+    const searchWord = this.props.match ? this.props.match.params.searchWord : '';
     return (
       <div className="search-form-wrapper">
         <form className="search-form" onSubmit={this.onSearch.bind(this)}>
-          <input type="search" ref="search" />
+          <input type="search" ref="search" defaultValue={searchWord} />
         </form>
       </div>
     );
@@ -26,5 +28,13 @@ const mapDispatchToProps = dispatch => {
     }
   };
 };
+const ConnectedSearchForm = connect(null, mapDispatchToProps)(SearchForm);
 
-export default connect(null, mapDispatchToProps)(SearchForm);
+const SearchFormWithRouteParam = () => (
+  <Switch>
+    <Route path="/search/:searchWord" component={ConnectedSearchForm} />
+    <Route path="/" component={ConnectedSearchForm} />
+  </Switch>
+);
+
+export default SearchFormWithRouteParam;
