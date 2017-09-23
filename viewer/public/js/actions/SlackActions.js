@@ -159,7 +159,7 @@ export default {
         dispatch({
           type: SlackConstants.UPDATE_MESSAGES,
           messages,
-          hasMoreMessage,
+          hasMorePastMessage: hasMoreMessage,
           messagesInfo: {
             type: MessagesType.SEARCH_MESSAGES,
             searchWord: word
@@ -178,11 +178,11 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  searchMore(word, minTs) {
+  searchMore(word, { isPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
-          type: SlackConstants.UPDATE_MORE_MESSAGES,
+          type: isPast ? SlackConstants.UPDATE_MORE_PAST_MESSAGES : SlackConstants.UPDATE_MORE_FUTURE_MESSAGES,
           messages,
           hasMoreMessage,
         });
@@ -194,7 +194,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `word=${encodeURIComponent(word)}&max_ts=${minTs}` // TODO: post json format
+        body: `word=${encodeURIComponent(word)}&${isPast ? 'max_ts' : 'min_ts'}=${limitTs}` // TODO: post json format
       };
       fetchJSON(url, params).then(updateMessage);
     };

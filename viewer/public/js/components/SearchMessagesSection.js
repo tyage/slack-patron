@@ -36,8 +36,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    loadMoreSearchMessages: searchWord => minTs => {
-      dispatch(SlackActions.searchMore(searchWord, minTs));
+    loadMoreSearchMessages: searchWord => params => {
+      dispatch(SlackActions.searchMore(searchWord, params));
     },
     loadSearchMessages: searchWord => {
       dispatch(SlackActions.search(searchWord));
