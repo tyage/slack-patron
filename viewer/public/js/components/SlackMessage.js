@@ -86,7 +86,9 @@ export default class extends Component {
                   </Link>
                 </div>
               ) : null }
-            <a href={this.originalMessageLink(teamInfo, message)} target="_blank">original</a>
+            <div className="slack-original-message-link">
+              <a href={this.originalMessageLink(teamInfo, message)} target="_blank">open original</a>
+            </div>
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
           </div>
