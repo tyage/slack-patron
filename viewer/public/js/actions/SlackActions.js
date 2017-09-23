@@ -75,7 +75,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `ts=${ts}` // TODO: post as json format
+        body: ts ? `ts=${ts}` : '' // TODO: post as json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
