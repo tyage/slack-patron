@@ -60,7 +60,7 @@ class MessagesList extends React.Component {
     }
 
     // first view
-    if (nextProps.messagesInfo !== this.props.messagesInfo) {
+    if (nextProps.messagesInfo !== this.props.messagesInfo || nextProps.scrollToTs !== this.props.scrollToTs) {
       if (this.props.scrollToTs) {
         this.scrollToTsAfterUpdate = true;
       } else {

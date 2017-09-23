@@ -161,7 +161,7 @@ post '/search' do
 
   content_type :json
   {
-    messages: all_messages.to_a.reverse,
+    messages: all_messages,
     has_more_message: has_more_message
   }.to_json
 end
