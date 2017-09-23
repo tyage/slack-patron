@@ -64,7 +64,7 @@ export default class extends Component {
       const channel = this.getChannel(message.channel);
 
       return (
-        <div className="slack-message">
+        <div className="slack-message" ref={this.props.messageRef}>
           <div className="slack-message-user-image">
             <img src={icon} />
           </div>

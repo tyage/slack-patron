@@ -42,24 +42,43 @@ class MessagesList extends React.Component {
       this.scrollToLastMessage();
       this.scrollToLastMessageAfterUpdate = false;
     }
+    if (this.scrollToTsAfterUpdate) {
+      const node = this.tsToNode[this.props.scrollToTs];
+      if (node) {
+        $(this.refs.messagesList).scrollTop(
+          $(node).offset().top + $(this.refs.messagesList).height() / 2
+        );
+      }
+      this.scrollToTsAfterUpdate = false;
+    }
   }
   componentWillReceiveProps(nextProps) {
+    // loading more
     if (this.state.isLoadingMore && nextProps.messages !== this.props.messages) {
       this.scrollBackAfterUpdate = true;
       this.setState({ isLoadingMore: false });
     }
+
+    // first view
     if (nextProps.messagesInfo !== this.props.messagesInfo) {
-      this.scrollToLastMessageAfterUpdate = true;
+      if (this.props.scrollToTs) {
+        this.scrollToTsAfterUpdate = true;
+      } else {
+        this.scrollToLastMessageAfterUpdate = true;
+      }
     }
   }
   render() {
+    this.tsToNode = {};
+
     const createMessages = (messages) => messages.map(message => (
         <SlackMessage message={message} users={this.props.users}
           teamInfo={this.props.teamInfo}
           channels={this.props.channels}
           ims={this.props.ims}
           key={message.ts}
-          type={this.props.messagesInfo.type} />
+          type={this.props.messagesInfo.type}
+          messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
     const loadMoreSection = () => {
       if (!this.props.hasMoreMessage) {

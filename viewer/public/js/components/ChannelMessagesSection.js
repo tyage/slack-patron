@@ -24,7 +24,7 @@ class ChannelMessagesSection extends React.Component {
     return (
       <div className="channel-messages">
         <ChannelMessagesHeader currentChannelId={ channel } />
-        <MessagesList onLoadMoreMessages={this.props.loadMoreChannelMessages(channel)} />
+        <MessagesList scrollToTs={this.props.match.params.ts} onLoadMoreMessages={this.props.loadMoreChannelMessages(channel)} />
       </div>
     );
   }
