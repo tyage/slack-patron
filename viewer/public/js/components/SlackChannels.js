@@ -12,12 +12,8 @@ const mapStateToProps = state => {
 
 const SlackChannels = ({ channels, ims }) => {
   let createChannelList = (channels) => _.map(channels, (channel) => {
-      let className = '';
-      if (channel.id === channel.id) { // XXX: use route
-        className = 'selected';
-      }
       return (
-        <li className={className} key={channel.id}>
+        <li key={channel.id}>
           <SlackChannel channel={channel} />
         </li>
       );
