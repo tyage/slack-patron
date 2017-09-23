@@ -2,16 +2,24 @@ import React from 'react';
 import { render } from 'react-dom';
 
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import thunkMiddleware from 'redux-thunk'
+import { createStore, combineReducers, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
 
-import { BrowserRouter } from 'react-router-dom'
+import createHistory from 'history/createBrowserHistory';
+import { Route } from 'react-router';
+import { ConnectedRouter, routerReducer, routerMiddleware, push } from 'react-router-redux';
 
-import slackPatron from './reducers';
+import reducers from './reducers';
 import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
-const store = createStore(slackPatron, applyMiddleware(thunkMiddleware));
+const history = createHistory();
+const middleware = routerMiddleware(history);
+
+const store = createStore(
+  combineReducers({ ...reducers, router: routerReducer }),
+  applyMiddleware(middleware, thunkMiddleware)
+);
 
 // initialize data
 store.dispatch(SlackActions.getUsers());
@@ -21,9 +29,9 @@ store.dispatch(SlackActions.getIms());
 
 render(
   <Provider store={store}>
-    <BrowserRouter>
+    <ConnectedRouter history={history}>
       <SlackPatron />
-    </BrowserRouter>
+    </ConnectedRouter>
   </Provider>,
   document.getElementById('app')
 );

@@ -1,14 +1,13 @@
-import { combineReducers } from 'redux';
 import channels from './channels';
 import searchWord from './searchWord';
 import teamInfo from './teamInfo';
 import users from './users';
 
-const slackPatron = combineReducers({
+const reducers = {
   channels,
   searchWord,
   teamInfo,
   users
-});
+};
 
-export default slackPatron;
+export default reducers;

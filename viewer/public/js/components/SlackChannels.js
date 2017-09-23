@@ -1,23 +1,23 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Route } from 'react-router';
 import _ from 'lodash';
 import SlackChannel from './SlackChannel';
 
 const mapStateToProps = state => {
   return {
     channels: state.channels.channels,
-    ims: state.channels.ims
+    ims: state.channels.ims,
+    router: state.router
   };
 };
 
 const SlackChannels = ({ channels, ims }) => {
-  let createChannelList = (channels) => _.map(channels, (channel) => {
-      return (
-        <li key={channel.id}>
-          <SlackChannel channel={channel} />
-        </li>
-      );
-    });
+  let createChannelList = (channels) => _.map(channels, (channel) => (
+      <li key={channel.id}>
+        <SlackChannel channel={channel} />
+      </li>
+    ));
 
   return (
     <div className="sidebar-body">

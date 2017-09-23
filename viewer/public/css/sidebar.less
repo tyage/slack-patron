@@ -44,28 +44,30 @@
       width: @sidebar-width - 12px;
       .list {
         color: #ab9ba9;
-        li {
+        a {
           text-shadow: 0 1px 1px rgba(0,0,0,0.25);
           cursor: pointer;
+          display: block;
+          line-height: 1.5rem;
+          padding: 0 .5rem 0 1rem;
+          font-size: 1rem;
+          text-decoration: none;
+          color: #ab9ba9;
           &:hover {
             background: #3e313c;
+            text-decoration: none;
           }
-          &.selected {
+          &:before {
+            content: ' ';
+            margin: 0 0 -4px 0;
+            display: inline-block;
+            width: 1em;
+            text-align: center;
+            font-weight: bold;
+          }
+          &.active {
             background: rgb(76, 150, 137);
             color: white;
-          }
-          p {
-            line-height: 1.5rem;
-            padding: 0 .5rem 0 1rem;
-            font-size: 1rem;
-            &:before {
-              content: ' ';
-              margin: 0 0 -4px 0;
-              display: inline-block;
-              width: 1em;
-              text-align: center;
-              font-weight: bold;
-            }
           }
         }
       }
