@@ -81,8 +81,9 @@ class MessagesList extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    messages: state.messages,
-    hasMoreMessage: state.hasMoreMessage,
+    messages: state.messages.messages,
+    hasMoreMessage: state.messages.hasMoreMessage,
+    messagesInfo: state.messages.messagesInfo,
     users: state.users,
     channels: state.channels,
     ims: state.ims,

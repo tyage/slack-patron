@@ -51,20 +51,22 @@ export default {
     );
   },
   getMessages(channel) {
-    let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
-      SlackDispatcher.dispatch({
-        actionType: SlackConstants.UPDATE_MESSAGES,
-        messages,
-        hasMoreMessage,
-        messagesInfo: {
-          type: MessagesType.CHANNEL_MESSAGES,
-          channel
-        }
+    return dispatch => {
+      const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMoreMessage,
+          messagesInfo: {
+            type: MessagesType.CHANNEL_MESSAGES,
+            channel
+          }
+        });
       });
-    });
 
-    let url = generateApiUrl('./messages/' + channel + '.json');
-    fetchJSON(url, { method: 'POST' }).then(updateMessage);
+      const url = generateApiUrl('./messages/' + channel + '.json');
+      fetchJSON(url, { method: 'POST' }).then(updateMessage);
+    };
   },
   getMoreMessages(channel, minTs) {
     let updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {

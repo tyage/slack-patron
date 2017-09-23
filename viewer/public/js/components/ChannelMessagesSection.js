@@ -2,9 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux'
 import ChannelMessagesHeader from './ChannelMessagesHeader';
 import MessagesList from './MessagesList';
+import SlackActions from '../actions/SlackActions';
 
-const ChannelMessagesSection = ({ loadMoreChannelMessages, match }) => {
+const ChannelMessagesSection = ({ loadMoreChannelMessages, match, loadChannelMessages }) => {
   const channel = match.params.channel;
+  loadChannelMessages(channel);
   return (
     <div className="channel-messages">
       <ChannelMessagesHeader currentChannelId={ channel } />
@@ -21,7 +23,10 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     loadMoreChannelMessages: channel => minTs => {
-      SlackActions.getMoreMessages(channel, minTs);
+      dispatch(SlackActions.getMoreMessages(channel, minTs));
+    },
+    loadChannelMessages: channel => {
+      dispatch(SlackActions.getMessages(channel));
     }
   };
 };
