@@ -7,8 +7,13 @@ class SearchMessagesSection extends React.Component {
   componentDidMount() {
     this.initialzeData(this.props.match.params.searchWord);
   }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.match.params.searchWord !== nextProps.match.params.searchWord) {
+      this.initialzeData(nextProps.match.params.searchWord);
+    }
+  }
   initialzeData(searchWord) {
-    this.props.loadSearchMessages(searchWord);
+    this.props.loadSearchMessages(decodeURIComponent(searchWord));
   }
   render() {
     const { match, loadMoreSearchMessages } = this.props;
@@ -24,6 +29,11 @@ class SearchMessagesSection extends React.Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    router: state.router
+  };
+};
 const mapDispatchToProps = dispatch => {
   return {
     loadMoreSearchMessages: searchWord => minTs => {
@@ -35,4 +45,4 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(null, mapDispatchToProps)(SearchMessagesSection);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchMessagesSection);

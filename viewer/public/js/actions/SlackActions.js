@@ -1,5 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
+import { push } from 'react-router-redux'
 import 'whatwg-fetch'
 
 let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
@@ -111,10 +112,7 @@ export default {
     });
   },
   updateSearchWord(word) {
-    SlackDispatcher.dispatch({
-      actionType: SlackConstants.UPDATE_SEARCH_WORD,
-      word
-    });
+    return push(`/search/${encodeURIComponent(word)}`);
   },
   search(word) {
     return dispatch => {
