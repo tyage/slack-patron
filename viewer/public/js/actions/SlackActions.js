@@ -22,7 +22,7 @@ const fetchJSON = (url, params) => {
 
 export default {
   getChannels() {
-    return (dispatch) => (
+    return dispatch => (
       fetchJSON(generateApiUrl('/channels.json')).then((channels) => {
         dispatch({
           type: SlackConstants.UPDATE_CHANNELS,
@@ -32,7 +32,7 @@ export default {
     );
   },
   getIms() {
-    return (dispatch) => (
+    return dispatch => (
       fetchJSON(generateApiUrl('/ims.json')).then((ims) => {
         dispatch({
           type: SlackConstants.UPDATE_IMS,
@@ -42,7 +42,7 @@ export default {
     );
   },
   getUsers() {
-    return (dispatch) => (
+    return dispatch => (
       fetchJSON(generateApiUrl('/users.json')).then((users) => {
         dispatch({
           type: SlackConstants.UPDATE_USERS,
@@ -105,11 +105,13 @@ export default {
     );
   },
   importBackup(formData) {
-    let url = generateApiUrl('/import_backup');
-    fetchJSON(url, {
-      method: 'post',
-      body: formData
-    });
+    return dispatch => {
+      const url = generateApiUrl('/import_backup');
+      fetchJSON(url, {
+        method: 'post',
+        body: formData
+      });
+    };
   },
   updateSearchWord(word) {
     return push(`/search/${encodeURIComponent(word)}`);
