@@ -5,7 +5,7 @@ import SlackActions from '../actions/SlackActions';
 class ConfigureWindow extends React.Component {
   importBackup(e) {
     e.preventDefault();
-    let formData = new FormData(this.refs.importBackup);
+    const formData = new FormData(this.refs.importBackup);
     this.props.importBackup(formData);
     this.refs.backupFile.value = '';
   }

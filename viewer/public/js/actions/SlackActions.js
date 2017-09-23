@@ -3,11 +3,11 @@ import MessagesType from '../constants/MessagesType';
 import { push } from 'react-router-redux'
 import 'whatwg-fetch'
 
-let generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
+const generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
 
 // callback becomes callable if it is passed to this function last time
 let _lastCallback;
-let callableIfLast = (callback) => {
+const callableIfLast = (callback) => {
   _lastCallback = callback;
   return (...args) => {
     if (_lastCallback === callback) {
