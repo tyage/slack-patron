@@ -26,7 +26,7 @@ export default {
       fetchJSON(generateApiUrl('/channels.json')).then((channels) => {
         dispatch({
           type: SlackConstants.UPDATE_CHANNELS,
-          channels: Object.values(channels)
+          channels
         });
       })
     );
@@ -36,7 +36,7 @@ export default {
       fetchJSON(generateApiUrl('/ims.json')).then((ims) => {
         dispatch({
           type: SlackConstants.UPDATE_IMS,
-          ims: Object.values(ims)
+          ims
         });
       })
     );

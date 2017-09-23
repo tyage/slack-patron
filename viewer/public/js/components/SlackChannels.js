@@ -5,7 +5,7 @@ import { Route } from 'react-router';
 import ChannelName from './ChannelName';
 
 const SlackChannels = ({ channels, ims }) => {
-  const createChannelList = (channels) => channels.map(channel => (
+  const createChannelList = (channels) => Object.values(channels).map(channel => (
       <li key={channel.id}>
         <NavLink to={ `/${channel.id}` }>
           <ChannelName channel={channel} />
