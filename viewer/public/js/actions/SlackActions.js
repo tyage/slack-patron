@@ -17,6 +17,7 @@ const callableIfLast = (callback) => {
 };
 
 const fetchJSON = (url, params) => {
+  params.credentials = 'same-origin';
   return fetch(url, params).then(res => res.json());
 };
 
