@@ -13,6 +13,9 @@ import reducers from './reducers';
 import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
+import 'normalize.css/normalize.css';
+import './app.less';
+
 const history = createHistory({
   basename: document.getElementById('basename').getAttribute('href')
 });

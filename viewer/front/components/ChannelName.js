@@ -1,5 +1,7 @@
 import React from 'react';
 
+import './ChannelName.less';
+
 const channelTypeToClassName = {
   C: 'channel',
   G: 'group',

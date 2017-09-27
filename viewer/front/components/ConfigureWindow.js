@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import SlackActions from '../actions/SlackActions';
 
+import './ConfigureWindow.less';
+
 class ConfigureWindow extends React.Component {
   importBackup(e) {
     e.preventDefault();

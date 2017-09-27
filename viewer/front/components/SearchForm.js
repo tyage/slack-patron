@@ -3,6 +3,8 @@ import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router';
 import SlackActions from '../actions/SlackActions';
 
+import './SearchForm.less';
+
 class SearchForm extends React.Component {
   onSearch(e) {
     e.preventDefault();
