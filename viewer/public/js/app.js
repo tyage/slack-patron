@@ -13,6 +13,8 @@ import reducers from './reducers';
 import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
+import '../css/app.less';
+
 const history = createHistory({
   basename: document.getElementById('basename').getAttribute('href')
 });

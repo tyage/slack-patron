@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "gulp",
-    "watch": "gulp watch"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "repository": {
     "type": "git",
@@ -46,6 +46,10 @@
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
-    "gulp-watch": "^4.3.5"
+    "css-loader": "^0.28.7",
+    "gulp-watch": "^4.3.5",
+    "less": "^2.7.2",
+    "less-loader": "^4.0.5",
+    "style-loader": "^0.18.2"
   }
 }
