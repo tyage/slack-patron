@@ -13,6 +13,7 @@ import reducers from './reducers';
 import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
+import 'normalize.css/normalize.css';
 import '../css/app.less';
 
 const history = createHistory({
