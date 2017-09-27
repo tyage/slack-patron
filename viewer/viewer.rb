@@ -131,6 +131,8 @@ post '/import_backup' do
   FileUtils.move(params[:file][:tempfile], exported_file)
   # TODO: show progress when import
   SlackImport.new.import_from_file(exported_file)
+
+  { result: 'success' }.to_json
 end
 
 get '/' do
