@@ -5,7 +5,6 @@ gem 'sinatra'
 gem 'rubyzip'
 gem 'mongo'
 gem 'json'
-gem 'rake'
 group :development do
   gem 'thin'
 end
