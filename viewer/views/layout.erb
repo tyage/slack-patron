@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <base href="<%= uri('/', false) %>" id="basename" />
     <meta name="referrer" content="never" />
     <meta name="robots" content="noindex,nofollow,noarchive" />
-    <title></title>
-    <link rel="stylesheet" type="text/css" href="<%= uri('/dist/css/app.css', false) %>" />
-    <script src="<%= uri('/dist/js/app.js', false) %>"></script>
+    <title>Slack Patron</title>
+    <script defer src="build/app.js"></script>
   </head>
   <body>
 

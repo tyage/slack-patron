@@ -12,7 +12,7 @@ PR is welcome!!
   - Also, you can import all data with backup file.
 - View these data in web browser.
 
-![https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png](https://i.gyazo.com/e38237c8ac0259b9ee0549a67a52bc64.png)
+![](https://i.gyazo.com/84143f0b371bc0c023c64075b5d83734.png)
 
 ## 1. Setup
 
@@ -30,7 +30,7 @@ You can edit `config.yml` for more configuration.
 
 ## 2-A. Deploy with docker
 
-If you want to deploy with docker, what you should do is just type these command!
+To deploy with docker, just run these commands!
 
 ```sh
 $ docker-compose up -d
@@ -39,20 +39,18 @@ $ open http://localhost:9292 # open http://localhost:9292 in your browser
 
 ## 2-B. Deploy without docker
 
-You should edit `config.yml` to specify the location of mongo, redis server.
+You should edit `config.yml` and specify the location of mongo.
 
 ### Requirements
 
-- ruby: 2.1.5p273
-- mongo db: 2.4.9
-- redis: 3.0.2
-- node.js: v0.10.25
+- ruby: 2.4.1p111
+- mongo db: v3.2.11
+- node.js: v8.5.0
 
 ### 2-B-1. Setup
 
 ```sh
 $ mongod # you need to start mongo db server
-$ redis-server # you need to start redis server
 $ bundle install
 ```
 

@@ -1,0 +1,27 @@
+.search-form-wrapper {
+  position: absolute;
+  right: 0;
+  top: 0;
+  z-index: 100;
+  &:before {
+    content: '🔍';
+    display: block;
+    position: absolute;
+    left: 10px;
+    top: 16px;
+  }
+  .search-form {
+    margin: 9px 6px 0 0;
+    input {
+      border-radius: 40px;
+      background: #FFF;
+      border: 1px solid rgba(214,214,214,.61);
+      width: 240px;
+      height: 1.9rem;
+      outline: 0;
+      font-size: 15px;
+      padding: 2px 2rem;
+      box-shadow: 1px 1px 2px #eee;
+    }
+  }
+}

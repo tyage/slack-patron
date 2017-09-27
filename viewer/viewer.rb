@@ -1,6 +1,6 @@
 require 'sinatra'
 require 'json'
-require './lib/sidekiq'
+require './lib/slack_import'
 require './lib/slack'
 require './lib/db'
 
@@ -39,10 +39,12 @@ end
 
 def messages(params)
   limit = params[:limit] || 100
+  ts_direction = params[:min_ts].nil? ? -1 : 1
   condition = {
-    ts: { '$lt' =>  params[:min_ts] || Time.now.to_i.to_s },
     hidden: { '$ne' => true }
   }
+  condition[:ts] = { '$gte' => params[:min_ts] } unless params[:min_ts].nil?
+  condition[:ts] = { '$lte' => params[:max_ts] } unless params[:max_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
   condition['$or'] = [
     # normal message
@@ -58,11 +60,13 @@ def messages(params)
 
   all_messages = Messages
     .find(condition)
-    .sort(ts: -1)
+    .sort(ts: ts_direction)
     .limit(limit + 1)
   has_more_message = all_messages.count > limit
+  return_messages = all_messages.limit(limit).to_a
+  return_messages = return_messages.reverse if ts_direction == -1
 
-  return all_messages.limit(limit), has_more_message
+  return return_messages, has_more_message
 end
 
 get '/users.json' do
@@ -83,13 +87,36 @@ end
 post '/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
+    max_ts: params[:max_ts],
     min_ts: params[:min_ts]
   )
+  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
   content_type :json
   {
-    messages: all_messages.to_a.reverse,
+    messages: all_messages,
     has_more_message: has_more_message
+  }.to_json
+end
+
+post '/around_messages/:channel.json' do
+  past_messages, has_more_past_message = messages(
+    channel: params[:channel],
+    max_ts: params[:ts],
+    limit: 50
+  )
+  future_messages, has_more_future_message = messages(
+    channel: params[:channel],
+    min_ts: params[:ts],
+    limit: 50
+  )
+  all_messages = (past_messages + future_messages).uniq { |m| m[:ts] }
+
+  content_type :json
+  {
+    messages: all_messages,
+    has_more_past_message: has_more_past_message,
+    has_more_future_message: has_more_future_message
   }.to_json
 end
 
@@ -102,7 +129,10 @@ end
 post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
-  ImportWorker.perform_async(exported_file)
+  # TODO: show progress when import
+  SlackImport.new.import_from_file(exported_file)
+
+  { result: 'success' }.to_json
 end
 
 get '/' do
@@ -119,16 +149,24 @@ end
 get '/:channel' do
   erb :index
 end
+get '/:channel/:ts' do
+  erb :index
+end
+get '/search/:search_word' do
+  erb :index
+end
 
 post '/search' do
   all_messages, has_more_message = messages(
     search: params[:word],
+    max_ts: params[:max_ts],
     min_ts: params[:min_ts]
   )
+  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
   content_type :json
   {
-    messages: all_messages.to_a.reverse,
+    messages: all_messages,
     has_more_message: has_more_message
   }.to_json
 end

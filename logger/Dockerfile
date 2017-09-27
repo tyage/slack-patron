@@ -1,4 +1,4 @@
-FROM ruby:2.3-alpine
+FROM ruby:2.4-alpine
 MAINTAINER tyage <namatyage@gmail.com>
 
 ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
@@ -20,4 +20,4 @@ RUN set -x && \
 COPY ./config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
-CMD bundle exec ruby logger/logger.rb && tail -f logs/sidekiq.log
+CMD bundle exec ruby logger/logger.rb

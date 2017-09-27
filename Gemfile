@@ -5,5 +5,6 @@ gem 'sinatra'
 gem 'rubyzip'
 gem 'mongo'
 gem 'json'
-gem 'sidekiq'
-gem 'redis-namespace'
+group :development do
+  gem 'thin'
+end

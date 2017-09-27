@@ -1,19 +1,29 @@
 module.exports = {
-  entry: './public/src/js/app.js',
+  entry: './front/app.js',
   output: {
-    filename: './public/dist/js/app.js'
+    filename: './public/build/app.js'
   },
   devtool: 'inline-source-map',
   module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader'
-      }
-    ]
-  },
-  resolve: {
-    extensions: ['', '.js']
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [
+        'babel-loader'
+      ]
+    }, {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
+    }, {
+      test: /\.less$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'less-loader'
+      ]
+    }]
   }
 };
