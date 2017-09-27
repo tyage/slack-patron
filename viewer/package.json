@@ -37,7 +37,6 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "webpack": "^3.6.0",
-    "webpack-stream": "^4.0.0",
     "whatwg-fetch": "^2.0.3"
   },
   "devDependencies": {
