@@ -5,32 +5,25 @@ module.exports = {
   },
   devtool: 'inline-source-map',
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        use: {
-          loader: 'babel-loader',
-        }
-      },
-      {
-        test: /\.css$/,
-        use: [{
-          loader: 'style-loader'
-        }, {
-          loader: 'css-loader'
-        }]
-      },
-      {
-        test: /\.less$/,
-        use: [{
-          loader: 'style-loader'
-        }, {
-          loader: 'css-loader'
-        }, {
-          loader: 'less-loader'
-        }]
-      }
-    ]
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/,
+      use: [
+        'babel-loader'
+      ]
+    }, {
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        'css-loader'
+      ]
+    }, {
+      test: /\.less$/,
+      use: [
+        'style-loader',
+        'css-loader',
+        'less-loader'
+      ]
+    }]
   }
 };
