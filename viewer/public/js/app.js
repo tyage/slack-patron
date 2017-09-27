@@ -14,7 +14,7 @@ import SlackPatron from './components/SlackPatron';
 import SlackActions from './actions/SlackActions';
 
 import 'normalize.css/normalize.css';
-import '../css/app.less';
+import './app.less';
 
 const history = createHistory({
   basename: document.getElementById('basename').getAttribute('href')

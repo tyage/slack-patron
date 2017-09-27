@@ -4,6 +4,8 @@ import { Route, Switch } from 'react-router';
 import SearchMessagesSection from './SearchMessagesSection';
 import ChannelMessagesSection from './ChannelMessagesSection';
 
+import './MessagesSection.less';
+
 const MessagesSection = ({ isMessageLoading }) => (
   <div className="messages">
     { isMessageLoading ? (
