@@ -1,6 +1,6 @@
-import React from 'react';
-import { connect } from 'react-redux'
-import ConfigureWindow from './ConfigureWindow';
+import React from "react";
+import { connect } from "react-redux";
+import ConfigureWindow from "./ConfigureWindow";
 
 class SidebarHeader extends React.Component {
   constructor(props) {
@@ -18,15 +18,19 @@ class SidebarHeader extends React.Component {
     return (
       <div>
         <div className="sidebar-header">
-          <div className="team-info" onClick={this.toggleConfigureWindow.bind(this)}>
+          <div
+            className="team-info"
+            onClick={this.toggleConfigureWindow.bind(this)}
+          >
             <span className="team-name">{this.props.teamInfo.name}</span>
-            <p className="configure-toggler"></p>
+            <p className="configure-toggler" />
           </div>
         </div>
-        {
-          this.state.showConfigureWindow &&
-            <ConfigureWindow toggleConfigureWindow={this.toggleConfigureWindow.bind(this)} />
-        }
+        {this.state.showConfigureWindow && (
+          <ConfigureWindow
+            toggleConfigureWindow={this.toggleConfigureWindow.bind(this)}
+          />
+        )}
       </div>
     );
   }

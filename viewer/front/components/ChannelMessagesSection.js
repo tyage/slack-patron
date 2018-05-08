@@ -1,19 +1,25 @@
-import React from 'react';
-import { connect } from 'react-redux'
-import ChannelMessagesHeader from './ChannelMessagesHeader';
-import MessagesList from './MessagesList';
-import SlackActions from '../actions/SlackActions';
+import React from "react";
+import { connect } from "react-redux";
+import ChannelMessagesHeader from "./ChannelMessagesHeader";
+import MessagesList from "./MessagesList";
+import SlackActions from "../actions/SlackActions";
 
 class ChannelMessagesSection extends React.Component {
   componentDidMount() {
-    this.initialzeData(this.props.match.params.channel, this.props.match.params.ts);
+    this.initialzeData(
+      this.props.match.params.channel,
+      this.props.match.params.ts
+    );
   }
   componentWillReceiveProps(nextProps) {
     if (
       this.props.match.params.channel !== nextProps.match.params.channel ||
       this.props.match.params.ts !== nextProps.match.params.ts
     ) {
-      this.initialzeData(nextProps.match.params.channel, nextProps.match.params.ts);
+      this.initialzeData(
+        nextProps.match.params.channel,
+        nextProps.match.params.ts
+      );
     }
   }
   initialzeData(channel, ts) {
@@ -23,8 +29,11 @@ class ChannelMessagesSection extends React.Component {
     const channel = this.props.match.params.channel;
     return (
       <div className="channel-messages">
-        <ChannelMessagesHeader currentChannelId={ channel } />
-        <MessagesList scrollToTs={this.props.match.params.ts} onLoadMoreMessages={this.props.loadMoreChannelMessages(channel)} />
+        <ChannelMessagesHeader currentChannelId={channel} />
+        <MessagesList
+          scrollToTs={this.props.match.params.ts}
+          onLoadMoreMessages={this.props.loadMoreChannelMessages(channel)}
+        />
       </div>
     );
   }
@@ -50,4 +59,6 @@ const mapDispatchToProps = dispatch => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChannelMessagesSection);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ChannelMessagesSection
+);

@@ -1,7 +1,7 @@
-import React from 'react';
-import { connect } from 'react-redux'
-import $ from 'jquery';
-import SlackMessage from './SlackMessage';
+import React from "react";
+import { connect } from "react-redux";
+import $ from "jquery";
+import SlackMessage from "./SlackMessage";
 
 class MessagesList extends React.Component {
   constructor(props) {
@@ -29,8 +29,11 @@ class MessagesList extends React.Component {
     this.previousHeight = this.currentHeight();
     this.previousTop = $(this.refs.messagesList).scrollTop();
 
-    const oldestTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
-    const latestTs = (this.props.messages.length > 0) && this.props.messages[this.props.messages.length - 1].ts;
+    const oldestTs =
+      this.props.messages.length > 0 && this.props.messages[0].ts;
+    const latestTs =
+      this.props.messages.length > 0 &&
+      this.props.messages[this.props.messages.length - 1].ts;
     this.props.onLoadMoreMessages({
       isPast,
       limitTs: isPast ? oldestTs : latestTs
@@ -47,9 +50,7 @@ class MessagesList extends React.Component {
           this.currentHeight() - (this.previousHeight || 0)
         );
       } else {
-        $(this.refs.messagesList).scrollTop(
-          (this.previousTop || 0)
-        );
+        $(this.refs.messagesList).scrollTop(this.previousTop || 0);
       }
       this.scrollBackAfterUpdate = false;
     }
@@ -70,13 +71,19 @@ class MessagesList extends React.Component {
   componentWillReceiveProps(nextProps) {
     // TODO: create reducer which manage scroll state
     // loading more
-    if (this.state.isLoadingMore && nextProps.messages !== this.props.messages) {
+    if (
+      this.state.isLoadingMore &&
+      nextProps.messages !== this.props.messages
+    ) {
       this.scrollBackAfterUpdate = true;
       this.setState({ isLoadingMore: false });
     }
 
     // first view
-    if (nextProps.messagesInfo !== this.props.messagesInfo || nextProps.scrollToTs !== this.props.scrollToTs) {
+    if (
+      nextProps.messagesInfo !== this.props.messagesInfo ||
+      nextProps.scrollToTs !== this.props.scrollToTs
+    ) {
       if (this.props.scrollToTs) {
         this.scrollToTsAfterUpdate = true;
       } else {
@@ -87,17 +94,21 @@ class MessagesList extends React.Component {
   render() {
     this.tsToNode = {};
 
-    const createMessages = (messages) => messages.map(message => (
-        <SlackMessage message={message} users={this.props.users}
+    const createMessages = messages =>
+      messages.map(message => (
+        <SlackMessage
+          message={message}
+          users={this.props.users}
           teamInfo={this.props.teamInfo}
           channels={this.props.channels}
           ims={this.props.ims}
           key={message.ts}
           type={this.props.messagesInfo.type}
           selected={message.ts === this.props.scrollToTs}
-          messageRef={ n => this.tsToNode[message.ts] = n } />
+          messageRef={n => (this.tsToNode[message.ts] = n)}
+        />
       ));
-    const loadMoreSection = (isPast) => {
+    const loadMoreSection = isPast => {
       if (isPast && !this.props.hasMorePastMessage) {
         return;
       }
@@ -109,7 +120,10 @@ class MessagesList extends React.Component {
         return <div className="messages-load-more loading">Loading...</div>;
       } else {
         return (
-          <div className="messages-load-more" onClick={this.handleLoadMore.bind(this, isPast)}>
+          <div
+            className="messages-load-more"
+            onClick={this.handleLoadMore.bind(this, isPast)}
+          >
             Load more messages...
           </div>
         );

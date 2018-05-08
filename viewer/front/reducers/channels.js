@@ -1,4 +1,4 @@
-import SlackConstants from '../constants/SlackConstants';
+import SlackConstants from "../constants/SlackConstants";
 
 const channels = (state = { channels: [], ims: [] }, action) => {
   switch (action.type) {

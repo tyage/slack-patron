@@ -1,4 +1,4 @@
-import SlackConstants from '../constants/SlackConstants';
+import SlackConstants from "../constants/SlackConstants";
 
 const searchWord = (state = null, action) => {
   switch (action.type) {

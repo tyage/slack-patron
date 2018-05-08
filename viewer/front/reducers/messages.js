@@ -1,6 +1,14 @@
-import SlackConstants from '../constants/SlackConstants';
+import SlackConstants from "../constants/SlackConstants";
 
-const messages = (state = { messages: [], hasMorePastMessage: false, hasMoreFutureMessage: false, messagesInfo: {} }, action) => {
+const messages = (
+  state = {
+    messages: [],
+    hasMorePastMessage: false,
+    hasMoreFutureMessage: false,
+    messagesInfo: {}
+  },
+  action
+) => {
   switch (action.type) {
     case SlackConstants.UPDATE_MESSAGES:
       return {

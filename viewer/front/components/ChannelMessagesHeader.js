@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux'
-import _ from 'lodash';
-import ChannelName from './ChannelName'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import _ from "lodash";
+import ChannelName from "./ChannelName";
 
 const ChannelMessagesHeader = ({ channels, ims, currentChannelId }) => {
   const allChannels = Object.assign({}, channels, ims);
-  const channel = _.find(allChannels, (c) => c.id === currentChannelId);
+  const channel = _.find(allChannels, c => c.id === currentChannelId);
 
   if (!channel) {
     return null;
