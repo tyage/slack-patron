@@ -10,7 +10,8 @@ RUN set -x && \
 	apk add --update \
 		git \
 		build-base \
-		openssl && \
+		openssl \
+		openssl-dev && \
 	echo 'gem: --no-document' >> /etc/gemrc && \
 	git clone ${REPOSITORY} ${SRCDIR} && \
 	cd ${SRCDIR} && \
