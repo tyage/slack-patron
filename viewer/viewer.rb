@@ -61,8 +61,7 @@ def messages(params)
   all_messages = Messages
     .find(condition)
     .sort(ts: ts_direction)
-    .limit(limit + 1)
-  has_more_message = all_messages.count > limit
+  has_more_message = all_messages.count({limit: limit+1}) > limit
   return_messages = all_messages.limit(limit).to_a
   return_messages = return_messages.reverse if ts_direction == -1
 
