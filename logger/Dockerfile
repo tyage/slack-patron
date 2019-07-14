@@ -1,7 +1,7 @@
 FROM ruby:2.4-alpine
 MAINTAINER tyage <namatyage@gmail.com>
 
-ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
+ARG REPOSITORY="https://github.com/tsg-ut/slack-patron.git"
 ARG BRANCH="master"
 ARG SRCDIR="/usr/local/slack-patron"
 
