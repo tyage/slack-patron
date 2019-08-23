@@ -91,6 +91,14 @@ export default class extends Component {
             </div>
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
+            { message.reactions && message.reactions.length > 0 && (
+              <div className="slack-message-reactions">{
+                message.reactions.map((reaction) => (
+                  <div className="slack-message-reaction">:{reaction.name}:
+                    <div className="slack-message-reaction-count">{reaction.count}</div></div>
+                ))
+              }</div>
+            ) }
           </div>
         </div>
       );
