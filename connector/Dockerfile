@@ -4,5 +4,6 @@ RUN pip install 'mongo-connector[elastic5]' 'elastic2-doc-manager[elastic5]'
 
 RUN mkdir /conf && mkdir /var/log/mongo-connector
 COPY ./config.json /conf/
+COPY ./run.sh /run.sh
 
-CMD ["mongo-connector", "-c", "/conf/config.json"]
+CMD ["/run.sh"]
