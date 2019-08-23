@@ -33,7 +33,7 @@ export default class extends Component {
     };
     const userLink = (id) => {
       const user = this.getUser(id);
-      return `@${user && user.name}`;
+      return `@${user && (user.profile.display_name || user.profile.real_name || user.name)}`;
     };
     const specialCommand = (command) => `@${command}`;
     const uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
@@ -112,7 +112,7 @@ export default class extends Component {
       return <SlackMessagePrototype
           message={message}
           icon={user && user.profile.image_48}
-          username={user && user.name}
+          username={user && (user.profile.display_name || user.profile.real_name || user.name)}
           showChannel={showChannel}
           teamInfo={teamInfo}
           text={message.text}
