@@ -78,6 +78,19 @@ export default class extends Component {
     const messageId = message.ts.replace('.', '');
     return `https://${teamInfo.domain}.slack.com/messages/${message.channel}/p${messageId}`;
   }
+  renderReaction(reaction) {
+    return (
+      <div className="slack-message-reaction" key={reaction.name}>
+        {
+          this.getEmojiImage(reaction.name) ? (
+            <img className="slack-message-reaction-image" src={this.getEmojiImage(reaction.name)} />
+          ) : (
+            `:${reaction.name}:`
+          )
+        }
+        <div className="slack-message-reaction-count">{reaction.count}</div>
+      </div>);
+  }
   render() {
     const createMarkup = (text) => {
       return {
@@ -117,19 +130,8 @@ export default class extends Component {
               dangerouslySetInnerHTML={createMarkup(text)}></div>
             { message.reactions && message.reactions.length > 0 && (
               <div className="slack-message-reactions">{
-                message.reactions.map((reaction) => (
-                  <div className="slack-message-reaction" key={reaction.name}>
-                    {
-                      this.getEmojiImage(reaction.name) ? (
-                        <img className="slack-message-reaction-image" src={this.getEmojiImage(reaction.name)} />
-                      ) : (
-                        `:${reaction.name}:`
-                      )
-                    }
-                    <div className="slack-message-reaction-count">{reaction.count}</div></div>
-                ))
-              }</div>
-            ) }
+                message.reactions.map((reaction) => this.renderReaction(reaction))
+              }</div> ) }
           </div>
         </div>
       );
