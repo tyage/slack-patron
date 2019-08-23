@@ -50,7 +50,7 @@ Messages.indexes.create_one({ :ts => 1 }, :unique => true)
 def insert_message(message)
   # Message can be duplicate but dont check (to improve the speed)
   begin
-    Messages.insert_one(message)
+    Messages.replace_one({ :ts => message[:ts] || message['ts'] }, message, { :upsert => true })
   rescue
   end
 end
