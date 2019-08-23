@@ -1,7 +1,10 @@
+const path = require('path');
+
 module.exports = {
   entry: './front/app.js',
   output: {
-    filename: './public/build/app.js'
+    path: path.resolve(__dirname, 'public/build'),
+    filename: 'app.js'
   },
   devtool: 'inline-source-map',
   module: {
