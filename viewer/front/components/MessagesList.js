@@ -88,7 +88,10 @@ class MessagesList extends React.Component {
     this.tsToNode = {};
 
     const createMessages = (messages) => messages.map(message => (
-        <SlackMessage message={message} users={this.props.users}
+        <SlackMessage
+          message={message}
+          users={this.props.users}
+          emojis={this.props.emojis}
           teamInfo={this.props.teamInfo}
           channels={this.props.channels}
           ims={this.props.ims}
@@ -135,6 +138,7 @@ const mapStateToProps = state => {
     users: state.users,
     channels: state.channels.channels,
     ims: state.channels.ims,
+    emojis: state.emojis,
     teamInfo: state.teamInfo
   };
 };

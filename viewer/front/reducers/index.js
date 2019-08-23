@@ -3,6 +3,7 @@ import searchWord from './searchWord';
 import teamInfo from './teamInfo';
 import users from './users';
 import messages from './messages';
+import emojis from './emojis';
 import isMessageLoading from './isMessageLoading';
 
 const reducers = {
@@ -11,6 +12,7 @@ const reducers = {
   teamInfo,
   users,
   messages,
+  emojis,
   isMessageLoading
 };
 

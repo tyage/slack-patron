@@ -37,6 +37,13 @@ def ims
   hashed_ims.sort_by {|k, v| v[:name] }.to_h
 end
 
+def emojis
+  emojis = Emojis.find.map do |emoji|
+    [emoji[:name], emoji[:url]]
+  end
+  emojis.to_h
+end
+
 def messages(params)
   limit = params[:limit] || 100
   ts_direction = params[:min_ts].nil? ? -1 : 1
@@ -81,6 +88,11 @@ end
 get '/ims.json' do
   content_type :json
   ims.to_json
+end
+
+get '/emojis.json' do
+  content_type :json
+  emojis.to_json
 end
 
 post '/messages/:channel.json' do
