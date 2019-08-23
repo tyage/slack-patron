@@ -1,22 +1,62 @@
-version: '2'
+version: '3'
 services:
-  logger:
-    build:
-      context: ./
-      dockerfile: ./logger/Dockerfile
-    container_name: slack-patron-logger
-    links:
+ logger:
+   build:
+     context: ./
+     dockerfile: ./logger/Dockerfile
+   container_name: slack-patron-logger
+   links:
      - mongo
 
-  viewer:
-    build:
-      context: ./
-      dockerfile: ./viewer/Dockerfile
-    container_name: slack-patron-viewer
-    ports:
-     - "9292:9292"
-    links:
+ viewer:
+   build:
+     context: ./
+     dockerfile: ./viewer/Dockerfile
+   container_name: slack-patron-viewer
+   ports:
+    - "9292:9292"
+   links:
      - mongo
+     - elasticsearch
 
-  mongo:
-    image: mongo
+ elasticsearch:
+   image: elasticsearch:5.1
+
+ mongo:
+   image: mongo:4.0-xenial
+   entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+   expose:
+     - 27017
+
+ mongo2:
+   image: mongo:4.0-xenial
+   entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+   expose:
+     - 27017
+
+ mongo3:
+   image: mongo:4.0-xenial
+   entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+   expose:
+     - 27017
+
+ mongo-setup:
+   image: mongo:4.0-xenial
+   depends_on:
+     - mongo
+     - mongo2
+     - mongo3
+   volumes:
+     - ./scripts:/scripts
+   links:
+     - mongo
+   entrypoint: [ "/scripts/setup.sh" ]
+
+ connector:
+   build:
+     context: ./connector/
+   depends_on:
+     - mongo-setup
+   links:
+     - mongo
+     - elasticsearch
