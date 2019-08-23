@@ -1,6 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
-import { push } from 'react-router-redux'
+import { push } from 'connected-react-router'
 import 'whatwg-fetch'
 
 const generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
