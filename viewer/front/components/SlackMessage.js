@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
 import ChannelName from './ChannelName';
 import { Link } from 'react-router-dom';
+import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
+
+const emojiData = new EmojiData();
+const emojiRegex = new RegExp(':([\\p{Letter}\\p{Number}+\\-_\']+):', 'giu');
 
 export default class extends Component {
   getChannel(id) {
@@ -17,6 +21,18 @@ export default class extends Component {
   getUser(id) {
     const users = this.props.users;
     return users && users[id];
+  }
+  getEmojiImage(name) {
+    const data = emojiData.getImageData(name);
+    if (data) {
+      return `https://cdn.jsdelivr.net/gh/iamcal/emoji-data@v4.1.0/img-apple-64/${data.imageUrl}`
+    }
+    const emojis = this.props.emojis;
+    const emoji = emojis && emojis[name];
+    if (emoji && emoji.startsWith('alias:')) {
+      return this.getEmojiImage(emoji.split(':')[1]);
+    }
+    return emoji;
   }
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
@@ -37,13 +53,21 @@ export default class extends Component {
     };
     const specialCommand = (command) => `@${command}`;
     const uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
+    const emojiImage = (name) => {
+      const image = this.getEmojiImage(name);
+      if (image) {
+        return `<img class="slack-message-emoji" src="${image}">`;
+      }
+      return `:${name}:`;
+    };
     if (text) {
       return text.replace(/<#([0-9A-Za-z]+)>/, (m, id) => channelLink(id))
         .replace(/<#([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => channelLink(id))
         .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
-        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)));
+        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)))
+        .replace(emojiRegex, (m, name) => emojiImage(name));
     }
     return text;
   }
@@ -94,7 +118,14 @@ export default class extends Component {
             { message.reactions && message.reactions.length > 0 && (
               <div className="slack-message-reactions">{
                 message.reactions.map((reaction) => (
-                  <div className="slack-message-reaction">:{reaction.name}:
+                  <div className="slack-message-reaction" key={reaction.name}>
+                    {
+                      this.getEmojiImage(reaction.name) ? (
+                        <img className="slack-message-reaction-image" src={this.getEmojiImage(reaction.name)} />
+                      ) : (
+                        `:${reaction.name}:`
+                      )
+                    }
                     <div className="slack-message-reaction-count">{reaction.count}</div></div>
                 ))
               }</div>

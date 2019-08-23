@@ -55,6 +55,16 @@ export default {
       })
     );
   },
+  getEmojis() {
+    return dispatch => (
+      fetchJSON(generateApiUrl('emojis.json')).then((emojis) => {
+        dispatch({
+          type: SlackConstants.UPDATE_EMOJIS,
+          emojis
+        });
+      })
+    );
+  },
   getAroundMessages(channel, ts) {
     return dispatch => {
       dispatch({

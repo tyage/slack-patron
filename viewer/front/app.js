@@ -31,6 +31,7 @@ store.dispatch(SlackActions.getUsers());
 store.dispatch(SlackActions.getTeamInfo());
 store.dispatch(SlackActions.getChannels());
 store.dispatch(SlackActions.getIms());
+store.dispatch(SlackActions.getEmojis());
 
 render(
   <Provider store={store}>
