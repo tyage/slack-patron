@@ -6,6 +6,10 @@
   float: left;
   background: #4d394b;
   padding: 0 0 20px 0;
+  @media @mobile {
+    position: absolute;
+    left: -@sidebar-width;
+  }
   .sidebar-header {
     height: @sidebar-header-height;
     position: relative;

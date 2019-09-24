@@ -6,6 +6,9 @@
   height: 100%;
   width: calc(~'100% - @{sidebar-width}');
   position: relative;
+  @media @mobile {
+    width: 100%;
+  }
   .channel-messages, .search-messages {
     height: 100%;
     .messages-header {
@@ -41,6 +44,11 @@
         position: relative;
         word-wrap: break-word;
         white-space: pre-wrap;
+        @media @mobile {
+          padding-right: 0;
+          margin-left: 0.8rem;
+          margin-right: 0.8rem;
+        }
         &.selected {
           background: yellow;
         }
@@ -58,12 +66,16 @@
           }
         }
         .slack-message-content {
+          .slack-message-head {
+            display: block;
+            line-height: 0.8rem;
+            padding-bottom: 0.6rem;
+          }
           .slack-message-user-name {
             display: inline-block;
             color: rgb(61, 60, 64);
             font-weight: 900;
             padding-right: .25rem;
-            height: 23px;
           }
           .slack-message-date, .slack-message-channel, .slack-original-message-link {
             display: inline-block;
