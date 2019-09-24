@@ -110,21 +110,23 @@ export default class extends Component {
             <img src={icon} />
           </div>
           <div className="slack-message-content">
-            <div className="slack-message-user-name">{username}</div>
-            <div className="slack-message-date">
-              <Link to={this.messageLink(message)}>
-                {this.formatDate(message.ts)}
-              </Link>
-            </div>
-            { showChannel && channel ? (
-                <div className="slack-message-channel">
-                  <Link to={ `/${channel.id}` }>
-                    <ChannelName channel={channel} />
-                  </Link>
-                </div>
-              ) : null }
-            <div className="slack-original-message-link">
-              <a href={this.originalMessageLink(teamInfo, message)} target="_blank">open original</a>
+            <div className="slack-message-head">
+              <div className="slack-message-user-name">{username}</div>
+              <div className="slack-message-date">
+                <Link to={this.messageLink(message)}>
+                  {this.formatDate(message.ts)}
+                </Link>
+              </div>
+              { showChannel && channel ? (
+                  <div className="slack-message-channel">
+                    <Link to={ `/${channel.id}` }>
+                      <ChannelName channel={channel} />
+                    </Link>
+                  </div>
+                ) : null }
+              <div className="slack-original-message-link">
+                <a href={this.originalMessageLink(teamInfo, message)} target="_blank">open original</a>
+              </div>
             </div>
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>

@@ -6,18 +6,46 @@
   height: 100%;
   width: calc(~'100% - @{sidebar-width}');
   position: relative;
+  @media @mobile {
+    width: 100%;
+  }
   .channel-messages, .search-messages {
     height: 100%;
     .messages-header {
+      display: flex;
+      align-items: center;
       height: @messages-header-height;
       color: #555459;
       box-shadow: 1px 1px 2px #eee;
+      .toggle-sidebar {
+        display: none;
+        width: 1.5rem;
+        height: 1.5rem;
+        margin: 0.6rem;
+        flex: 0 0 2rem;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: center;
+        cursor: pointer;
+        @media @mobile {
+          display: flex;
+        }
+        .bar {
+          width: 1.5rem;
+          height: 3px;
+          border-radius: 3px;
+          background: #555459;
+        }
+      }
       .title {
         padding: 0 .1rem 0 1.5rem;
         font-size: 1.4rem;
         line-height: @messages-header-height;
         font-weight: 900;
         display: inline-block;
+        @media @mobile {
+          padding: 0;
+        }
       }
     }
     .messages-list {
@@ -41,6 +69,11 @@
         position: relative;
         word-wrap: break-word;
         white-space: pre-wrap;
+        @media @mobile {
+          padding-right: 0;
+          margin-left: 0.8rem;
+          margin-right: 0.8rem;
+        }
         &.selected {
           background: yellow;
         }
@@ -58,12 +91,16 @@
           }
         }
         .slack-message-content {
+          .slack-message-head {
+            display: block;
+            line-height: 0.8rem;
+            padding-bottom: 0.6rem;
+          }
           .slack-message-user-name {
             display: inline-block;
             color: rgb(61, 60, 64);
             font-weight: 900;
             padding-right: .25rem;
-            height: 23px;
           }
           .slack-message-date, .slack-message-channel, .slack-original-message-link {
             display: inline-block;

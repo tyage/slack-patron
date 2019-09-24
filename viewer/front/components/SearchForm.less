@@ -1,3 +1,5 @@
+@import '../styles/variable';
+
 .search-form-wrapper {
   position: absolute;
   right: 0;
@@ -22,6 +24,9 @@
       font-size: 15px;
       padding: 2px 2rem;
       box-shadow: 1px 1px 2px #eee;
+      @media @mobile {
+        width: 160px;
+      }
     }
   }
 }

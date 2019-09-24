@@ -3,11 +3,12 @@ import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router';
 import SearchMessagesSection from './SearchMessagesSection';
 import ChannelMessagesSection from './ChannelMessagesSection';
+import SlackActions from '../actions/SlackActions';
 
 import './MessagesSection.less';
 
-const MessagesSection = ({ isMessageLoading }) => (
-  <div className="messages">
+const MessagesSection = ({ isMessageLoading, closeSidebar }) => (
+  <div className="messages" onClick={closeSidebar}>
     { isMessageLoading ? (
         <div className="loading-messages">
           <h2 className="title">Now loading...</h2>
@@ -21,6 +22,14 @@ const MessagesSection = ({ isMessageLoading }) => (
   </div>
 );
 
+const mapDispatchToProps = dispatch => {
+  return {
+    closeSidebar: () => {
+      dispatch(SlackActions.closeSidebar());
+    },
+  };
+};
+
 const mapStateToProps = state => {
   return {
     isMessageLoading: state.isMessageLoading,
@@ -28,4 +37,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(MessagesSection);
+export default connect(mapStateToProps, mapDispatchToProps)(MessagesSection);
