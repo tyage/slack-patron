@@ -5,6 +5,7 @@ import users from './users';
 import messages from './messages';
 import emojis from './emojis';
 import isMessageLoading from './isMessageLoading';
+import isSidebarActive from './isSidebarActive';
 
 const reducers = {
   channels,
@@ -13,7 +14,8 @@ const reducers = {
   users,
   messages,
   emojis,
-  isMessageLoading
+  isMessageLoading,
+  isSidebarActive,
 };
 
 export default reducers;

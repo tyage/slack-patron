@@ -160,6 +160,20 @@ export default {
       });
     };
   },
+  openSidebar() {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.OPEN_SIDEBAR,
+      });
+    };
+  },
+  closeSidebar() {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.CLOSE_SIDEBAR,
+      });
+    };
+  },
   updateSearchWord(word) {
     return push(`/search/${encodeURIComponent(word)}`);
   },

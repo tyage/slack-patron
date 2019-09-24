@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import { NavLink } from 'react-router-dom';
-import { Route } from 'react-router';
 import ChannelName from './ChannelName';
 
 const SlackChannels = ({ channels, ims }) => {

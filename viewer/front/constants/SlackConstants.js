@@ -9,5 +9,7 @@ export default {
   UPDATE_EMOJIS: Symbol(),
   UPDATE_CURRENT_CHANNEL: Symbol(),
   UPDATE_TEAM_INFO: Symbol(),
-  UPDATE_SEARCH_WORD: Symbol()
+  UPDATE_SEARCH_WORD: Symbol(),
+  OPEN_SIDEBAR: Symbol(),
+  CLOSE_SIDEBAR: Symbol(),
 };

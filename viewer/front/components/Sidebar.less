@@ -6,9 +6,14 @@
   float: left;
   background: #4d394b;
   padding: 0 0 20px 0;
+  transition: left 0.3s;
   @media @mobile {
     position: absolute;
     left: -@sidebar-width;
+    z-index: 1;
+  }
+  &.active {
+    left: 0;
   }
   .sidebar-header {
     height: @sidebar-header-height;
@@ -35,7 +40,8 @@
   }
   .sidebar-body {
     padding: 12px 0 0 0;
-    overflow: hidden;
+    overflow-x: hidden;
+    overflow-y: auto;
     height: calc(~'100% - @{sidebar-header-height}');
     border-right: 4px solid transparent;
     &:hover {
