@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux'
-import _ from 'lodash';
+import find from 'lodash/find';
 import ChannelName from './ChannelName'
 import SlackActions from '../actions/SlackActions';
 
 const ChannelMessagesHeader = ({ channels, ims, currentChannelId, openSidebar }) => {
   const allChannels = Object.assign({}, channels, ims);
-  const channel = _.find(allChannels, (c) => c.id === currentChannelId);
+  const channel = find(allChannels, (c) => c.id === currentChannelId);
 
   if (!channel) {
     return null;
