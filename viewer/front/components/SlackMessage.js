@@ -3,6 +3,7 @@ import ChannelName from './ChannelName';
 import { Link } from 'react-router-dom';
 import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
+import find from 'lodash/find';
 
 const emojiData = new EmojiData();
 const emojiRegex = new RegExp(':([\\p{Letter}\\p{Number}+\\-_\']+):', 'giu');
@@ -139,7 +140,7 @@ export default class extends Component {
       );
     };
     const botMessage = (teamInfo, message, showChannel) => {
-      const attachment = _.find(message.attachments, (attachment) => attachment.text);
+      const attachment = find(message.attachments, (attachment) => attachment.text);
       const text = attachment ? attachment.text : message.text;
       const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return <SlackMessagePrototype
