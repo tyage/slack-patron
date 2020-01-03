@@ -28,7 +28,7 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "history": "^4.7.2",
-    "jquery": "^3.2.1",
+    "jquery": "^3.4.0",
     "lodash": "^4.17.13",
     "normalize.css": "^7.0.0",
     "react": "^15.6.1",
