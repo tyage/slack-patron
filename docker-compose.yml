@@ -5,6 +5,8 @@ services:
       context: ./
       dockerfile: ./logger/Dockerfile
     container_name: slack-patron-logger
+    volumes:
+      - ./config.yml:/usr/local/slack-patron/config.yml
     links:
      - mongo
 
@@ -13,6 +15,8 @@ services:
       context: ./
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
+    volumes:
+      - ./config.yml:/usr/local/slack-patron/config.yml
     ports:
      - "9292:9292"
     links:

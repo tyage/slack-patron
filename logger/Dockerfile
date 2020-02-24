@@ -1,5 +1,5 @@
 FROM ruby:2.4-alpine
-MAINTAINER tyage <namatyage@gmail.com>
+LABEL maintainer="namatyage@gmail.com"
 
 ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
 ARG BRANCH="master"
@@ -18,7 +18,6 @@ RUN set -x && \
 	git checkout ${BRANCH} && \
 	bundle install
 
-COPY ./config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
 CMD bundle exec ruby logger/logger.rb

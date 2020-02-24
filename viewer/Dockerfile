@@ -1,5 +1,5 @@
 FROM ruby:2.4-alpine
-MAINTAINER tyage <namatyage@gmail.com>
+LABEL maintainer="namatyage@gmail.com"
 
 ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
 ARG BRANCH="master"
@@ -20,7 +20,6 @@ RUN set -x && \
 	bundle install && \
 	./viewer/setup.sh
 
-COPY ./config.yml ${SRCDIR}/config.yml
 WORKDIR ${SRCDIR}
 
 CMD bundle exec rackup viewer/config.ru -o 0.0.0.0 -p 9292
