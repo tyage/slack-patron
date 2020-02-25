@@ -20,7 +20,13 @@ services:
      - elasticsearch
 
  elasticsearch:
-   image: elasticsearch:5.1
+   build:
+     context: ./
+     dockerfile: ./elasticsearch/Dockerfile
+   container_name: slack-patron-elasticsearch
+   expose:
+     - 9200
+     - 9300
 
  mongo:
    image: mongo:4.0-xenial

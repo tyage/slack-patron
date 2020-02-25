@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'net/http'
 require 'json'
 require './lib/slack_import'
 require './lib/slack'
@@ -66,6 +67,41 @@ def messages(params)
   return_messages = return_messages.reverse if ts_direction == -1
 
   return return_messages, has_more_message
+end
+
+def search(params)
+  limit = params[:limit] || 100
+  ts_direction = params[:min_ts].nil? ? -1 : 1
+
+  uri = URI.parse("http://elasticsearch:9200/slack_logger/messages/_search")
+  http = Net::HTTP.new(uri.host, uri.port)
+  headers = { "Content-Type" => "application/json" }
+  #query = {
+  #  q: params[:query]}
+  query = {
+    query: {
+      match: { text: params[:search].gsub("　", " ") }
+    },
+    highlight: {
+      fields: { text: {} }
+    }
+  }
+  req = Net::HTTP::Post.new(uri.path)
+  req.initialize_http_header(headers)
+  req.body = query.to_json
+
+  res = http.request(req)
+  if res.is_a?(Net::HTTPSuccess)
+    res = JSON.parse(res.body)
+    all_messages = res['hits']['hits'].map do |entry|
+      message = entry["_source"]
+      message['_id'] = { '$oid' => entry['_id'] }
+      message
+    end
+    return all_messages, false, [res, req.body]
+  else
+    return [], false, res
+  end
 end
 
 get '/users.json' do
@@ -156,16 +192,19 @@ get '/search/:search_word' do
 end
 
 post '/search' do
-  all_messages, has_more_message = messages(
-    search: params[:word],
-    max_ts: params[:max_ts],
-    min_ts: params[:min_ts]
-  )
-  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
+  #all_messages, has_more_message = messages(
+  #  search: params[:word],
+  #  max_ts: params[:max_ts],
+  #  min_ts: params[:min_ts]
+  #)
+  #all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
+  all_messages, has_more_message, debug = search(
+    search: params[:word])
   content_type :json
   {
     messages: all_messages,
-    has_more_message: has_more_message
+    has_more_message: has_more_message,
+    elasticsearch: debug
   }.to_json
 end
