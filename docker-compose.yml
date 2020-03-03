@@ -5,8 +5,6 @@ services:
      context: ./
      dockerfile: ./logger/Dockerfile
    container_name: slack-patron-logger
-   links:
-     - mongo
 
  viewer:
    build:
@@ -15,18 +13,19 @@ services:
    container_name: slack-patron-viewer
    ports:
     - "9292:9292"
-   links:
-     - mongo
-     - elasticsearch
 
  elasticsearch:
+  build:
+    context: ./elasticsearch
+  expose:
+    - 9200
+    - 9300
+
+ elasticsearch-setup:
    build:
-     context: ./
-     dockerfile: ./elasticsearch/Dockerfile
-   container_name: slack-patron-elasticsearch
-   expose:
-     - 9200
-     - 9300
+     context: ./elasticsearch-setup
+   depends_on:
+     - elasticsearch
 
  mongo:
    image: mongo:4.0-xenial
@@ -54,8 +53,6 @@ services:
      - mongo3
    volumes:
      - ./scripts:/scripts
-   links:
-     - mongo
    entrypoint: [ "/scripts/setup.sh" ]
 
  connector:
@@ -63,6 +60,4 @@ services:
      context: ./connector/
    depends_on:
      - mongo-setup
-   links:
-     - mongo
-     - elasticsearch
+     - elasticsearch-setup

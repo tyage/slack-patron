@@ -82,6 +82,9 @@ def search(params)
     query: {
       match: { text: params[:search].gsub("　", " ") }
     },
+    sort: [
+      { ts: "asc" }
+    ],
     highlight: {
       fields: { text: {} }
     }
@@ -96,6 +99,7 @@ def search(params)
     all_messages = res['hits']['hits'].map do |entry|
       message = entry["_source"]
       message['_id'] = { '$oid' => entry['_id'] }
+      message['text'] = entry['highlight']['text'][0]
       message
     end
     return all_messages, false, [res, req.body]
