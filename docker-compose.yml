@@ -33,24 +33,10 @@ services:
    expose:
      - 27017
 
- mongo2:
-   image: mongo:4.0-xenial
-   entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
-   expose:
-     - 27017
-
- mongo3:
-   image: mongo:4.0-xenial
-   entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
-   expose:
-     - 27017
-
  mongo-setup:
    image: mongo:4.0-xenial
    depends_on:
      - mongo
-     - mongo2
-     - mongo3
    volumes:
      - ./scripts:/scripts
    entrypoint: [ "/scripts/setup.sh" ]
