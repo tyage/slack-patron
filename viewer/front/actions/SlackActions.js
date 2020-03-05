@@ -1,6 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
-import { push } from 'react-router-redux'
+import { push } from 'connected-react-router'
 import 'whatwg-fetch'
 
 const generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
@@ -51,6 +51,16 @@ export default {
         dispatch({
           type: SlackConstants.UPDATE_USERS,
           users
+        });
+      })
+    );
+  },
+  getEmojis() {
+    return dispatch => (
+      fetchJSON(generateApiUrl('emojis.json')).then((emojis) => {
+        dispatch({
+          type: SlackConstants.UPDATE_EMOJIS,
+          emojis
         });
       })
     );
@@ -147,6 +157,20 @@ export default {
       fetchJSON(url, {
         method: 'post',
         body: formData
+      });
+    };
+  },
+  openSidebar() {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.OPEN_SIDEBAR,
+      });
+    };
+  },
+  closeSidebar() {
+    return dispatch => {
+      dispatch({
+        type: SlackConstants.CLOSE_SIDEBAR,
       });
     };
   },

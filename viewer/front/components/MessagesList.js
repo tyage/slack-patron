@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import $ from 'jquery';
 import SlackMessage from './SlackMessage';
 
 class MessagesList extends React.Component {
@@ -12,7 +11,7 @@ class MessagesList extends React.Component {
     };
   }
   scrollToLastMessage() {
-    $(this.refs.messagesList).scrollTop(this.currentHeight());
+    this.refs.messagesList.scrollTop = this.currentHeight();
   }
   currentHeight() {
     return this.refs.messagesList.scrollHeight;
@@ -27,7 +26,7 @@ class MessagesList extends React.Component {
       isLoadingPast: isPast
     });
     this.previousHeight = this.currentHeight();
-    this.previousTop = $(this.refs.messagesList).scrollTop();
+    this.previousTop = this.refs.messagesList.scrollTop;
 
     const oldestTs = (this.props.messages.length > 0) && this.props.messages[0].ts;
     const latestTs = (this.props.messages.length > 0) && this.props.messages[this.props.messages.length - 1].ts;
@@ -43,13 +42,9 @@ class MessagesList extends React.Component {
     if (this.scrollBackAfterUpdate) {
       // fix scrollTop when load more messages
       if (this.state.isLoadingPast) {
-        $(this.refs.messagesList).scrollTop(
-          this.currentHeight() - (this.previousHeight || 0)
-        );
+        this.refs.messagesList.scrollTop = this.currentHeight() - (this.previousHeight || 0);
       } else {
-        $(this.refs.messagesList).scrollTop(
-          (this.previousTop || 0)
-        );
+        this.refs.messagesList.scrollTop = this.previousTop || 0;
       }
       this.scrollBackAfterUpdate = false;
     }
@@ -60,9 +55,7 @@ class MessagesList extends React.Component {
     if (this.scrollToTsAfterUpdate) {
       const node = this.tsToNode[this.props.scrollToTs];
       if (node) {
-        $(this.refs.messagesList).scrollTop(
-          $(node).offset().top - $(this.refs.messagesList).height() / 2
-        );
+        this.refs.messagesList.scrollTop = node.getBoundingClientRect().top - this.refs.messagesList.getBoundingClientRect().height / 2
       }
       this.scrollToTsAfterUpdate = false;
     }
@@ -88,7 +81,10 @@ class MessagesList extends React.Component {
     this.tsToNode = {};
 
     const createMessages = (messages) => messages.map(message => (
-        <SlackMessage message={message} users={this.props.users}
+        <SlackMessage
+          message={message}
+          users={this.props.users}
+          emojis={this.props.emojis}
           teamInfo={this.props.teamInfo}
           channels={this.props.channels}
           ims={this.props.ims}
@@ -135,6 +131,7 @@ const mapStateToProps = state => {
     users: state.users,
     channels: state.channels.channels,
     ims: state.channels.ims,
+    emojis: state.emojis,
     teamInfo: state.teamInfo
   };
 };

@@ -35,6 +35,11 @@ class SlackLogger
     replace_ims(ims)
   end
 
+  def update_emojis
+    emojis = Slack.emoji_list['emoji']
+    replace_emojis(emojis)
+  end
+
   # log history messages
   def fetch_history(target, channel)
     response = Slack.send(
@@ -91,6 +96,11 @@ class SlackLogger
       update_channels
     end
 
+    realtime.on :emoji_changed do |c|
+      puts "emoji has changed"
+      update_emojis
+    end
+
     if ENABLE_PRIVATE_CHANNEL
       realtime.on :group_joined do |c|
         puts "group has joined"
@@ -125,6 +135,7 @@ class SlackLogger
         log_realtime
       }
 
+      update_emojis
       update_users
       update_channels
       update_groups if ENABLE_PRIVATE_CHANNEL
