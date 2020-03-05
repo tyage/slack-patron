@@ -1,4 +1,5 @@
 require 'sinatra'
+require 'net/http'
 require 'json'
 require './lib/slack_import'
 require './lib/slack'
@@ -66,6 +67,63 @@ def messages(params)
   return_messages = return_messages.reverse if ts_direction == -1
 
   return return_messages, has_more_message
+end
+
+def search(params)
+  limit = params[:limit] || 100
+  ts_direction = params[:min_ts].nil? ? "desc" : "asc"
+  ts_range = { gte: 0 }
+  ts_range = { gte: params[:min_ts] } unless params[:min_ts].nil?
+  ts_range = { lte: params[:max_ts] } unless params[:max_ts].nil?
+
+  uri = URI.parse("http://elasticsearch:9200/slack_logger/messages/_search")
+  http = Net::HTTP.new(uri.host, uri.port)
+  headers = { "Content-Type" => "application/json" }
+  query = {
+    query: {
+      bool: {
+        must: [
+          {
+            match: { text: params[:search].gsub("　", " ") }
+	  },
+	  {
+            range: {
+              ts: ts_range
+            }
+	  }
+        ]
+      }
+    },
+    size: limit,
+    sort: [
+      { ts: ts_direction }
+    ],
+    highlight: {
+      fields: { text: {} }
+    }
+  }
+  req = Net::HTTP::Post.new(uri.path)
+  req.initialize_http_header(headers)
+  req.body = query.to_json
+
+  begin
+    res = http.request(req)
+    if res.is_a?(Net::HTTPSuccess)
+      res_data = JSON.parse(res.body)
+      all_messages = res_data['hits']['hits'].map do |entry|
+        message = entry["_source"]
+        message['_id'] = { '$oid' => entry['_id'] }
+        message['text'] = entry['highlight']['text'][0]
+        message
+      end
+      all_messages = all_messages.reverse if ts_direction == "desc"
+      return all_messages, res_data['hits']['total'] > limit, [res_data, req.body]
+    else
+      return [], false, res.body
+    end
+  rescue => e
+    return [], false, [e.class, e].join(" : ")
+  end
 end
 
 get '/users.json' do
@@ -156,16 +214,16 @@ get '/search/:search_word' do
 end
 
 post '/search' do
-  all_messages, has_more_message = messages(
+  all_messages, has_more_message, debug = search(
     search: params[:word],
     max_ts: params[:max_ts],
     min_ts: params[:min_ts]
   )
-  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
-
+  all_messages = all_messages.select { |m| m['ts'] != params[:max_ts] && m['ts'] != params[:min_ts] }
   content_type :json
   {
     messages: all_messages,
-    has_more_message: has_more_message
+    has_more_message: has_more_message,
+    debug: debug
   }.to_json
 end

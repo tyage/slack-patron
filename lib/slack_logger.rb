@@ -37,11 +37,15 @@ class SlackLogger
 
   # log history messages
   def fetch_history(target, channel)
-    messages = Slack.send(
+    response = Slack.send(
       target,
       channel: channel,
       count: 1000,
-    )['messages']
+    )
+    messages = response['messages']
+    if messages.nil?
+      puts response
+    end
 
     unless messages.nil?
       messages.each do |m|
