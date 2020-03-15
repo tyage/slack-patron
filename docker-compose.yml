@@ -5,8 +5,8 @@ services:
       context: ./
       dockerfile: ./logger/Dockerfile
     container_name: slack-patron-logger
-    links:
-     - mongo
+    volumes:
+      - .:/usr/local/slack-patron
     restart: always
 
   viewer:
@@ -15,9 +15,9 @@ services:
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
     ports:
-     - "127.0.0.1:9292:9292"
-    links:
-     - mongo
+      - "127.0.0.1:9292:9292"
+    volumes:
+      - .:/usr/local/slack-patron
     restart: always
     depends_on:
       - connector
@@ -39,8 +39,8 @@ services:
     image: mongo:4.0-xenial
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
     volumes:
-        - ./datadir:/data/db
-        - ./mongo-log:/var/log/mongodb
+      - datadir:/data/db
+      - mongo-log:/var/log/mongodb
     restart: always
     expose:
       - 27017
@@ -59,3 +59,7 @@ services:
     depends_on:
       - mongo-setup
       - elasticsearch-setup
+
+volumes:
+  datadir:
+  mongo-log:
