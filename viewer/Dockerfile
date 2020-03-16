@@ -12,12 +12,13 @@ RUN set -x && \
 		nodejs-npm && \
 	echo 'gem: --no-document' >> /etc/gemrc
 
-COPY ./ ${SRCDIR}
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 
-RUN bundle install && ./viewer/setup.sh
+RUN bundle install
 
-CMD bundle exec puma viewer/config.ru -C viewer/puma.rb -p 9292
+CMD ./viewer/setup.sh && bundle exec puma viewer/config.ru -C viewer/puma.rb -p 9292
 
 EXPOSE 9292

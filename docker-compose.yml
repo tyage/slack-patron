@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   logger:
     build:
@@ -7,6 +7,8 @@ services:
     container_name: slack-patron-logger
     volumes:
       - .:/usr/local/slack-patron
+    depends_on:
+      - connector
     restart: always
 
   viewer:
@@ -14,20 +16,34 @@ services:
       context: ./
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
-    ports:
-      - "127.0.0.1:9292:9292"
     volumes:
       - .:/usr/local/slack-patron
+    depends_on:
+      - connector
+    ports:
+      - "127.0.0.1:9292:9292"
+    restart: always
+
+  connector:
+    build: connector
+    depends_on:
+      - mongo
+      - elasticsearch
+    restart: always
+
+  elasticsearch:
+    build: elasticsearch
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
     restart: always
 
   mongo:
     image: mongo
-    command: --logpath=/var/log/mongodb/mongo.log --profile=1 --slowms=100
+    command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
     volumes:
-      - datadir:/data/db
-      - mongo-log:/var/log/mongodb
+      - mongodata:/data/db
     restart: always
 
 volumes:
-  datadir:
-  mongo-log:
+  esdata:
+  mongodata:

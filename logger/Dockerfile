@@ -8,13 +8,17 @@ RUN set -x && \
 	apk add --update \
 		build-base \
 		openssl \
-		openssl-dev && \
-	echo 'gem: --no-document' >> /etc/gemrc
+		openssl-dev \
+		bash && \
+	echo 'gem: --no-document' >> /etc/gemrc && \
+	wget https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh -O /wait-for-it.sh && \
+	chmod +x /wait-for-it.sh
 
-COPY ./ ${SRCDIR}
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 
 RUN bundle install
 
-CMD bundle exec ruby logger/logger.rb
+CMD /wait-for-it.sh -t 0 mongo:27017 -- /wait-for-it.sh -t 0 elasticsearch:9200 -- bundle exec ruby logger/logger.rb
