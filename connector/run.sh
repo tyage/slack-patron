@@ -32,6 +32,17 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
           "type": "double"
         }
       }
+    },
+    "root": {
+      "properties": {
+        "attachments": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        }
+      }
     }
   }
 }' -v
