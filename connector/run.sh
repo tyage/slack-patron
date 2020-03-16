@@ -11,14 +11,19 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
         }
       }
     }
-  },
-  "mappings": {
-    "messages": {
+  }
+}'
+curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
+  "properties": {
+    "text": {
+      "type": "text",
+      "analyzer": "kuromoji_analyzer"
+    },
+    "ts": {
+      "type": "double"
+    },
+    "attachments": {
       "properties": {
-        "text": {
-          "type": "text",
-          "analyzer": "kuromoji_analyzer"
-        },
         "ts": {
           "type": "double"
         }
@@ -27,4 +32,4 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
   }
 }'
 
-mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout
+mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout --continue-on-error
