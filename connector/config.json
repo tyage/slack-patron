@@ -7,12 +7,12 @@
     "continueOnError": false,
     "logging": {
         "type": "file",
-        "filename": "/var/log/mongo-connector/mongo-connector.log",
+        "filename": "/var/log/mongo-connector/mongo-connector.log"
     },
     "docManagers": [
         {
             "docManager": "elastic2_doc_manager",
-            "targetURL": "elasticsearch:9200",
+            "targetURL": "elasticsearch:9200"
         }
     ]
 }
