@@ -82,6 +82,13 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
         },
         "root": {
           "properties": {
+            "attachments": {
+              "properties": {
+                "ts": {
+                  "type": "double"
+                }
+              }
+            },
             "ts": {
               "type": "double"
             }
@@ -117,6 +124,13 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
         },
         "root": {
           "properties": {
+            "attachments": {
+              "properties": {
+                "ts": {
+                  "type": "double"
+                }
+              }
+            },
             "ts": {
               "type": "double"
             }
