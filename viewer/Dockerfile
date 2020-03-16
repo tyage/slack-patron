@@ -12,7 +12,8 @@ RUN set -x && \
 		nodejs-npm && \
 	echo 'gem: --no-document' >> /etc/gemrc
 
-COPY ./ ${SRCDIR}
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 

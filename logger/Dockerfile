@@ -9,13 +9,14 @@ RUN set -x && \
 		build-base \
 		openssl \
 		openssl-dev && \
-	echo 'gem: --no-document' >> /etc/gemrc
+	echo 'gem: --no-document' >> /etc/gemrc && \
+	wget https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh
 
-COPY ./ ${SRCDIR}
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 
 RUN bundle install
-RUN wget https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh
 
 CMD bash wait-for-it.sh -t 0 mongo:27017 -- bash wait-for-it.sh -t 0 elasticsearch:9200 -- bundle exec ruby logger/logger.rb
