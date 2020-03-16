@@ -18,6 +18,8 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
     }
   }
 }' -v
+
+# `ts` property cannot be automatically detected as double datatype but long... so I manually annotate this
 curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
   "properties": {
     "text": {
@@ -31,6 +33,97 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
       "properties": {
         "ts": {
           "type": "double"
+        },
+        "children": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        }
+      }
+    },
+    "edited": {
+      "properties": {
+        "ts": {
+          "type": "double"
+        }
+      }
+    },
+    "replies": {
+      "properties": {
+        "ts": {
+          "type": "double"
+        }
+      }
+    },
+    "message": {
+      "properties": {
+        "attachments": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "edited": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "replies": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "root": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "ts": {
+          "type": "double"
+        }
+      }
+    },
+    "previous_message": {
+      "properties": {
+        "attachments": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "edited": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "replies": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "root": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "ts": {
+          "type": "double"
         }
       }
     },
@@ -42,6 +135,23 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
               "type": "double"
             }
           }
+        },
+        "edited": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "replies": {
+          "properties": {
+            "ts": {
+              "type": "double"
+            }
+          }
+        },
+        "ts": {
+          "type": "double"
         }
       }
     }
