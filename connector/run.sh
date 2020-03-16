@@ -7,12 +7,16 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
       "analyzer": {
         "kuromoji_analyzer": {
           "type": "custom",
-          "tokenizer": "kuromoji_tokenizer"
+          "tokenizer": "kuromoji_tokenizer",
+          "filter": [
+            "cjk_width",
+            "lowercase"
+          ]
         }
       }
     }
   }
-}'
+}' -v
 curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
   "properties": {
     "text": {
@@ -30,6 +34,6 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
       }
     }
   }
-}'
+}' -v
 
 mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout --continue-on-error
