@@ -78,26 +78,30 @@ end
 
 def search(params)
   limit = params[:limit] || 100
-  ts_direction = params[:min_ts].nil? ? "desc" : "asc"
-  ts_range = { gte: 0 }
-  ts_range = { gte: params[:min_ts] } unless params[:min_ts].nil?
-  ts_range = { lte: params[:max_ts] } unless params[:max_ts].nil?
+  ts_direction = params[:min_ts].nil? ? 'desc' : 'asc'
+  ts_range = {
+    gte: params[:min_ts],
+    lte: params[:max_ts],
+  }
 
-  uri = URI.parse("http://elasticsearch:9200/slack_logger/messages/_search")
+  uri = URI.parse('http://elasticsearch:9200/slack_logger/messages/_search')
   http = Net::HTTP.new(uri.host, uri.port)
-  headers = { "Content-Type" => "application/json" }
   query = {
     query: {
       bool: {
         must: [
           {
-            match: { text: params[:search].gsub("　", " ") }
-	  },
-	  {
+            query_string: {
+              query: params[:search],
+              default_field: 'text',
+              default_operator: 'AND'
+            }
+          },
+          {
             range: {
               ts: ts_range
             }
-	  }
+          }
         ]
       }
     },
@@ -110,26 +114,24 @@ def search(params)
     }
   }
   req = Net::HTTP::Post.new(uri.path)
-  req.initialize_http_header(headers)
+  req.initialize_http_header({ 'Content-Type' => 'application/json' })
   req.body = query.to_json
 
-  begin
-    res = http.request(req)
-    if res.is_a?(Net::HTTPSuccess)
-      res_data = JSON.parse(res.body)
-      all_messages = res_data['hits']['hits'].map do |entry|
-        message = entry["_source"]
-        message['_id'] = { '$oid' => entry['_id'] }
+  res = http.request(req)
+  if res.is_a?(Net::HTTPSuccess)
+    res_data = JSON.parse(res.body)
+    all_messages = res_data['hits']['hits'].map do |entry|
+      message = entry['_source']
+      message['_id'] = { '$oid' => entry['_id'] }
+      if entry.has_key? 'highlight'
         message['text'] = entry['highlight']['text'][0]
-        message
       end
-      all_messages = all_messages.reverse if ts_direction == "desc"
-      return all_messages, res_data['hits']['total'] > limit, [res_data, req.body]
-    else
-      return [], false, res.body
+      message
     end
-  rescue => e
-    return [], false, [e.class, e].join(" : ")
+    all_messages = all_messages.reverse if ts_direction == 'desc'
+    return all_messages, res_data['hits']['total'] > limit
+  else
+    return [], false
   end
 end
 
@@ -212,7 +214,7 @@ get '/' do
   if default_channel.nil?
     default_channel, _ = hashed_channels.first
   end
-  redirect("/#{default_channel || 'CHANNELS_NOT_FOUND'}")
+  redirect('/#{default_channel || 'CHANNELS_NOT_FOUND'}')
 end
 
 get '/:channel' do
@@ -226,7 +228,7 @@ get '/search/:search_word' do
 end
 
 post '/search' do
-  all_messages, has_more_message, debug = search(
+  all_messages, has_more_message = search(
     search: params[:word],
     max_ts: params[:max_ts],
     min_ts: params[:min_ts]
@@ -236,6 +238,5 @@ post '/search' do
   {
     messages: all_messages,
     has_more_message: has_more_message,
-    debug: debug
   }.to_json
 end
