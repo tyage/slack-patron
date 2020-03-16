@@ -3,6 +3,7 @@
 mongo mongo:27017 <<< "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'mongo:27017'}], protocolVersion: 1}, {force: true})"
 curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
   "settings": {
+    "index.mapping.total_fields.limit": 50000,
     "analysis": {
       "analyzer": {
         "kuromoji_analyzer": {
