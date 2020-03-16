@@ -38,14 +38,12 @@ services:
     restart: always
 
   mongo:
-    image: mongo:4.0-xenial
-    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
+    image: mongo
+    command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
     volumes:
       - mongodata:/data/db
-      - mongo-log:/var/log/mongodb
     restart: always
 
 volumes:
   esdata:
   mongodata:
-  mongo-log:
