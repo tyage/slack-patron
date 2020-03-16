@@ -27,4 +27,4 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
   }
 }'
 
-mongo-connector -c /conf/config.json
+mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout
