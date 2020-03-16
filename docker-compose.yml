@@ -7,59 +7,40 @@ services:
     container_name: slack-patron-logger
     volumes:
       - .:/usr/local/slack-patron
-    restart: always
+    depends_on:
+      - connector
 
   viewer:
     build:
       context: ./
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
-    ports:
-      - "127.0.0.1:9292:9292"
     volumes:
       - .:/usr/local/slack-patron
-    restart: always
     depends_on:
       - connector
+    ports:
+      - "127.0.0.1:9292:9292"
+
+  connector:
+    build: connector
+    depends_on:
+      - mongo
+      - elasticsearch
 
   elasticsearch:
-   build:
-     context: ./elasticsearch
-   expose:
-     - 9200
-     - 9300
-
-  elasticsearch-setup:
-    build:
-      context: ./elasticsearch-setup
-    depends_on:
-      - elasticsearch
+    build: elasticsearch
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
 
   mongo:
     image: mongo:4.0-xenial
     entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "rs0" ]
     volumes:
-      - datadir:/data/db
+      - mongodata:/data/db
       - mongo-log:/var/log/mongodb
-    restart: always
-    expose:
-      - 27017
-
-  mongo-setup:
-    image: mongo:4.0-xenial
-    depends_on:
-      - mongo
-    volumes:
-      - ./scripts:/scripts
-    entrypoint: [ "/scripts/setup.sh" ]
-
-  connector:
-    build:
-      context: ./connector/
-    depends_on:
-      - mongo-setup
-      - elasticsearch-setup
 
 volumes:
-  datadir:
+  esdata:
+  mongodata:
   mongo-log:
