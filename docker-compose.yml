@@ -9,6 +9,7 @@ services:
       - .:/usr/local/slack-patron
     depends_on:
       - connector
+    restart: always
 
   viewer:
     build:
@@ -21,17 +22,20 @@ services:
       - connector
     ports:
       - "127.0.0.1:9292:9292"
+    restart: always
 
   connector:
     build: connector
     depends_on:
       - mongo
       - elasticsearch
+    restart: always
 
   elasticsearch:
     build: elasticsearch
     volumes:
       - esdata:/usr/share/elasticsearch/data
+    restart: always
 
   mongo:
     image: mongo:4.0-xenial
@@ -39,6 +43,7 @@ services:
     volumes:
       - mongodata:/data/db
       - mongo-log:/var/log/mongodb
+    restart: always
 
 volumes:
   esdata:
