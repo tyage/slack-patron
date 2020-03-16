@@ -54,17 +54,6 @@ def messages(params)
   condition[:ts] = { '$gte' => params[:min_ts] } unless params[:min_ts].nil?
   condition[:ts] = { '$lte' => params[:max_ts] } unless params[:max_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
-  condition['$or'] = [
-    # normal message
-    { text: Regexp.new(params[:search]) },
-    # bot message
-    {
-      attachments: {
-        '$elemMatch' => { text: Regexp.new(params[:search]) }
-      },
-      subtype: 'bot_message'
-    }
-  ] unless params[:search].nil?
 
   all_messages = Messages
     .find(condition)
