@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mongo mongo:27017 <<< "rs.initiate()"
+mongo mongo:27017 <<< "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'mongo:27017'}], protocolVersion: 1}, {force: true})"
 curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
   "settings": {
     "analysis": {
