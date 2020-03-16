@@ -141,7 +141,7 @@ export default class extends Component {
     };
     const botMessage = (teamInfo, message, showChannel) => {
       const attachment = find(message.attachments, (attachment) => attachment.text);
-      const text = attachment ? attachment.text : message.text;
+      const text = (!message.text && attachment) ? attachment.text : message.text;
       const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
       return <SlackMessagePrototype
           message={message}
