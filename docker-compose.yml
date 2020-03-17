@@ -26,6 +26,8 @@ services:
 
   connector:
     build: connector
+    volumes:
+      - oplog:/var/log/mongo-connector
     depends_on:
       - mongo
       - elasticsearch
@@ -47,3 +49,4 @@ services:
 volumes:
   esdata:
   mongodata:
+  oplog:

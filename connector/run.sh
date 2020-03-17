@@ -172,4 +172,4 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
   }
 }' -v
 
-mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout --continue-on-error
+mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout --continue-on-error --oplog-ts /var/log/mongo-connector/oplog.timestamp
