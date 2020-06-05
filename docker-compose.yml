@@ -35,6 +35,8 @@ services:
 
   elasticsearch:
     build: elasticsearch
+    environment:
+      - ES_JAVA_OPTS=-Xms500m -Xmx500m
     volumes:
       - esdata:/usr/share/elasticsearch/data
     restart: always
