@@ -1,9 +1,9 @@
 FROM ruby:2.4-alpine
 LABEL maintainer="namatyage@gmail.com"
 
-ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
-ARG BRANCH="master"
-ARG SRCDIR="/usr/local/slack-patron"
+ENV REPOSITORY="https://github.com/tyage/slack-patron.git"
+ENV BRANCH="master"
+ENV SRCDIR="/usr/local/slack-patron"
 
 RUN set -x && \
 	apk upgrade --update && \
