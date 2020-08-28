@@ -65,7 +65,7 @@ export default {
       })
     );
   },
-  getAroundMessages(channel, ts) {
+  getAroundMessages(channel, ts, thread_ts) {
     return dispatch => {
       dispatch({
         type: SlackConstants.START_UPDATE_MESSAGES
@@ -90,7 +90,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `ts=${ts}` // TODO: post as json format
+        body: `ts=${ts}` + (thread_ts ? `&thread_ts=${thread_ts}` : '') // TODO: post as json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -120,7 +120,7 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  getMoreMessages(channel, { isPast, limitTs }) {
+  getMoreMessages(channel, { isPast, limitTs }, thread_ts) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
@@ -136,7 +136,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
         },
-        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}`
+        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}` + (thread_ts ? `&thread_ts=${thread_ts}` : '')
       };
       fetchJSON(url, params).then(updateMessage);
     };

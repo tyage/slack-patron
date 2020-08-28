@@ -54,6 +54,7 @@ def messages(params)
   condition[:ts] = { '$gte' => params[:min_ts] } unless params[:min_ts].nil?
   condition[:ts] = { '$lte' => params[:max_ts] } unless params[:max_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
+  condition[:thread_ts] = params[:thread_ts] unless params[:thread_ts].nil?
 
   all_messages = Messages
     .find(condition)
@@ -148,7 +149,8 @@ post '/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
     max_ts: params[:max_ts],
-    min_ts: params[:min_ts]
+    min_ts: params[:min_ts],
+    thread_ts: params[:thread_ts]
   )
   all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
@@ -163,11 +165,13 @@ post '/around_messages/:channel.json' do
   past_messages, has_more_past_message = messages(
     channel: params[:channel],
     max_ts: params[:ts],
+    thread_ts: params[:thread_ts],
     limit: 50
   )
   future_messages, has_more_future_message = messages(
     channel: params[:channel],
     min_ts: params[:ts],
+    thread_ts: params[:thread_ts],
     limit: 50
   )
   all_messages = (past_messages + future_messages).uniq { |m| m[:ts] }

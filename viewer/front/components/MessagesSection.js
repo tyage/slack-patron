@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Route, Switch } from 'react-router';
 import SearchMessagesSection from './SearchMessagesSection';
 import ChannelMessagesSection from './ChannelMessagesSection';
+import ThreadMessagesSection from './ThreadMessagesSection';
 import SlackActions from '../actions/SlackActions';
 
 import './MessagesSection.less';
@@ -16,6 +17,7 @@ const MessagesSection = ({ isMessageLoading, closeSidebar }) => (
       ) : null }
     <Switch>
       <Route path="/search/:searchWord" component={ SearchMessagesSection } />
+      <Route path="/thread/:channel/:thread_ts/:ts" component={ ThreadMessagesSection } />
       <Route path="/:channel/:ts" component={ ChannelMessagesSection } />
       <Route path="/:channel" component={ ChannelMessagesSection } />
     </Switch>
