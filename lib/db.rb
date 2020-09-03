@@ -47,17 +47,21 @@ end
 
 Messages = db['messages']
 Messages.indexes.create_one({ :ts => 1 }, :unique => true)
-#Messages.indexes.create_one({ :thread_ts => 1 }, :sparse => true)
 def insert_message(message)
   # Message can be duplicate but dont check (to improve the speed)
   begin
-    index = { :ts => message[:ts] || message['ts'] }
-    #thread_ts = message[:thread_ts] || message['thread_ts']
-    #unless thread_ts.nil?
-    #  index[:thread_ts] = thread_ts
-    #  Messages.update({ :ts => thread_ts }, { '$set': { :thread_ts => thread_ts } })
-    #end
-    Messages.replace_one(index, message, { :upsert => true })
+    subtype = message[:subtype] || message['subtype']
+    if subtype == 'message_replied'
+      message_inside = message[:message] || message['message']
+      unless message_inside.nil?
+        message_inside['channel'] = message['channel']
+        p message_inside
+        insert_message(message_inside)
+      end
+    else
+      index = { :ts => message[:ts] || message['ts'] }
+      Messages.replace_one(index, message, { :upsert => true })
+    end
   rescue
   end
 end
