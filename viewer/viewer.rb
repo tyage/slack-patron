@@ -73,7 +73,7 @@ def search(params)
     lte: params[:max_ts],
   }
 
-  uri = URI.parse('http://elasticsearch:9200/slack_logger/messages/_search')
+  uri = URI.parse('http://elasticsearch:9200/slack_logger.messages/_search')
   http = Net::HTTP.new(uri.host, uri.port)
   query = {
     query: {
@@ -118,7 +118,9 @@ def search(params)
       message
     end
     all_messages = all_messages.reverse if ts_direction == 'desc'
-    return all_messages, res_data['hits']['total'] > limit
+    # FIXME: The meaning of hits.total.value might change in ElasticSearch 8
+    # https://www.elastic.co/guide/en/elasticsearch/reference/current/breaking-changes-7.0.html#hits-total-now-object-search-response
+    return all_messages, res_data['hits']['total']['value'] > limit
   else
     return [], false
   end

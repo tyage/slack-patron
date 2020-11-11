@@ -1,7 +1,8 @@
 #!/bin/bash
 
 mongo mongo:27017 <<< "rs.initiate({_id: 'rs0', members: [{_id: 0, host: 'mongo:27017'}], protocolVersion: 1}, {force: true})"
-curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
+# FIXME: We should healthcheck elasticsearch or the commands here might fail!
+curl -H "Content-Type: application/json" -XPUT 'http://elasticsearch:9200/slack_logger.messages' -d '{
   "settings": {
     "index.mapping.total_fields.limit": 50000,
     "analysis": {
@@ -20,7 +21,8 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger' -d '{
 }' -v
 
 # `ts` property cannot be automatically detected as double datatype but long... so I manually annotate this
-curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
+# `blocks` property can be either an object or text, so disable parsing to avoid conflicts
+curl -H "Content-Type: application/json" -XPUT 'http://elasticsearch:9200/slack_logger.messages/_mapping' -d '{
   "properties": {
     "text": {
       "type": "text",
@@ -28,6 +30,9 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
     },
     "ts": {
       "type": "double"
+    },
+    "blocks": {
+      "enabled": false
     },
     "attachments": {
       "properties": {
@@ -101,6 +106,9 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
     },
     "previous_message": {
       "properties": {
+        "blocks": {
+          "enabled": false
+        },
         "attachments": {
           "properties": {
             "ts": {
@@ -172,4 +180,6 @@ curl -XPUT 'http://elasticsearch:9200/slack_logger/_mapping/messages' -d '{
   }
 }' -v
 
-mongo-connector -m mongo:27017 -t elasticsearch:9200 -d elastic2_doc_manager --stdout --continue-on-error --oplog-ts /var/log/mongo-connector/oplog.timestamp
+curl -XPOST 'http://elasticsearch:9200/slack_logger.messages/_refresh' -v
+
+/bin/monstache -f monstache.toml
