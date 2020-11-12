@@ -7,8 +7,6 @@ services:
     container_name: slack-patron-logger
     volumes:
       - .:/usr/local/slack-patron
-    depends_on:
-      - connector
     restart: always
 
   viewer:
@@ -18,16 +16,16 @@ services:
     container_name: slack-patron-viewer
     volumes:
       - .:/usr/local/slack-patron
-    depends_on:
-      - connector
     ports:
       - "127.0.0.1:9292:9292"
     restart: always
 
   connector:
     build: connector
-    volumes:
-      - oplog:/var/log/mongo-connector
+    environment:
+      - MONSTACHE_DIRECT_READ_NS=slack_logger.messages
+      - MONSTACHE_ES_URLS=http://elasticsearch:9200
+      - MONSTACHE_MONGO_URL=mongodb://mongo:27017
     depends_on:
       - mongo
       - elasticsearch
@@ -36,7 +34,8 @@ services:
   elasticsearch:
     build: elasticsearch
     environment:
-      - ES_JAVA_OPTS=-Xms500m -Xmx500m
+      - ES_JAVA_OPTS=-Xms640m -Xmx640m
+      - discovery.type=single-node
     volumes:
       - esdata:/usr/share/elasticsearch/data
     restart: always
@@ -46,6 +45,8 @@ services:
     command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
     volumes:
       - mongodata:/data/db
+    ports:
+      - "127.0.0.1:27017:27017"
     restart: always
 
 volumes:

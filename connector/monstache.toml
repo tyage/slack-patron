@@ -1,0 +1,5 @@
+elasticsearch-max-conns = 2
+elasticsearch-retry = true
+direct-read-split-max = 2
+resume = true
+direct-read-stateful = true
