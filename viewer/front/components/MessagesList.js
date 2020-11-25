@@ -3,6 +3,10 @@ import { connect } from 'react-redux'
 import SlackMessage from './SlackMessage';
 
 class MessagesList extends React.Component {
+  static defaultProps = {
+    onLoadMoreMessages: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -94,6 +98,9 @@ class MessagesList extends React.Component {
           messageRef={ n => this.tsToNode[message.ts] = n } />
       ));
     const loadMoreSection = (isPast) => {
+      if (!this.props.onLoadMoreMessages) {
+        return;
+      }
       if (isPast && !this.props.hasMorePastMessage) {
         return;
       }

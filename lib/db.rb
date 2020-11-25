@@ -50,7 +50,17 @@ Messages.indexes.create_one({ :ts => 1 }, :unique => true)
 def insert_message(message)
   # Message can be duplicate but dont check (to improve the speed)
   begin
-    Messages.replace_one({ :ts => message[:ts] || message['ts'] }, message, { :upsert => true })
+    subtype = message[:subtype] || message['subtype']
+    if subtype == 'message_replied'
+      message_inside = message[:message] || message['message']
+      unless message_inside.nil?
+        message_inside['channel'] = message['channel']
+        insert_message(message_inside)
+      end
+    else
+      index = { :ts => message[:ts] || message['ts'] }
+      Messages.replace_one(index, message, { :upsert => true })
+    end
   rescue
   end
 end

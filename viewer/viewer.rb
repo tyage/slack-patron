@@ -55,6 +55,9 @@ def messages(params)
   condition[:ts] = { '$lte' => params[:max_ts] } unless params[:max_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
 
+  # search thread replies
+  condition[:thread_ts] = params[:thread_ts] unless params[:thread_ts].nil?
+
   all_messages = Messages
     .find(condition)
     .sort(ts: ts_direction)
@@ -182,6 +185,18 @@ post '/around_messages/:channel.json' do
   }.to_json
 end
 
+post '/thread_messages.json' do
+  thread_messages, _ = messages(
+    thread_ts: params[:thread_ts],
+    limit: 10000
+  )
+
+  content_type :json
+  {
+    messages: thread_messages
+  }.to_json
+end
+
 get '/team.json' do
   content_type :json
   # TODO: cache in redis or mongodb or in memory?
@@ -215,6 +230,9 @@ get '/:channel/:ts' do
   erb :index
 end
 get '/search/:search_word' do
+  erb :index
+end
+get '/thread/:thread_ts' do
   erb :index
 end
 

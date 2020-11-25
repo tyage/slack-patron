@@ -141,6 +141,32 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
+  getThreadMessages(threadTs) {
+    return dispatch => {
+      const updateMessage = callableIfLast(({ messages }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMorePastMessage: false,
+          hasMoreFutureMessage: false,
+          messagesInfo: {
+            type: MessagesType.THREAD_MESSAGES,
+            threadTs,
+          }
+        });
+      });
+
+      const url = generateApiUrl('thread_messages.json');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
+        },
+        body: `thread_ts=${threadTs}`,
+      };
+      fetchJSON(url, params).then(updateMessage);
+    };
+  },
   getTeamInfo() {
     return (dispatch) => (
       fetchJSON(generateApiUrl('team.json')).then((teamInfo) => {
