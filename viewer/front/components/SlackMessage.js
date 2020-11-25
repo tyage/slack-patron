@@ -76,7 +76,7 @@ export default class extends Component {
     return `/${message.channel}/${message.ts}`;
   }
   threadLink(message) {
-    return `/thread/${message.channel}/${message.thread_ts}/${message.ts}`;
+    return `/thread/${message.thread_ts}?ts=${encodeURIComponent(message.ts)}`;
   }
   originalMessageLink(teamInfo, message) {
     const messageId = message.ts.replace('.', '');
@@ -131,7 +131,7 @@ export default class extends Component {
               <div className="slack-original-message-link">
                 <a href={this.originalMessageLink(teamInfo, message)} target="_blank">open original</a>
               </div>
-              { message.thread_ts ? (
+              { message.thread_ts && this.props.type !== MessagesType.THREAD_MESSAGES ? (
                   <div className="slack-message-thread">
                     <Link to={this.threadLink(message)}>
                       view thread

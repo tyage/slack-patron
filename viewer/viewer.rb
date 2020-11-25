@@ -151,8 +151,7 @@ post '/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
     max_ts: params[:max_ts],
-    min_ts: params[:min_ts],
-    thread_ts: params[:thread_ts]
+    min_ts: params[:min_ts]
   )
   all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
 
@@ -167,13 +166,11 @@ post '/around_messages/:channel.json' do
   past_messages, has_more_past_message = messages(
     channel: params[:channel],
     max_ts: params[:ts],
-    thread_ts: params[:thread_ts],
     limit: 50
   )
   future_messages, has_more_future_message = messages(
     channel: params[:channel],
     min_ts: params[:ts],
-    thread_ts: params[:thread_ts],
     limit: 50
   )
   all_messages = (past_messages + future_messages).uniq { |m| m[:ts] }
@@ -183,6 +180,18 @@ post '/around_messages/:channel.json' do
     messages: all_messages,
     has_more_past_message: has_more_past_message,
     has_more_future_message: has_more_future_message
+  }.to_json
+end
+
+post '/thread_messages.json' do
+  thread_messages, _ = messages(
+    thread_ts: params[:thread_ts],
+    limit: 10000
+  )
+
+  content_type :json
+  {
+    messages: thread_messages
   }.to_json
 end
 
@@ -219,6 +228,9 @@ get '/:channel/:ts' do
   erb :index
 end
 get '/search/:search_word' do
+  erb :index
+end
+get '/thread/:thread_ts' do
   erb :index
 end
 

@@ -2,30 +2,55 @@ import React from 'react';
 import { connect } from 'react-redux'
 import MessagesList from './MessagesList';
 import SlackActions from '../actions/SlackActions';
-import ThreadMessagesHeader from './ThreadMessagesHeader';
 
 class ThreadMessagesSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleToggleSidebar = this.handleToggleSidebar.bind(this);
+    const params = new URLSearchParams(props.location.search);
+    this.state = {
+      ts: params.get('ts'),
+    };
+  }
   componentDidMount() {
-    this.initialzeData(this.props.match.params.channel, this.props.match.params.thread_ts, this.props.match.params.ts);
+    this.initialzeData(this.props.match.params.thread_ts);
   }
   componentWillReceiveProps(nextProps) {
     if (
-      this.props.match.params.channel !== nextProps.match.params.channel ||
-      this.props.match.params.ts !== nextProps.match.params.ts ||
       this.props.match.params.thread_ts !== nextProps.match.params.thread_ts
     ) {
-      this.initialzeData(nextProps.match.params.channel, nextProps.match.params.thread_ts, nextProps.match.params.ts);
+      this.initialzeData(nextProps.match.params.thread_ts);
     }
   }
-  initialzeData(channel, thread_ts, ts) {
-    this.props.loadThreadMessages(channel, thread_ts, ts);
+  initialzeData(thread_ts) {
+    this.props.loadThreadMessages(thread_ts);
+  }
+  handleToggleSidebar(event) {
+    event.stopPropagation();
+    this.props.openSidebar();
+  }
+  getChannelName() {
+    if (this.props.messages.length === 0 || !this.props.channels) {
+      return '';
+    }
+    const initialMessage = this.props.messages[0];
+    if (!this.props.channels.hasOwnProperty(initialMessage.channel)) {
+      return '';
+    }
+    return this.props.channels[initialMessage.channel].name;
   }
   render() {
-    const channel = this.props.match.params.channel;
     return (
       <div className="thread-messages">
-        <ThreadMessagesHeader currentChannelId={channel} />
-        <MessagesList scrollToTs={this.props.match.params.ts} onLoadMoreMessages={this.props.loadMoreThreadMessages(channel, this.props.match.params.thread_ts)} />
+        <div className="messages-header">
+          <div className="toggle-sidebar" onClick={this.handleToggleSidebar}>
+            <div className="bar"/>
+            <div className="bar"/>
+            <div className="bar"/>
+          </div>
+          <div className="title">Thread in {this.getChannelName()}</div>
+        </div>
+        <MessagesList scrollToTs={this.state.ts} />
       </div>
     );
   }
@@ -33,16 +58,18 @@ class ThreadMessagesSection extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    router: state.router
+    router: state.router,
+    messages: state.messages.messages,
+    channels: state.channels.channels,
   };
 };
 const mapDispatchToProps = dispatch => {
   return {
-    loadMoreThreadMessages: (channel, thread_ts) => params => {
-      dispatch(SlackActions.getMoreMessages(channel, params, thread_ts));
+    openSidebar: () => {
+      dispatch(SlackActions.openSidebar());
     },
-    loadThreadMessages: (channel, thread_ts, ts) => {
-      dispatch(SlackActions.getAroundMessages(channel, ts, thread_ts));
+    loadThreadMessages: (thread_ts) => {
+      dispatch(SlackActions.getThreadMessages(thread_ts));
     }
   };
 };

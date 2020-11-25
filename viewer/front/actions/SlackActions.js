@@ -65,7 +65,7 @@ export default {
       })
     );
   },
-  getAroundMessages(channel, ts, thread_ts) {
+  getAroundMessages(channel, ts) {
     return dispatch => {
       dispatch({
         type: SlackConstants.START_UPDATE_MESSAGES
@@ -90,7 +90,7 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
         },
-        body: `ts=${ts}` + (thread_ts ? `&thread_ts=${thread_ts}` : '') // TODO: post as json format
+        body: `ts=${ts}` // TODO: post as json format
       };
       fetchJSON(url, params).then(updateMessage);
     };
@@ -120,7 +120,7 @@ export default {
       fetchJSON(url, params).then(updateMessage);
     };
   },
-  getMoreMessages(channel, { isPast, limitTs }, thread_ts) {
+  getMoreMessages(channel, { isPast, limitTs }) {
     return dispatch => {
       const updateMessage = callableIfLast(({ messages, has_more_message: hasMoreMessage }) => {
         dispatch({
@@ -136,7 +136,33 @@ export default {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
         },
-        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}` + (thread_ts ? `&thread_ts=${thread_ts}` : '')
+        body: `${isPast ? 'max_ts' : 'min_ts'}=${limitTs}`
+      };
+      fetchJSON(url, params).then(updateMessage);
+    };
+  },
+  getThreadMessages(threadTs) {
+    return dispatch => {
+      const updateMessage = callableIfLast(({ messages }) => {
+        dispatch({
+          type: SlackConstants.UPDATE_MESSAGES,
+          messages,
+          hasMorePastMessage: false,
+          hasMoreFutureMessage: false,
+          messagesInfo: {
+            type: MessagesType.THREAD_MESSAGES,
+            threadTs,
+          }
+        });
+      });
+
+      const url = generateApiUrl('thread_messages.json');
+      const params = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' // TODO: post as json format
+        },
+        body: `thread_ts=${threadTs}`,
       };
       fetchJSON(url, params).then(updateMessage);
     };
