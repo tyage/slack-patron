@@ -55,7 +55,6 @@ def insert_message(message)
       message_inside = message[:message] || message['message']
       unless message_inside.nil?
         message_inside['channel'] = message['channel']
-        p message_inside
         insert_message(message_inside)
       end
     else
