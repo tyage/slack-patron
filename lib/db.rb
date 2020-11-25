@@ -47,6 +47,7 @@ end
 
 Messages = db['messages']
 Messages.indexes.create_one({ :ts => 1 }, :unique => true)
+Messages.indexes.create_one({ :thread_ts => 1 })
 def insert_message(message)
   # Message can be duplicate but dont check (to improve the speed)
   begin
