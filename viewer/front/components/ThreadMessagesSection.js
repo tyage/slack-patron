@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom';
 import MessagesList from './MessagesList';
 import SlackActions from '../actions/SlackActions';
 
@@ -37,7 +38,14 @@ class ThreadMessagesSection extends React.Component {
     if (!this.props.channels.hasOwnProperty(initialMessage.channel)) {
       return '';
     }
-    return this.props.channels[initialMessage.channel].name;
+    return `#${this.props.channels[initialMessage.channel].name}`;
+  }
+  getChannelLink() {
+    if (this.props.messages.length === 0) {
+      return '';
+    }
+    const initialMessage = this.props.messages[0];
+    return `/${initialMessage.channel}/${initialMessage.ts}`;
   }
   render() {
     return (
@@ -48,7 +56,7 @@ class ThreadMessagesSection extends React.Component {
             <div className="bar"/>
             <div className="bar"/>
           </div>
-          <div className="title">Thread in {this.getChannelName()}</div>
+          <div className="title">Thread in <Link to={this.getChannelLink()}>{this.getChannelName()}</Link></div>
         </div>
         <MessagesList scrollToTs={this.state.ts} />
       </div>

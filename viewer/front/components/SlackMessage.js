@@ -131,13 +131,12 @@ export default class extends Component {
               <div className="slack-original-message-link">
                 <a href={this.originalMessageLink(teamInfo, message)} target="_blank">open original</a>
               </div>
-              { message.thread_ts && this.props.type !== MessagesType.THREAD_MESSAGES ? (
-                  <div className="slack-message-thread">
-                    <Link to={this.threadLink(message)}>
-                      view thread
-                    </Link>
-                  </div>
-                ) : null }
+              { message.thread_ts && this.props.type !== MessagesType.THREAD_MESSAGES && (
+                <div className="slack-message-thread">
+                  <Link to={this.threadLink(message)}>
+                    view thread
+                  </Link>
+                </div> ) }
             </div>
             <div className="slack-message-text"
               dangerouslySetInnerHTML={createMarkup(text)}></div>
