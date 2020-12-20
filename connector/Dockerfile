@@ -1,7 +1,7 @@
 FROM mongo:4.4.2
 
 RUN apt-get update -y && \
-	apt-get install wget zip -y && \
+	apt-get install wget zip curl -y && \
 	cd /tmp && \
 	wget https://github.com/rwynn/monstache/releases/download/v6.7.3/monstache-b9dcddc.zip && \
 	unzip monstache-b9dcddc.zip && \
