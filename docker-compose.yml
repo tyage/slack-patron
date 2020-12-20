@@ -41,7 +41,7 @@ services:
     restart: always
 
   mongo:
-    image: mongo
+    image: mongo:4.4.2
     command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
     volumes:
       - mongodata:/data/db
