@@ -1,5 +1,5 @@
-FROM ruby:2.4-alpine
-MAINTAINER tyage <namatyage@gmail.com>
+FROM ruby:2.7.2-alpine
+LABEL maintainer="TSG <info@tsg.ne.jp>"
 
 ARG SRCDIR="/usr/local/slack-patron"
 

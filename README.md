@@ -43,9 +43,9 @@ You should edit `config.yml` and specify the location of mongo.
 
 ### Requirements
 
-- ruby: 2.4.1p111
+- ruby: 2.7.2
 - mongo db: v3.2.11
-- node.js: v8.5.0
+- node.js: v14.15.3
 
 ### 2-B-1. Setup
 
