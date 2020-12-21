@@ -11,7 +11,7 @@ RUN apt-get update -y && \
 	apt-get purge wget zip -y && \
 	apt-get autoremove -y && \
 	apt-get clean && \
-	rm -rf /var/lib/apt/lists/* /tmp
+	rm -rf /var/lib/apt/lists/* /tmp/*
 
 COPY run.sh .
 COPY monstache.toml .
