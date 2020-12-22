@@ -16,7 +16,8 @@
     }
 
     .attachment-content {
-      flex: 1 0 0;
+      flex: 1 1 0;
+      width: 0;
     }
 
     .attachment-author {
@@ -41,9 +42,13 @@
       font-weight: bold;
     }
 
-    .attachment-image {
+    .attachment-image-wrap {
       max-width: 24rem;
-      max-height: 24rem;
+
+      .attachment-image {
+        max-width: 100%;
+        max-height: 24rem;
+      }
     }
 
     .attachment-fields {

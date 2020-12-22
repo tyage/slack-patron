@@ -85,9 +85,11 @@ export default class extends Component {
               <MrkdwnText text={attachment.text} />
             )}
             {attachment.image_url && ( 
-              <a href={attachment.image_url} target="_blank" rel="noopener noreferrer">
-                <img className="attachment-image" src={attachment.image_url}/>
-              </a>
+              <div className="attachment-image-wrap">
+                <a href={attachment.image_url} target="_blank" rel="noopener noreferrer">
+                  <img className="attachment-image" src={attachment.image_url}/>
+                </a>
+              </div>
             )}
             {attachment.fields && ( 
               <div className="attachment-fields">
