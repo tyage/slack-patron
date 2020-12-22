@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
 import MrkdwnText from './message/MrkdwnText';
+import Attachment from './message/Attachment';
+import { get } from 'lodash';
 import find from 'lodash/find';
 
 const emojiData = new EmojiData();
@@ -107,6 +109,9 @@ export default class extends Component {
                 message.reactions.map((reaction) => this.renderReaction(reaction))
               }</div> ) }
           </div>
+          { get(message, 'attachments', []).map((attachment) => ( 
+            <Attachment key={attachment.id} attachment={attachment} />
+          )) }
         </div>
       );
     };

@@ -2,6 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { EmojiData } from 'emoji-data-ts';
 
+import "./MrkdwnText.less";
+
 const emojiData = new EmojiData();
 const emojiRegex = new RegExp(':([\\p{Letter}\\p{Number}+\\-_\']+):', 'giu');
 
@@ -62,7 +64,7 @@ class MrkdwnText extends React.Component {
     const emojiImage = (name) => {
       const image = this.getEmojiImage(name);
       if (image) {
-        return `<img class="slack-message-emoji" src="${image}">`;
+        return `<img class="emoji" src="${image}">`;
       }
       return `:${name}:`;
     };
@@ -79,8 +81,7 @@ class MrkdwnText extends React.Component {
   }
   render() {
     return (
-            <span
-              dangerouslySetInnerHTML={{__html: this.formatText(this.props.text) || ''}}></span>
+      <span className="mrkdwn-text" dangerouslySetInnerHTML={{__html: this.formatText(this.props.text) || ''}}></span>
     );
   }
 }
