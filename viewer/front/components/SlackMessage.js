@@ -3,10 +3,10 @@ import ChannelName from './ChannelName';
 import { Link } from 'react-router-dom';
 import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
+import MrkdwnText from './message/MrkdwnText';
 import find from 'lodash/find';
 
 const emojiData = new EmojiData();
-const emojiRegex = new RegExp(':([\\p{Letter}\\p{Number}+\\-_\']+):', 'giu');
 
 export default class extends Component {
   getChannel(id) {
@@ -38,40 +38,6 @@ export default class extends Component {
   formatDate(date) {
     return new Date(date * 1000).toLocaleString();
   }
-  formatText(text) {
-    const entity = (str) => {
-      return str.replace(/"/g, "&quot;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;");
-    };
-    const channelLink = (id) => {
-      const channel = this.getChannel(id);
-      return `#${channel && channel.name}`;
-    };
-    const userLink = (id) => {
-      const user = this.getUser(id);
-      return `@${user && (user.profile.display_name || user.profile.real_name || user.name)}`;
-    };
-    const specialCommand = (command) => `@${command}`;
-    const uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
-    const emojiImage = (name) => {
-      const image = this.getEmojiImage(name);
-      if (image) {
-        return `<img class="slack-message-emoji" src="${image}">`;
-      }
-      return `:${name}:`;
-    };
-    if (text) {
-      return text.replace(/<#([0-9A-Za-z]+)>/, (m, id) => channelLink(id))
-        .replace(/<#([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => channelLink(id))
-        .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
-        .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
-        .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
-        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)))
-        .replace(emojiRegex, (m, name) => emojiImage(name));
-    }
-    return text;
-  }
   messageLink(message) {
     return `/${message.channel}/${message.ts}`;
   }
@@ -96,11 +62,6 @@ export default class extends Component {
       </div>);
   }
   render() {
-    const createMarkup = (text) => {
-      return {
-        __html: this.formatText(text) || ''
-      };
-    };
     const SlackMessagePrototype = ({ message, icon, username, showChannel, teamInfo, text }) => {
       const channel = this.getChannel(message.channel);
       const classNames = ['slack-message'];
@@ -138,8 +99,9 @@ export default class extends Component {
                   </Link>
                 </div> ) }
             </div>
-            <div className="slack-message-text"
-              dangerouslySetInnerHTML={createMarkup(text)}></div>
+            <div className="slack-message-text">
+              <MrkdwnText text={text} />
+            </div>
             { message.reactions && message.reactions.length > 0 && (
               <div className="slack-message-reactions">{
                 message.reactions.map((reaction) => this.renderReaction(reaction))
@@ -179,12 +141,12 @@ export default class extends Component {
     const message = this.props.message;
     const showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
     switch (this.props.message.subtype) {
-      case 'bot_message':
+      case 'bot_message': { 
         return botMessage(this.props.teamInfo, message, showChannel);
-        break;
-      default:
+      }
+      default: {
         return normalMessage(this.props.teamInfo, message, this.getUser(message.user), showChannel);
-        break;
+      }
     }
   }
 }
