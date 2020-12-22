@@ -60,7 +60,7 @@ class MrkdwnText extends React.Component {
       return `@${user && (user.profile.display_name || user.profile.real_name || user.name)}`;
     };
     const specialCommand = (command) => `@${command}`;
-    const uriLink = (uri) => `<a href="${uri}" target="_blank">${uri}</a>`;
+    const uriLink = (uri, text) => `<a href="${uri}" target="_blank">${text}</a>`;
     const emojiImage = (name) => {
       const image = this.getEmojiImage(name);
       if (image) {
@@ -74,7 +74,8 @@ class MrkdwnText extends React.Component {
         .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
-        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)))
+        .replace(/<(https?:\/\/[^>|]*)\|(.+?)>/gi, (m, uri, text) => uriLink(entity(uri), entity(text)))
+        .replace(/<(https?:\/\/[^>|]*)>/gi, (m, uri) => uriLink(entity(uri), entity(uri)))
         .replace(emojiRegex, (m, name) => emojiImage(name));
     }
     return text;
