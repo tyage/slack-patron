@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
 import MrkdwnText from './message/MrkdwnText';
+import Files from './message/Files';
 import Attachment from './message/Attachment';
 import { get } from 'lodash';
 import find from 'lodash/find';
@@ -104,14 +105,17 @@ export default class extends Component {
             <div className="slack-message-text">
               <MrkdwnText text={text} />
             </div>
-            { message.reactions && message.reactions.length > 0 && (
-              <div className="slack-message-reactions">{
-                message.reactions.map((reaction) => this.renderReaction(reaction))
-              }</div> ) }
           </div>
-          { get(message, 'attachments', []).map((attachment) => ( 
+          { message.attachments && message.attachments.map((attachment) => (
             <Attachment key={attachment.id} attachment={attachment} />
           )) }
+          { message.files && (
+            <Files files={message.files} />
+          ) }
+          { message.reactions && message.reactions.length > 0 && (
+            <div className="slack-message-reactions">{
+              message.reactions.map((reaction) => this.renderReaction(reaction))
+            }</div> ) }
         </div>
       );
     };
