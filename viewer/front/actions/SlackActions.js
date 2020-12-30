@@ -3,7 +3,7 @@ import MessagesType from '../constants/MessagesType';
 import { push } from 'connected-react-router'
 import 'whatwg-fetch'
 
-const generateApiUrl = (url) => url + '?t=' + (new Date()).getTime();
+const generateApiUrl = (url) => 'api/' + url + '?t=' + (new Date()).getTime();
 
 // callback becomes callable if it is passed to this function last time
 let _lastCallback;

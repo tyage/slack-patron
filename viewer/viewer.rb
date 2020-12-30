@@ -129,27 +129,27 @@ def search(params)
   end
 end
 
-get '/users.json' do
+get '/api/users.json' do
   content_type :json
   users.to_json
 end
 
-get '/channels.json' do
+get '/api/channels.json' do
   content_type :json
   channels.to_json
 end
 
-get '/ims.json' do
+get '/api/ims.json' do
   content_type :json
   ims.to_json
 end
 
-get '/emojis.json' do
+get '/api/emojis.json' do
   content_type :json
   emojis.to_json
 end
 
-post '/messages/:channel.json' do
+post '/api/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
     max_ts: params[:max_ts],
@@ -164,7 +164,7 @@ post '/messages/:channel.json' do
   }.to_json
 end
 
-post '/around_messages/:channel.json' do
+post '/api/around_messages/:channel.json' do
   past_messages, has_more_past_message = messages(
     channel: params[:channel],
     max_ts: params[:ts],
@@ -185,7 +185,7 @@ post '/around_messages/:channel.json' do
   }.to_json
 end
 
-post '/thread_messages.json' do
+post '/api/thread_messages.json' do
   thread_messages, _ = messages(
     thread_ts: params[:thread_ts],
     limit: 10000
@@ -197,13 +197,13 @@ post '/thread_messages.json' do
   }.to_json
 end
 
-get '/team.json' do
+get '/api/team.json' do
   content_type :json
   # TODO: cache in redis or mongodb or in memory?
   Slack.team_info['team'].to_json
 end
 
-post '/import_backup' do
+post '/api/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
   # TODO: show progress when import
@@ -236,7 +236,7 @@ get '/thread/:thread_ts' do
   erb :index
 end
 
-post '/search' do
+post '/api/search' do
   all_messages, has_more_message = search(
     search: params[:word],
     max_ts: params[:max_ts],
