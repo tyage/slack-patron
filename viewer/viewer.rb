@@ -203,14 +203,14 @@ get '/api/team.json' do
   Slack.team_info['team'].to_json
 end
 
-post '/api/import_backup' do
-  exported_file = '/tmp/slack_export.zip'
-  FileUtils.move(params[:file][:tempfile], exported_file)
-  # TODO: show progress when import
-  SlackImport.new.import_from_file(exported_file)
+# post '/api/import_backup' do
+#   exported_file = '/tmp/slack_export.zip'
+#   FileUtils.move(params[:file][:tempfile], exported_file)
+#   # TODO: show progress when import
+#   SlackImport.new.import_from_file(exported_file)
 
-  { result: 'success' }.to_json
-end
+#   { result: 'success' }.to_json
+# end
 
 get '/' do
   hashed_channels = channels
