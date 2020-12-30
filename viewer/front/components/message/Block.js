@@ -1,16 +1,19 @@
 import React, { Component } from 'react';
 import Emoji from './Emoji';
+import UserMention from './UserMention';
+import ChannelMention from './ChannelMention';
 
 import './Block.less';
 
 class RichTextSection extends Component {
-  getStyle(style) {
-    const {bold, italic, code} = style || {};
-    return {
-      ...(bold ? {fontWeight: 'bold'} : {}),
-      ...(italic ? {fontStyle: 'italic'} : {}),
-      ...(code ? {fontFamily: 'monospace'} : {}),
-    }
+  getClasses(style) {
+    const {bold, italic, code, strike} = style || {};
+    return [
+      ...(bold ? ['bold'] : []),
+      ...(italic ? ['italic'] : []),
+      ...(strike ? ['strike'] : []),
+      ...(code ? ['code'] : []),
+    ].join(' ');
   }
   render() {
     const {elements} = this.props;
@@ -19,7 +22,7 @@ class RichTextSection extends Component {
         {
           elements.map((element, index) => {
             if (element.type === 'text') {
-              return <span key={index} style={this.getStyle(element.style)}>{element.text}</span>
+              return <span key={index} className={this.getClasses(element.style)}>{element.text}</span>
             }
             if (element.type === 'link') {
               return (
@@ -28,14 +31,23 @@ class RichTextSection extends Component {
                   href={element.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={this.getStyle(element.style)}
+                  className={this.getClasses(element.style)}
                 >
                   {element.text || element.url}
                 </a>
               );
             }
             if (element.type === 'emoji') {
-              return <Emoji key={index} name={element.name} style={this.getStyle(element.style)} />
+              return <Emoji key={index} name={element.name} className={this.getClasses(element.style)} />
+            }
+            if (element.type === 'user') {
+              return <UserMention key={index} id={element.user_id} className={this.getClasses(element.style)} />
+            }
+            if (element.type === 'channel') {
+              return <ChannelMention key={index} id={element.channel_id} className={this.getClasses(element.style)} />
+            }
+            if (element.type === 'broadcast') {
+              return <span key={index} className={this.getClasses(element.style)}>@{element.range}</span>
             }
             return <code key={index}>{JSON.stringify(element)}</code>
           })
