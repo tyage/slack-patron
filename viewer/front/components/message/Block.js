@@ -57,6 +57,65 @@ class RichTextSection extends Component {
   }
 }
 
+class RichTextList extends Component {
+  renderItems() {
+    return this.props.elements.map((element, index) => {
+      if (element.type === 'rich_text_section') {
+        return <li key={index}><RichTextSection elements={element.elements} /></li>
+      }
+      return <span style={{color: 'red'}}>ERROR: Unsupported element type {element.type}</span>
+    });
+  }
+  render() {
+    const {style} = this.props;
+    if (style === 'ordered') {
+      return (
+        <ol className="rich-text-list">
+          {this.renderItems()}
+        </ol>
+      );
+    }
+    if (style === 'bullet') {
+      return (
+        <ul className="rich-text-list">
+          {this.renderItems()}
+        </ul>
+      );
+    }
+    return <span style={{color: 'red'}}>ERROR: Unsupported list style {style}</span>
+  }
+}
+
+class RichTextPreformatted extends Component {
+  render() {
+    const {elements} = this.props;
+    return (
+      <div className="rich-text-preformatted">
+        {
+          elements.map((element, index) => {
+            if (element.type === 'text') {
+              return <span key={index}>{element.text}</span>
+            }
+            if (element.type === 'link') {
+              return (
+                <a
+                  key={index}
+                  href={element.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {element.text || element.url}
+                </a>
+              );
+            }
+            return <code key={index} style={{color: 'red'}}>{JSON.stringify(element)}</code>
+          })
+        }
+      </div>
+    );
+  }
+}
+
 class RichTextBlock extends Component {
   render() {
     const {elements} = this.props;
@@ -66,6 +125,12 @@ class RichTextBlock extends Component {
           elements.map((element, index) => {
             if (element.type === 'rich_text_section') {
               return <RichTextSection key={index} elements={element.elements} />
+            }
+            if (element.type === 'rich_text_list') {
+              return <RichTextList key={index} elements={element.elements} style={element.style} />
+            }
+            if (element.type === 'rich_text_preformatted') {
+              return <RichTextPreformatted key={index} elements={element.elements} style={element.style} />
             }
             return <span style={{color: 'red'}}>ERROR: Unsupported element type {element.type}</span>
           })
