@@ -3,7 +3,7 @@ import MrkdwnText from './MrkdwnText';
 
 import './Attachment.less';
 
-const formatDate = (date)  => ( 
+const formatDate = (date) => (
   new Date(date * 1000).toLocaleString()
 );
 
@@ -75,26 +75,26 @@ export default class extends Component {
         <div className="attachment-main">
           <div className="attachment-sidebar" style={{backgroundColor: `#${attachment.color}`}}></div>
           <div className="attachment-content">
-            {attachment.author_name && ( 
+            {attachment.author_name && (
               <Author name={attachment.author_name} link={attachment.author_link} icon={attachment.author_icon}/>
             )}
-            {attachment.title && ( 
+            {attachment.title && (
               <Title title={attachment.title} link={attachment.title_link}/>
             )}
-            {attachment.text && ( 
+            {attachment.text && (
               <MrkdwnText text={attachment.text} />
             )}
-            {attachment.image_url && ( 
+            {attachment.image_url && (
               <div className="attachment-image-wrap">
                 <a href={attachment.image_url} target="_blank" rel="noopener noreferrer">
                   <img className="attachment-image" src={attachment.image_url}/>
                 </a>
               </div>
             )}
-            {attachment.fields && ( 
+            {attachment.fields && (
               <div className="attachment-fields">
                 {
-                  attachment.fields.map((field, index) => ( 
+                  attachment.fields.map((field, index) => (
                     <div key={index} className="attachment-field">
                       <div className="attachment-field-title">{field.title}</div>
                       <div className="attachment-field-value">{field.value}</div>
@@ -103,7 +103,7 @@ export default class extends Component {
                 }
               </div>
             )}
-            {(attachment.footer || attachment.footer_icon || attachment.ts) && ( 
+            {(attachment.footer || attachment.footer_icon || attachment.ts) && (
               <Footer text={attachment.footer} icon={attachment.footer_icon} ts={attachment.ts}/>
             )}
           </div>
