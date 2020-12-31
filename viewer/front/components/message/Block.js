@@ -49,6 +49,7 @@ class RichTextSection extends Component {
             if (element.type === 'broadcast') {
               return <span key={index} className={this.getClasses(element.style)}>@{element.range}</span>
             }
+            // TODO: team, usergroup, date
             return <code key={index}>{JSON.stringify(element)}</code>
           })
         }
@@ -147,9 +148,6 @@ export default class extends Component {
       return (
         <div className="slack-message-block">
           <RichTextBlock elements={block.elements} />
-          <pre>
-            {JSON.stringify(block, null, '  ')}
-          </pre>
         </div>
       )
     }
