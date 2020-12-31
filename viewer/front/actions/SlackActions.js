@@ -25,7 +25,12 @@ const fetchJSON = async (url, params) => {
       ...params?.headers,
     }
   }
-  return fetch(url, params).then(res => res.json());
+  const res = await fetch(url, params)
+  if (res.ok) {
+    return await res.json();
+  } else {
+    throw Error('fetch failed');
+  }
 };
 
 export default {
