@@ -1,0 +1,57 @@
+@import '../../styles/variable';
+
+.rich-text-section {
+  .emoji {
+    height: 22px;
+    width: 22px;
+    vertical-align: bottom;
+  }
+
+  .bold {
+    font-weight: bold;
+  }
+
+  .strike {
+    text-decoration: line-through;
+  }
+
+  .italic {
+    font-style: italic;
+  }
+
+  .code {
+    font-family: monospace;
+    margin: 0 0.2em;
+    padding: 0 0.3em;
+    border-radius: 2px;
+    border: 1px solid #ddd;
+    background-color: #f8f8f8;
+  }
+}
+
+.rich-text-list {
+  padding: 0 0 0 1.5rem;
+  margin: 0;
+}
+
+.rich-text-preformatted {
+  font-family: monospace;
+  margin: 0.2em;
+  padding: 0.3em 0.5em;
+  line-height: 1em;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  background-color: #f8f8f8;
+}
+
+.rich-text-quote {
+  display: flex;
+
+  &::before {
+    content: '';
+    flex: 0 0 0.25rem;
+    background: lightgrey;
+    margin-right: 0.4rem;
+    border-radius: 0.25rem;
+  }
+}
