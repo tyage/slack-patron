@@ -4,6 +4,7 @@ require 'json'
 require './lib/slack_import'
 require './lib/slack'
 require './lib/db'
+require './viewer/auth'
 
 config = YAML.load_file('./config.yml')
 
@@ -126,6 +127,12 @@ def search(params)
     return all_messages, res_data['hits']['total']['value'] > limit
   else
     return [], false
+  end
+end
+
+before '/api/*' do
+  if not auth(request.env["HTTP_AUTHORIZATION"])
+    halt 403
   end
 end
 
