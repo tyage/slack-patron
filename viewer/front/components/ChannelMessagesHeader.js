@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import find from 'lodash/find';
 import ChannelName from './ChannelName'
 import SlackActions from '../actions/SlackActions';
+import firebase from 'firebase/app';
 
 const ChannelMessagesHeader = ({ channels, ims, currentChannelId, openSidebar }) => {
   const allChannels = Object.assign({}, channels, ims);
@@ -17,6 +18,10 @@ const ChannelMessagesHeader = ({ channels, ims, currentChannelId, openSidebar })
     openSidebar();
   };
 
+  const handleSignOut = () => {
+    firebase.auth().signOut();
+  }
+
   return (
     <div className="messages-header">
       <div className="toggle-sidebar" onClick={handleToggleSidebar}>
@@ -27,6 +32,7 @@ const ChannelMessagesHeader = ({ channels, ims, currentChannelId, openSidebar })
       <div className="title">
         <ChannelName channel={channel} />
       </div>
+      <button onClick={handleSignOut}> Sign Out </button>
     </div>
   );
 };
