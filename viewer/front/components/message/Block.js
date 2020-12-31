@@ -117,6 +117,16 @@ class RichTextPreformatted extends Component {
   }
 }
 
+class RichTextQuote extends Component {
+  render() {
+    return (
+      <div className="rich-text-quote">
+        <RichTextSection elements={this.props.elements} />
+      </div>
+    );
+  }
+}
+
 class RichTextBlock extends Component {
   render() {
     const {elements} = this.props;
@@ -131,7 +141,10 @@ class RichTextBlock extends Component {
               return <RichTextList key={index} elements={element.elements} style={element.style} />
             }
             if (element.type === 'rich_text_preformatted') {
-              return <RichTextPreformatted key={index} elements={element.elements} style={element.style} />
+              return <RichTextPreformatted key={index} elements={element.elements} />
+            }
+            if (element.type === 'rich_text_quote') {
+              return <RichTextQuote key={index} elements={element.elements} />
             }
             return <span style={{color: 'red'}}>ERROR: Unsupported element type {element.type}</span>
           })
@@ -153,9 +166,12 @@ export default class extends Component {
     }
     return (
       <div className="slack-message-block">
-        <pre>
-          {JSON.stringify(block, null, '  ')}
-        </pre>
+        {/* TODO */}
+        {/*
+          <pre>
+            {JSON.stringify(block, null, '  ')}
+          </pre>
+        */}
       </div>
     );
   }
