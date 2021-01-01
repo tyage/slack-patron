@@ -129,27 +129,27 @@ def search(params)
   end
 end
 
-get '/api/users.json' do
+get '/users.json' do
   content_type :json
   users.to_json
 end
 
-get '/api/channels.json' do
+get '/channels.json' do
   content_type :json
   channels.to_json
 end
 
-get '/api/ims.json' do
+get '/ims.json' do
   content_type :json
   ims.to_json
 end
 
-get '/api/emojis.json' do
+get '/emojis.json' do
   content_type :json
   emojis.to_json
 end
 
-post '/api/messages/:channel.json' do
+post '/messages/:channel.json' do
   all_messages, has_more_message = messages(
     channel: params[:channel],
     max_ts: params[:max_ts],
@@ -164,7 +164,7 @@ post '/api/messages/:channel.json' do
   }.to_json
 end
 
-post '/api/around_messages/:channel.json' do
+post '/around_messages/:channel.json' do
   past_messages, has_more_past_message = messages(
     channel: params[:channel],
     max_ts: params[:ts],
@@ -185,7 +185,7 @@ post '/api/around_messages/:channel.json' do
   }.to_json
 end
 
-post '/api/thread_messages.json' do
+post '/thread_messages.json' do
   thread_messages, _ = messages(
     thread_ts: params[:thread_ts],
     limit: 10000
@@ -197,13 +197,13 @@ post '/api/thread_messages.json' do
   }.to_json
 end
 
-get '/api/team.json' do
+get '/team.json' do
   content_type :json
   # TODO: cache in redis or mongodb or in memory?
   Slack.team_info['team'].to_json
 end
 
-post '/api/import_backup' do
+post '/import_backup' do
   exported_file = '/tmp/slack_export.zip'
   FileUtils.move(params[:file][:tempfile], exported_file)
   # TODO: show progress when import
@@ -236,7 +236,7 @@ get '/thread/:thread_ts' do
   erb :index
 end
 
-post '/api/search' do
+post '/search' do
   all_messages, has_more_message = search(
     search: params[:word],
     max_ts: params[:max_ts],
