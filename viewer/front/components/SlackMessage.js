@@ -5,6 +5,7 @@ import { EmojiData } from 'emoji-data-ts';
 import MessagesType from '../constants/MessagesType';
 import MrkdwnText from './message/MrkdwnText';
 import Files from './message/Files';
+import Block from './message/Block';
 import Attachment from './message/Attachment';
 import { get } from 'lodash';
 import find from 'lodash/find';
@@ -65,7 +66,7 @@ export default class extends Component {
       </div>);
   }
   render() {
-    const SlackMessagePrototype = ({ message, icon, username, showChannel, teamInfo, text }) => {
+    const SlackMessagePrototype = ({ message, icon, username, showChannel, teamInfo, text, blocks }) => {
       const channel = this.getChannel(message.channel);
       const classNames = ['slack-message'];
       if (this.props.selected) {
@@ -102,9 +103,21 @@ export default class extends Component {
                   </Link>
                 </div> ) }
             </div>
-            <div className="slack-message-text">
-              <MrkdwnText text={text} />
-            </div>
+            {
+              Array.isArray(message.blocks) ? (
+                <div className="slack-message-blocks">
+                  {
+                    message.blocks.map((block) => (
+                      <Block key={block.block_id} block={block} />
+                    ))
+                  }
+                </div>
+              ) : (
+                <div className="slack-message-text">
+                  <MrkdwnText text={text} />
+                </div>
+              )
+            }
           </div>
           { message.attachments && message.attachments.map((attachment) => (
             <Attachment key={attachment.id} attachment={attachment} />
