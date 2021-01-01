@@ -24,7 +24,7 @@ class ConfigureWindow extends React.Component {
                 <input type="file" name="file" ref="backupFile" />
               </div>
               <div className="form-section">
-                <input className="submit-button" type="submit" value="Import backup file" disabled />
+                <input className="submit-button" type="submit" value="Import backup file" />
               </div>
             </form>
           </div>
