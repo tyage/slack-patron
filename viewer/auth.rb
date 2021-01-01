@@ -20,25 +20,25 @@ def verify_keys
 end
 
 def decode_token(token)
+  keys = verify_keys
+
+  notvalidated_data = JWT.decode token, nil, false
+  if !keys.key? notvalidated_data[1]["kid"]
+    "print unknown key"
+    # key id is not known
+    return nil
+  end
+
+  key = keys[notvalidated_data[1]["kid"]]
+  if key === nil or key === ""
+    print "key is nil"
+    # nazeka key ga mu
+    return nil
+  end
+
+  x509 = OpenSSL::X509::Certificate.new(key)
+
   begin
-    keys = verify_keys
-
-    notvalidated_data = JWT.decode token, nil, false
-    if !keys.key? notvalidated_data[1]["kid"]
-      "print unknown key"
-      # key id is not known
-      return nil
-    end
-
-    key = keys[notvalidated_data[1]["kid"]]
-    if key === nil or key === ""
-      print "key is nil"
-      # nazeka key ga mu
-      return nil
-    end
-
-    x509 = OpenSSL::X509::Certificate.new(key)
-
     user, header = JWT.decode token, x509.public_key, true, { algorithm: 'RS256' }
 
     # additional checks
