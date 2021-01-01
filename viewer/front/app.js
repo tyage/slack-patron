@@ -36,13 +36,13 @@ const store = createStore(
 );
 
 // initialize data
+store.dispatch(SlackActions.getUsers());
+store.dispatch(SlackActions.getTeamInfo());
+store.dispatch(SlackActions.getChannels());
+store.dispatch(SlackActions.getIms());
+store.dispatch(SlackActions.getEmojis());
 firebase.auth().onAuthStateChanged((user) => {
   store.dispatch(AuthActions.changeAuthState(user));
-  store.dispatch(SlackActions.getUsers());
-  store.dispatch(SlackActions.getTeamInfo());
-  store.dispatch(SlackActions.getChannels());
-  store.dispatch(SlackActions.getIms());
-  store.dispatch(SlackActions.getEmojis());
 });
 
 render(

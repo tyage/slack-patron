@@ -1,7 +1,6 @@
 import SlackConstants from '../constants/SlackConstants';
 import MessagesType from '../constants/MessagesType';
 import { push } from 'connected-react-router'
-import firebase from 'firebase/app';
 import 'whatwg-fetch'
 
 const generateApiUrl = (url) => 'api/' + url + '?t=' + (new Date()).getTime();
@@ -17,14 +16,11 @@ const callableIfLast = (callback) => {
   };
 };
 
-const fetchJSON = async (url, params) => {
-  params = {
-    ...params,
-    headers: {
-      'Authorization': await firebase.auth().currentUser.getIdToken(),
-      ...params?.headers,
-    }
-  }
+const fetchJSON = (url, params) => {
+  const defaultParam = {
+    credentials: 'same-origin'
+  };
+  params = Object.assign(defaultParam, params);
   return fetch(url, params).then(res => res.json());
 };
 
