@@ -1,17 +1,16 @@
-import AuthConstants, {} from '../constants/AuthConstants';
-import AuthStatus from '../constants/AuthStatus';
+import AuthConstants from '../constants/AuthConstants';
 
-const auth = (state = { status: AuthStatus.loading }, action) => {
+const auth = (state = { isSignedIn: false }, action) => {
   switch (action.type) {
     case AuthConstants.SIGN_IN:
       return {
         ...state,
-        status: AuthStatus.signedIn,
+        isSignedIn: true,
       };
     case AuthConstants.SIGN_OUT:
       return {
         ...state,
-        status: AuthStatus.signedOut,
+        isSignedIn: false,
       };
     default:
       return state;
