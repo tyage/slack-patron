@@ -1,8 +1,8 @@
 import React from 'react';
 import firebase from 'firebase';
 
-export default () => {
-  const handleSignIn = async () => {
+export default class SignIn extends React.Component {
+  async handleSignIn() {
     const provider = new firebase.auth.GoogleAuthProvider();
     try {
       await firebase.auth().signInWithPopup(provider);
@@ -12,7 +12,9 @@ export default () => {
     }
   }
   
-  return (
-    <button onClick={handleSignIn}> Sign in with Google </button>
-  );
+  render() {
+    return (
+      <button onClick={this.handleSignIn.bind(this)}> Sign in with Google </button>
+    );
+  }
 }
