@@ -12,7 +12,6 @@ GEM
       eventmachine (>= 0.12.0)
       websocket-driver (>= 0.5.1)
     json (2.4.1)
-    jwt (2.2.2)
     mongo (2.14.0)
       bson (>= 4.8.2, < 5.0.0)
     multi_json (1.15.0)
@@ -25,7 +24,6 @@ GEM
     rack (2.2.3)
     rack-protection (2.1.0)
       rack
-    redis (4.2.5)
     ruby2_keywords (0.0.2)
     rubyzip (2.3.0)
     sinatra (2.1.0)
@@ -52,10 +50,8 @@ PLATFORMS
 
 DEPENDENCIES
   json
-  jwt
   mongo
   puma
-  redis
   rubyzip
   sinatra
   slack-api
