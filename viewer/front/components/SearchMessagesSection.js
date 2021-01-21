@@ -25,7 +25,7 @@ class SearchMessagesSection extends React.Component {
   }
   render() {
     const { match, loadMoreSearchMessages } = this.props;
-    const searchWord = match.params.searchWord;
+    const searchWord = decodeURIComponent(match.params.searchWord);
     return (
       <div className="search-messages">
         <div className="messages-header">
