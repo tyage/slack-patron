@@ -43,9 +43,10 @@ class SlackImport
         end
         zip.each do |entry|
           # channel/2015-01-01.json
-          if !File.directory?(dist + '/' + entry.to_s) and entry.to_s.split('/').size > 1
-            puts "import #{entry.to_s}"
-            channel = Channels.find(name: entry.to_s.split('/')[0]).to_a[0]
+          file_name = entry.name.clone.force_encoding('UTF-8')
+          if !File.directory?(dist + '/' + file_name) and file_name.split('/').size > 1
+            puts "import #{file_name}"
+            channel = Channels.find(name: file_name.split('/')[0]).to_a[0]
             messages = JSON.load(entry.get_input_stream)
             import_messages(channel, messages)
           end
