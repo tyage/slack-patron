@@ -7,6 +7,10 @@ config = {
   'slack' => {
     'token' => nil
   },
+  'aws' => {
+    'access_key_id' => nil,
+    'secret_access_key' => nil,
+  },
   'default_channel' => 'general',
   'logger' => {
     'enable_private_channel' => true,

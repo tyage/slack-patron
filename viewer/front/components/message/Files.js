@@ -10,11 +10,11 @@ export default class extends Component {
       <div className="slack-message-files">
         { files.map((file) => (
           <div key={file.id} className="slack-message-file">
-            {file.thumb_480 ? (
+            {file.mimetype.startsWith('image/') ? (
               <div className="file-thumb">
                 <div className="file-title">{file.title} ({file.original_w}x{file.original_h}, {(file.size / 1024).toFixed(2)}KB, {file.pretty_type})</div>
-                <a href={file.url_private} target="_blank" rel="noopener noreferrer">
-                  <img src={file.thumb_480}/>
+                <a href={file.url_private_download} target="_blank" rel="noopener noreferrer">
+                  <img src={file.url_private_download}/>
                 </a>
               </div>
             ) : (
