@@ -6,13 +6,13 @@ require './lib/slack_import'
 require './lib/slack'
 require './lib/db'
 
-config = YAML.load_file('./config.yml')
+$config = YAML.load_file('./config.yml')
 
-if config.has_key? 'aws'
+if $config.has_key? 'aws'
   Aws.config.update({
     credentials: Aws::Credentials.new(
-      config['aws']['access_key_id'],
-      config['aws']['secret_access_key'],
+      $config['aws']['access_key_id'],
+      $config['aws']['secret_access_key'],
     ),
     region: 'ap-northeast-1',
   })
@@ -76,7 +76,7 @@ def messages(params)
   return_messages = all_messages.limit(limit).to_a
   return_messages = return_messages.reverse if ts_direction == -1
 
-  if config.has_key? 'aws'
+  if $config.has_key? 'aws'
     signer = Aws::S3::Presigner.new
     return_messages.each do |message|
       if message.has_key? 'files'
@@ -244,7 +244,7 @@ end
 get '/' do
   hashed_channels = channels
   default_channel, _ = hashed_channels.find do |id, channel|
-    channel[:name] == config['default_channel']
+    channel[:name] == $config['default_channel']
   end
   if default_channel.nil?
     default_channel, _ = hashed_channels.first
