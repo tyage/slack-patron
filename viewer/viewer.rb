@@ -1,11 +1,22 @@
 require 'sinatra'
 require 'net/http'
 require 'json'
+require 'aws-sdk'
 require './lib/slack_import'
 require './lib/slack'
 require './lib/db'
 
 config = YAML.load_file('./config.yml')
+
+if config.has_key? 'aws'
+  Aws.config.update({
+    credentials: Aws::Credentials.new(
+      config['aws']['access_key_id'],
+      config['aws']['secret_access_key'],
+    ),
+    region: 'ap-northeast-1',
+  })
+end
 
 configure do
   set :absolute_redirects, false
@@ -64,6 +75,24 @@ def messages(params)
   has_more_message = all_messages.count({limit: limit+1}) > limit
   return_messages = all_messages.limit(limit).to_a
   return_messages = return_messages.reverse if ts_direction == -1
+
+  if config.has_key? 'aws'
+    signer = Aws::S3::Presigner.new
+    return_messages.each do |message|
+      if message.has_key? 'files'
+        message['files'].each do |file|
+          if file.has_key? 'url_private_download'
+            url = signer.presigned_url(:get_object, {
+              bucket: 'tsgbot-slack-files',
+              key: file['id'],
+              expires_in: 180,
+            })
+            file['url_private_download'] = url
+          end
+        end
+      end
+    end
+  end
 
   return return_messages, has_more_message
 end
