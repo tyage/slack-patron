@@ -125,6 +125,10 @@ export default class extends Component {
           { message.files && (
             <Files files={message.files} />
           ) }
+          {/* Compatibility with the old messages */}
+          { message.file && (
+            <Files files={[message.file]} />
+          ) }
           { message.reactions && message.reactions.length > 0 && (
             <div className="slack-message-reactions">{
               message.reactions.map((reaction) => this.renderReaction(reaction))
@@ -163,7 +167,7 @@ export default class extends Component {
     const message = this.props.message;
     const showChannel = this.props.type === MessagesType.SEARCH_MESSAGES;
     switch (this.props.message.subtype) {
-      case 'bot_message': { 
+      case 'bot_message': {
         return botMessage(this.props.teamInfo, message, showChannel);
       }
       default: {
