@@ -91,6 +91,19 @@ def messages(params)
           end
         end
       end
+
+      # Compatibility with old messages
+      if message.has_key? 'file'
+        file = message['file']
+        if file.has_key? 'url_private_download'
+          url = signer.presigned_url(:get_object, {
+            bucket: 'tsgbot-slack-files',
+            key: file['id'],
+            expires_in: 180,
+          })
+          file['url_private_download'] = url
+        end
+      end
     end
   end
 
