@@ -1,8 +1,12 @@
 import React from 'react';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import ja from 'date-fns/locale/ja';
+registerLocale('ja', ja);
 import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
 import SlackActions from '../actions/SlackActions';
 
+import 'react-datepicker/dist/react-datepicker.css';
 import './AdvancedSearchWindow.less';
 
 const { Option } = components;
@@ -12,6 +16,16 @@ const IconOption = props => (
     {props.data.label}
   </Option>
 );
+/**
+ * Convert the date to TS format in slack.
+ * If date is null, it returns '*'.
+ * @param {Date|null} date
+ * @returns string
+ */
+const calcTS = date => {
+  if (!date) return '*';
+  return (date.getTime() / 1000).toFixed(0);
+};
 class AdvancedSearchWindow extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +34,8 @@ class AdvancedSearchWindow extends React.Component {
       orQuery: '',
       selectChannels: [],
       selectUsers: [],
+      startDate: null,
+      endDate: null,
     };
   }
   handleChangeChannel(value) {
@@ -27,6 +43,12 @@ class AdvancedSearchWindow extends React.Component {
   }
   handleChangeUser(value) {
     this.setState({selectUsers: value});
+  }
+  handleChangeStartDate(value) {
+    this.setState({startDate: value});
+  }
+  handleChangeEndDate(value) {
+    this.setState({endDate: value});
   }
   search(e) {
     e.preventDefault();
@@ -38,8 +60,9 @@ class AdvancedSearchWindow extends React.Component {
     const qOR = this.refs.OR.value.split(' ').join(' OR ');
     const qCH = this.state.selectChannels.map(v=>`channel:${v.value}`).join(' OR ');
     const qUSER = this.state.selectUsers.map(v=>`user:${v.value}`).join(' OR ');
+    const qDATE = `ts:[${calcTS(this.state.startDate)} TO ${calcTS(this.state.endDate)}]`;
 
-    const query = [qAND, qOR, qCH, qUSER].filter(v=>(v.length > 0)).map(v=>`(${v})`);
+    const query = [qAND, qOR, qCH, qUSER, qDATE].filter(v=>(v.length > 0)).map(v=>`(${v})`);
     this.props.search(query.join(' AND '));
     this.props.toggleAdvancedSearchWindow();
   }
@@ -68,6 +91,22 @@ class AdvancedSearchWindow extends React.Component {
               </div>
               <div className="form-section">
                 Any of: <input type="text" name="or" ref="OR" defaultValue={this.state.orQuery} />
+              </div>
+              <div className="form-section">
+                from:<DatePicker
+                  locale="ja"
+                  selected={this.state.startDate}
+                  onChange={this.handleChangeStartDate.bind(this)}
+                  dateFormat="yyyy/MM/dd HH:mm"
+                  showTimeInput
+                />
+                until:<DatePicker
+                  locale="ja"
+                  selected={this.state.endDate}
+                  onChange={this.handleChangeEndDate.bind(this)}
+                  dateFormat="yyyy/MM/dd HH:mm"
+                  showTimeInput
+                />
               </div>
               <div className="form-section">
                 Channel:<Select
