@@ -1,7 +1,6 @@
 import React from 'react';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import ja from 'date-fns/locale/ja';
-registerLocale('ja', ja);
 import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
 import SlackActions from '../actions/SlackActions';
@@ -10,6 +9,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import './AdvancedSearchWindow.less';
 
 const { Option } = components;
+registerLocale('ja', ja);
+
 const IconOption = props => (
   <Option {...props}>
     <img src={props.data.icon} style={{ width: 24, 'padding-right': '1em' }} />
@@ -38,6 +39,12 @@ class AdvancedSearchWindow extends React.Component {
       endDate: null,
     };
   }
+  handleChangeAnd(event) {
+    this.setState({andQuery: event.target.value});
+  }
+  handleChangeOr(event) {
+    this.setState({orQuery: event.target.value});
+  }
   handleChangeChannel(value) {
     this.setState({selectChannels: value});
   }
@@ -52,18 +59,14 @@ class AdvancedSearchWindow extends React.Component {
   }
   search(e) {
     e.preventDefault();
-    this.setState({
-      andQuery: this.refs.AND.value,
-      orQuery: this.refs.OR.value
-    });
-    const qAND = this.refs.AND.value.split(' ').join(' AND ');
-    const qOR = this.refs.OR.value.split(' ').join(' OR ');
+    const qAND = this.state.andQuery.split(' ').join(' AND ');
+    const qOR = this.state.orQuery.split(' ').join(' OR ');
     const qCH = this.state.selectChannels.map(v=>`channel:${v.value}`).join(' OR ');
     const qUSER = this.state.selectUsers.map(v=>`user:${v.value}`).join(' OR ');
     const qDATE = `ts:[${calcTS(this.state.startDate)} TO ${calcTS(this.state.endDate)}]`;
 
     const query = [qAND, qOR, qCH, qUSER, qDATE].filter(v=>(v.length > 0)).map(v=>`(${v})`);
-    this.props.search(query.join(' AND '));
+    this.props.updateSearchWord(query.join(' AND '));
     this.props.toggleAdvancedSearchWindow();
   }
   getChannelOptions() {
@@ -87,10 +90,10 @@ class AdvancedSearchWindow extends React.Component {
             <p className="section-title">Advanced Search</p>
             <form id="search" onSubmit={this.search.bind(this)}>
               <div className="form-section">
-                All of: <input type="text" name="and" ref="AND" defaultValue={this.state.andQuery} />
+                All of: <input type="text" name="and" value={this.state.andQuery} onChange={this.handleChangeAnd.bind(this)} />
               </div>
               <div className="form-section">
-                Any of: <input type="text" name="or" ref="OR" defaultValue={this.state.orQuery} />
+                Any of: <input type="text" name="or" value={this.state.orQuery} onChange={this.handleChangeOr.bind(this)} />
               </div>
               <div className="form-section">
                 from:<DatePicker
@@ -98,14 +101,14 @@ class AdvancedSearchWindow extends React.Component {
                   selected={this.state.startDate}
                   onChange={this.handleChangeStartDate.bind(this)}
                   dateFormat="yyyy/MM/dd HH:mm"
-                  showTimeInput
+                  showTimeSelect
                 />
                 until:<DatePicker
                   locale="ja"
                   selected={this.state.endDate}
                   onChange={this.handleChangeEndDate.bind(this)}
                   dateFormat="yyyy/MM/dd HH:mm"
-                  showTimeInput
+                  showTimeSelect
                 />
               </div>
               <div className="form-section">
@@ -147,7 +150,7 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
-    search: (query) => {
+    updateSearchWord: (query) => {
       dispatch(SlackActions.updateSearchWord(query));
     }
   };
