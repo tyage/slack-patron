@@ -64,10 +64,10 @@ class AdvancedSearchWindow extends React.Component {
             <p className="section-title">Advanced Search</p>
             <form id="search" onSubmit={this.search.bind(this)}>
               <div className="form-section">
-                All of: <input type="text" name="and" ref="AND"/>
+                All of: <input type="text" name="and" ref="AND" defaultValue={this.state.andQuery} />
               </div>
               <div className="form-section">
-                Any of: <input type="text" name="or" ref="OR"/>
+                Any of: <input type="text" name="or" ref="OR" defaultValue={this.state.orQuery} />
               </div>
               <div className="form-section">
                 Channel:<Select
