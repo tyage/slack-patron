@@ -7,6 +7,7 @@ require './lib/slack'
 require './lib/db'
 
 $config = YAML.load_file('./config.yml')
+$signer = nil
 
 if $config.has_key? 'aws'
   Aws.config.update({
@@ -16,11 +17,41 @@ if $config.has_key? 'aws'
     ),
     region: 'ap-northeast-1',
   })
+  $signer = Aws::S3::Presigner.new
 end
 
 configure do
   set :absolute_redirects, false
   set :prefixed_redirects, true
+end
+
+def sign_file(file)
+  if file.has_key? 'url_private_download'
+    url = $signer.presigned_url(:get_object, {
+      bucket: 'tsgbot-slack-files',
+      key: file['id'],
+      expires_in: 180,
+    })
+    file['url_private_download'] = url
+  end
+end
+
+def sign_message_files(messages)
+  unless $signer.nil?
+    messages.each do |message|
+      if message.has_key? 'files'
+        message['files'].each do |file|
+          sign_file(file)
+        end
+      end
+
+      # Compatibility with old messages
+      if message.has_key? 'file'
+        file = message['file']
+        sign_file(file)
+      end
+    end
+  end
 end
 
 def users
@@ -76,36 +107,7 @@ def messages(params)
   return_messages = all_messages.limit(limit).to_a
   return_messages = return_messages.reverse if ts_direction == -1
 
-  if $config.has_key? 'aws'
-    signer = Aws::S3::Presigner.new
-    return_messages.each do |message|
-      if message.has_key? 'files'
-        message['files'].each do |file|
-          if file.has_key? 'url_private_download'
-            url = signer.presigned_url(:get_object, {
-              bucket: 'tsgbot-slack-files',
-              key: file['id'],
-              expires_in: 180,
-            })
-            file['url_private_download'] = url
-          end
-        end
-      end
-
-      # Compatibility with old messages
-      if message.has_key? 'file'
-        file = message['file']
-        if file.has_key? 'url_private_download'
-          url = signer.presigned_url(:get_object, {
-            bucket: 'tsgbot-slack-files',
-            key: file['id'],
-            expires_in: 180,
-          })
-          file['url_private_download'] = url
-        end
-      end
-    end
-  end
+  sign_message_files(return_messages)
 
   return return_messages, has_more_message
 end
@@ -163,6 +165,7 @@ def search(params)
       message
     end
     all_messages = all_messages.reverse if ts_direction == 'desc'
+    sign_message_files(all_messages)
     # FIXME: The meaning of hits.total.value might change in ElasticSearch 8
     # https://www.elastic.co/guide/en/elasticsearch/reference/current/breaking-changes-7.0.html#hits-total-now-object-search-response
     return all_messages, res_data['hits']['total']['value'] > limit
