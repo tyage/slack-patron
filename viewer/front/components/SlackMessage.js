@@ -43,7 +43,7 @@ export default class extends Component {
         .replace(/<@([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<@([0-9A-Za-z]+)\|([0-9A-Za-z]+)>/gi, (m, id) => userLink(id))
         .replace(/<!(channel|everyone|group)>/gi, (m, command) => specialCommand(command))
-        .replace(/<(https?:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)));
+        .replace(/<([a-z0-9]+:\/\/[^>]*)>/gi, (m, uri) => uriLink(entity(uri)));
     }
     return text;
   }
