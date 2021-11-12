@@ -3,6 +3,7 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import ja from 'date-fns/locale/ja';
 import Select, { components } from 'react-select';
 import { connect } from 'react-redux';
+import ModalWindow from './ModalWindow';
 import SlackActions from '../actions/SlackActions';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -85,25 +86,29 @@ class AdvancedSearchWindow extends React.Component {
     }
     return (
       <div>
-        <div className="configure-window">
-          <div className="configure-section">
-            <p className="section-title">Advanced Search</p>
-            <form id="search" onSubmit={this.search.bind(this)}>
-              <div className="form-section">
-                All of: <input type="text" name="and" value={this.state.andQuery} onChange={this.handleChangeAnd.bind(this)} />
-              </div>
-              <div className="form-section">
-                Any of: <input type="text" name="or" value={this.state.orQuery} onChange={this.handleChangeOr.bind(this)} />
-              </div>
-              <div className="form-section">
-                from:<DatePicker
+        <ModalWindow
+          toggleModalWindow={this.props.toggleAdvancedSearchWindow}
+          title="Advanced Search"
+        >
+          <form id="advanced-search-form" onSubmit={this.search.bind(this)}>
+            <div className="form-section">
+              All of: <input type="text" name="and" value={this.state.andQuery} onChange={this.handleChangeAnd.bind(this)} />
+            </div>
+            <div className="form-section">
+              Any of: <input type="text" name="or" value={this.state.orQuery} onChange={this.handleChangeOr.bind(this)} />
+            </div>
+            <div className="form-section multiple-items">
+              <div className="form-item">
+                from: <DatePicker
                   locale="ja"
                   selected={this.state.startDate}
                   onChange={this.handleChangeStartDate.bind(this)}
                   dateFormat="yyyy/MM/dd HH:mm"
                   showTimeSelect
                 />
-                until:<DatePicker
+              </div>
+              <div className="form-item">
+                until: <DatePicker
                   locale="ja"
                   selected={this.state.endDate}
                   onChange={this.handleChangeEndDate.bind(this)}
@@ -111,32 +116,31 @@ class AdvancedSearchWindow extends React.Component {
                   showTimeSelect
                 />
               </div>
-              <div className="form-section">
-                Channel:<Select
-                  isMulti
-                  onChange={this.handleChangeChannel.bind(this)}
-                  options={this.getChannelOptions()}
-                  value={this.state.selectChannels}
-                />
-              </div>
-              <div className="form-section">
-                User:<Select
-                  isMulti
-                  onChange={this.handleChangeUser.bind(this)}
-                  options={this.getUserOptions()}
-                  value={this.state.selectUsers}
-                  components={{
-                    Option: IconOption,
-                  }}
-                />
-              </div>
-              <div className="form-section">
-                <input type="submit" value="Search" />
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="configure-background" onClick={this.props.toggleAdvancedSearchWindow}></div>
+            </div>
+            <div className="form-section">
+              Channel:<Select
+                isMulti
+                onChange={this.handleChangeChannel.bind(this)}
+                options={this.getChannelOptions()}
+                value={this.state.selectChannels}
+              />
+            </div>
+            <div className="form-section">
+              User:<Select
+                isMulti
+                onChange={this.handleChangeUser.bind(this)}
+                options={this.getUserOptions()}
+                value={this.state.selectUsers}
+                components={{
+                  Option: IconOption,
+                }}
+              />
+            </div>
+            <div className="form-section">
+              <input type="submit" value="Search" />
+            </div>
+          </form>
+        </ModalWindow>
       </div>
     )
   }
