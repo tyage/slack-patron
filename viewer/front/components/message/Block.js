@@ -50,7 +50,7 @@ class RichTextSection extends Component {
               return <span key={index} className={this.getClasses(element.style)}>@{element.range}</span>
             }
             // TODO: team, usergroup, date
-            return <code key={index}>{JSON.stringify(element)}</code>
+            return <code key={index}>{JSON.stringify(element, null, '  ')}</code>
           })
         }
       </div>
@@ -155,6 +155,18 @@ class RichTextBlock extends Component {
 }
 
 export default class extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isHidden: true,
+    };
+    this.handleToggleRawData = this.handleToggleRawData.bind(this);
+  }
+  handleToggleRawData() {
+    this.setState((state) => ({
+      isHidden: !state.isHidden,
+    }));
+  }
   render() {
     const {block} = this.props;
     if (block.type === 'rich_text') {
@@ -167,11 +179,14 @@ export default class extends Component {
     return (
       <div className="slack-message-block">
         {/* TODO */}
-        {/*
-          <pre>
+        <div className="slack-message-unsupported-block" onClick={this.handleToggleRawData}>
+          ⚠️未対応のブロック (クリックで生データ表示)
+        </div>
+        { !this.state.isHidden && (
+          <pre className="slack-message-block-raw">
             {JSON.stringify(block, null, '  ')}
           </pre>
-        */}
+        ) }
       </div>
     );
   }
