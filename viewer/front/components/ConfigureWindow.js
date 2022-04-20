@@ -1,5 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import ModalWindow from './ModalWindow';
 import SlackActions from '../actions/SlackActions';
 
 import './ConfigureWindow.less';
@@ -14,22 +15,21 @@ class ConfigureWindow extends React.Component {
   render() {
     return (
       <div>
-        <div className="configure-window">
-          <div className="configure-section">
-            <p className="section-title">Import Slack Backup File</p>
-            <p>Import a Slack backup file</p>
-            <p>You can download Slack backup file from <a href={`https://${this.props.teamInfo.domain}.slack.com/services/export`} target="_blank">this page</a>(You need administrator privileges)</p>
-            <form id="import-slack-backup-form" onSubmit={this.importBackup.bind(this)} ref="importBackup">
-              <div className="form-section">
-                <input type="file" name="file" ref="backupFile" />
-              </div>
-              <div className="form-section">
-                <input className="submit-button" type="submit" value="Import backup file" />
-              </div>
-            </form>
-          </div>
-        </div>
-        <div className="configure-background" onClick={this.props.toggleConfigureWindow}></div>
+        <ModalWindow
+          toggleModalWindow={this.props.toggleConfigureWindow}
+          title="Import Slack Backup File"
+        >
+          <p>Import a Slack backup file</p>
+          <p>You can download Slack backup file from <a href={`https://${this.props.teamInfo.domain}.slack.com/services/export`} target="_blank">this page</a>(You need administrator privileges)</p>
+          <form id="import-slack-backup-form" onSubmit={this.importBackup.bind(this)} ref="importBackup">
+            <div className="form-section">
+              <input type="file" name="file" ref="backupFile" />
+            </div>
+            <div className="form-section">
+              <input className="submit-button" type="submit" value="Import backup file" />
+            </div>
+          </form>
+        </ModalWindow>
       </div>
     );
   }
