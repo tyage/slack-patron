@@ -7,6 +7,7 @@ gem 'rubyzip'
 gem 'mongo'
 gem 'json'
 gem 'aws-sdk'
+gem 'nokogiri'
 group :development do
   gem 'thin'
 end
