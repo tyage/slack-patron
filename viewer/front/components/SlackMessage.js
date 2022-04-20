@@ -136,10 +136,34 @@ export default class extends Component {
         </div>
       );
     };
+    const getBotMessageUserIcon = (message) => {
+      if (message.icons && message.icons.image_48) {
+        return message.icons.image_48;
+      }
+      if (message.icons && message.icons.image_64) {
+        return message.icons.image_64;
+      }
+      if (message.icons && message.icons.emoji) {
+        return this.props.emojis[message.icons.emoji.slice(1, -1)];
+      }
+      if (message.bot_id) {
+        const botUser = Object.values(this.props.users).find((user) => (
+          get(user, ['profile', 'bot_id']) === message.bot_id
+        ));
+        if (botUser) {
+          return botUser.profile.image_48;
+        }
+      }
+      const attachment = find(message.attachments, (attachment) => attachment.text);
+      if (attachment) {
+        return attachment.author_icon;
+      }
+      return '';
+    };
     const botMessage = (teamInfo, message, showChannel) => {
       const attachment = find(message.attachments, (attachment) => attachment.text);
       const text = (!message.text && attachment) ? attachment.text : message.text;
-      const icon = message.icons ? message.icons.image_48 : (attachment ? attachment.author_icon : '');
+      const icon = getBotMessageUserIcon(message);
       return <SlackMessagePrototype
           message={message}
           icon={icon}
@@ -171,6 +195,9 @@ export default class extends Component {
         return botMessage(this.props.teamInfo, message, showChannel);
       }
       default: {
+        if (this.props.message.bot_id) {
+          return botMessage(this.props.teamInfo, message, showChannel);
+        }
         return normalMessage(this.props.teamInfo, message, this.getUser(message.user), showChannel);
       }
     }
