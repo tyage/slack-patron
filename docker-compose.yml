@@ -34,7 +34,7 @@ services:
   elasticsearch:
     build: elasticsearch
     environment:
-      - ES_JAVA_OPTS=-Xms640m -Xmx640m -XX:G1PeriodicGCInterval=60k
+      - ES_JAVA_OPTS=-Xms200m -Xmx640m -XX:G1PeriodicGCInterval=60k
       - discovery.type=single-node
     ports:
       - "127.0.0.1:9200:9200"
