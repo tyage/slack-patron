@@ -3,10 +3,14 @@ require './lib/slack'
 require './lib/db'
 
 config = YAML.load_file('./config.yml')
-ENABLE_PRIVATE_CHANNEL = config['logger']['enable_private_channel']
-ENABLE_DIRECT_MESSAGE = config['logger']['enable_direct_message']
 
 class SlackLogger
+  attr_reader :client
+
+  def initialize
+    @client = Slack::Web::Client.new
+  end
+
   def is_private_channel(channel_name)
     channel_name[0] == 'G'
   end
@@ -16,37 +20,27 @@ class SlackLogger
   end
 
   def update_users
-    users = Slack.users_list['members']
+    users = client.users_list['members']
     replace_users(users)
   end
 
   def update_channels
-    channels = Slack.channels_list['channels']
+    channels = client.conversations_list({type: 'public_channel'})['channels']
     replace_channels(channels)
   end
 
-  def update_groups
-    groups = Slack.groups_list['groups']
-    replace_channels(groups)
-  end
-
-  def update_ims
-    ims = Slack.im_list['ims']
-    replace_ims(ims)
-  end
-
   def update_emojis
-    emojis = Slack.emoji_list['emoji']
+    emojis = client.emoji_list['emoji'] rescue nil
     replace_emojis(emojis)
   end
 
   # log history messages
   def fetch_history(target, channel)
-    messages = Slack.send(
+    messages = client.send(
       target,
       channel: channel,
       count: 1000,
-    )['messages']
+    )['messages'] rescue nil
 
     unless messages.nil?
       messages.each do |m|
@@ -58,13 +52,13 @@ class SlackLogger
 
   # realtime events
   def log_realtime
-    realtime = Slack.realtime
+    realtime = Slack::RealTime::Client.new
 
     realtime.on :message do |m|
-      if !ENABLE_PRIVATE_CHANNEL and is_private_channel(m['channel'])
+      if is_private_channel(m['channel'])
         next
       end
-      if !ENABLE_DIRECT_MESSAGE and is_direct_message(m['channel'])
+      if is_direct_message(m['channel'])
         next
       end
 
@@ -97,32 +91,13 @@ class SlackLogger
       update_emojis
     end
 
-    if ENABLE_PRIVATE_CHANNEL
-      realtime.on :group_joined do |c|
-        puts "group has joined"
-        update_groups
-      end
-
-      realtime.on :group_rename do |c|
-        puts "group has renamed"
-        update_groups
-      end
-    end
-
-    if ENABLE_DIRECT_MESSAGE
-      realtime.on :im_created do |c|
-        puts "direct message has created"
-        update_ims
-      end
-    end
-
     # if connection closed, restart the realtime logger
     realtime.on :close do
       puts "websocket disconnected"
       log_realtime
     end
 
-    realtime.start
+    realtime.start!
   end
 
   def start
@@ -134,24 +109,13 @@ class SlackLogger
       update_emojis
       update_users
       update_channels
-      update_groups if ENABLE_PRIVATE_CHANNEL
-      update_ims if ENABLE_DIRECT_MESSAGE
 
       Channels.find.each do |c|
         puts "loading messages from #{c[:name]}"
         if c[:is_channel]
-          fetch_history(:channels_history, c[:id])
-        elsif c[:is_group] && ENABLE_PRIVATE_CHANNEL
-          fetch_history(:groups_history, c[:id])
+          fetch_history(:conversations_history, c[:id])
         end
         sleep(1)
-      end
-
-      if ENABLE_DIRECT_MESSAGE
-        Ims.find.each do |i|
-          fetch_history(:im_history, i[:id])
-          sleep(1)
-        end
       end
 
       # realtime event is joined and dont exit current thread

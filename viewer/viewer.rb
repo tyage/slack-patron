@@ -245,7 +245,8 @@ end
 get '/team.json' do
   content_type :json
   # TODO: cache in redis or mongodb or in memory?
-  Slack.team_info['team'].to_json
+  client = Slack::Web::Client.new
+  client.team_info['team'].to_json
 end
 
 post '/import_backup' do
