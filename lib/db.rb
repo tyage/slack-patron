@@ -25,15 +25,10 @@ def replace_channels(channels)
   end
 end
 
+# Ims
+#   for backward compatibility. should be removed.
 Ims = db['ims']
 Ims.indexes.create_one({ :id => 1 }, :unique => true)
-def replace_ims(ims)
-  unless ims.nil?
-    ids = ims.map{ |im| im['id'] }
-    Ims.find(id: { '$in' => ids }).delete_many
-    Ims.insert_many(ims)
-  end
-end
 
 Emojis = db['emojis']
 Emojis.indexes.create_one({ :name => 1 }, :unique => true)

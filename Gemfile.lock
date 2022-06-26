@@ -1,6 +1,15 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    async (1.30.3)
+      console (~> 1.10)
+      nio4r (~> 2.3)
+      timers (~> 4.1)
+    async-io (1.33.0)
+      async
+    async-websocket (0.8.0)
+      async-io
+      websocket-driver (~> 0.7.0)
     aws-eventstream (1.2.0)
     aws-partitions (1.578.0)
     aws-sdk (3.1.0)
@@ -1228,22 +1237,28 @@ GEM
     aws-sigv4 (1.4.0)
       aws-eventstream (~> 1, >= 1.0.2)
     bson (4.14.1)
+    console (1.15.3)
+      fiber-local
     daemons (1.4.1)
     eventmachine (1.2.7)
-    faraday (0.17.5)
-      multipart-post (>= 1.2, < 3)
-    faraday_middleware (0.10.1)
-      faraday (>= 0.7.4, < 1.0)
-    faye-websocket (0.10.9)
-      eventmachine (>= 0.12.0)
-      websocket-driver (>= 0.5.1)
+    faraday (2.3.0)
+      faraday-net_http (~> 2.0)
+      ruby2_keywords (>= 0.0.4)
+    faraday-mashify (0.1.0)
+      faraday (~> 2.0)
+      hashie
+    faraday-multipart (1.0.4)
+      multipart-post (~> 2)
+    faraday-net_http (2.0.3)
+    fiber-local (1.0.0)
+    gli (2.21.0)
+    hashie (5.0.0)
     jmespath (1.6.1)
     json (2.6.1)
     mini_portile2 (2.8.0)
     mongo (2.17.1)
       bson (>= 4.8.2, < 5.0.0)
-    multi_json (1.15.0)
-    multipart-post (2.1.1)
+    multipart-post (2.2.3)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     nio4r (2.5.8)
@@ -1263,16 +1278,19 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.2.0)
       tilt (~> 2.0)
-    slack-api (1.6.1)
-      faraday (~> 0.11)
-      faraday_middleware (~> 0.10.0)
-      faye-websocket (~> 0.10.6)
-      multi_json (~> 1.0, >= 1.0.3)
+    slack-ruby-client (1.1.0)
+      faraday (>= 2.0)
+      faraday-mashify
+      faraday-multipart
+      gli
+      hashie
+      websocket-driver
     thin (1.8.1)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0, >= 1.0.4)
       rack (>= 1, < 3)
     tilt (2.0.10)
+    timers (4.3.3)
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
@@ -1281,6 +1299,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  async-websocket (~> 0.8.0)
   aws-sdk
   json
   mongo
@@ -1288,8 +1307,8 @@ DEPENDENCIES
   puma
   rubyzip
   sinatra
-  slack-api
+  slack-ruby-client
   thin
 
 BUNDLED WITH
-   2.2.20
+   2.3.16
