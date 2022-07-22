@@ -12,4 +12,5 @@ export default {
   UPDATE_SEARCH_WORD: Symbol(),
   OPEN_SIDEBAR: Symbol(),
   CLOSE_SIDEBAR: Symbol(),
+  UPDATE_IMPORT_MESSAGE: Symbol(),
 };

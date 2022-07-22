@@ -2,10 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux'
 import ModalWindow from './ModalWindow';
 import SlackActions from '../actions/SlackActions';
+import {db} from '../databases/messages';
 
 import './ConfigureWindow.less';
 
 class ConfigureWindow extends React.Component {
+  constructor(props) {
+    super(props);
+    this.initialize();
+  }
+  async initialize() {
+  }
   importBackup(e) {
     e.preventDefault();
     const formData = new FormData(this.refs.importBackup);
@@ -29,6 +36,7 @@ class ConfigureWindow extends React.Component {
               <input className="submit-button" type="submit" value="Import backup file" />
             </div>
           </form>
+          <p>{this.props.importMessage}</p>
         </ModalWindow>
       </div>
     );
@@ -37,7 +45,8 @@ class ConfigureWindow extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    teamInfo: state.teamInfo
+    teamInfo: state.teamInfo,
+    importMessage: state.importMessage,
   };
 };
 const mapDispatchToProps = dispatch => {
