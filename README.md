@@ -85,3 +85,8 @@ You can import Slack backup file with this command.
 ```sh
 $ bundle exec ruby ./bin/import.rb PATH_TO_BACKUP_FILE
 ```
+
+# Special Thanks
+
+This product receives a lot of contribution from
+[TSG](https://github.com/tsg-ut) <https://github.com/tsg-ut/slack-patron>
