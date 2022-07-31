@@ -18,7 +18,8 @@ PR is welcome!!
 
 This app needs access token from Slack.
 
-Get access token from [here](https://slack-patron.herokuapp.com/) (or use [test token](https://api.slack.com/docs/oauth-test-tokens)).
+Get access token from [here](https://slack-patron.herokuapp.com/) (or use
+[test token](https://api.slack.com/docs/oauth-test-tokens)).
 
 Then, generate `config.yml` with this command:
 
@@ -76,7 +77,8 @@ Import dialog will appear when you click team name in viewer.
 
 ### 3-B. With Command Line
 
-The size of Slack backup file is big and sometimes it is difficult to upload it with viewer.
+The size of Slack backup file is big and sometimes it is difficult to upload it
+with viewer.
 
 You can import Slack backup file with this command.
 
