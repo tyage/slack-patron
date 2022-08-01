@@ -6,7 +6,7 @@ services:
       dockerfile: ./logger/Dockerfile
     container_name: slack-patron-logger
     volumes:
-      - .:/usr/local/slack-patron
+      - ./config.yml:/usr/local/slack-patron/config.yml
     links:
       - mongo
 
@@ -16,7 +16,7 @@ services:
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
     volumes:
-      - .:/usr/local/slack-patron
+      - ./config.yml:/usr/local/slack-patron/config.yml
     ports:
       - "127.0.0.1:9292:9292"
     restart: always

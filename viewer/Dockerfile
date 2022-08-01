@@ -6,19 +6,23 @@ ARG SRCDIR="/usr/local/slack-patron"
 RUN set -x && \
 	apk upgrade --update && \
 	apk add --update \
-		build-base \
-		openssl \
-		nodejs \
-		nodejs-npm && \
+	build-base \
+	openssl \
+	nodejs \
+	nodejs-npm && \
 	echo 'gem: --no-document' >> /etc/gemrc
-
-COPY Gemfile ${SRCDIR}/
-COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 RUN bundle install
 
-CMD ./viewer/setup.sh && bundle exec puma viewer/config.ru -C viewer/puma.rb -p 9292
+COPY viewer/ ${SRCDIR}/viewer/
+RUN ./viewer/setup.sh
+
+COPY ./ ${SRCDIR}/
+
+CMD bundle exec puma viewer/config.ru -C viewer/puma.rb -p 9292
 
 EXPOSE 9292
