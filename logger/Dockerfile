@@ -1,23 +1,24 @@
-FROM ruby:2.4-alpine
+FROM ruby:2.7.2-alpine
 LABEL maintainer="namatyage@gmail.com"
 
-ARG REPOSITORY="https://github.com/tyage/slack-patron.git"
-ARG BRANCH="master"
 ARG SRCDIR="/usr/local/slack-patron"
 
 RUN set -x && \
 	apk upgrade --update && \
 	apk add --update \
-		git \
 		build-base \
 		openssl \
-		openssl-dev && \
+		openssl-dev \
+		bash && \
 	echo 'gem: --no-document' >> /etc/gemrc && \
-	git clone ${REPOSITORY} ${SRCDIR} && \
-	cd ${SRCDIR} && \
-	git checkout ${BRANCH} && \
-	bundle install
+	wget https://github.com/vishnubob/wait-for-it/raw/master/wait-for-it.sh -O /wait-for-it.sh && \
+	chmod +x /wait-for-it.sh
+
+COPY Gemfile ${SRCDIR}/
+COPY Gemfile.lock ${SRCDIR}/
 
 WORKDIR ${SRCDIR}
 
-CMD bundle exec ruby logger/logger.rb
+RUN bundle install
+
+CMD /wait-for-it.sh -t 0 mongo:27017 -- /wait-for-it.sh -t 0 elasticsearch:9200 -- bundle exec ruby logger/logger.rb

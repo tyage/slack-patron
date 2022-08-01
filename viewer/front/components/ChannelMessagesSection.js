@@ -23,7 +23,7 @@ class ChannelMessagesSection extends React.Component {
     const channel = this.props.match.params.channel;
     return (
       <div className="channel-messages">
-        <ChannelMessagesHeader currentChannelId={ channel } />
+        <ChannelMessagesHeader currentChannelId={channel} />
         <MessagesList scrollToTs={this.props.match.params.ts} onLoadMoreMessages={this.props.loadMoreChannelMessages(channel)} />
       </div>
     );

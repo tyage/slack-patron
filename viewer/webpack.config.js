@@ -1,9 +1,12 @@
-module.exports = {
+const path = require('path');
+
+module.exports = (env, argv) => ({
   entry: './front/app.js',
   output: {
-    filename: './public/build/app.js'
+    path: path.resolve(__dirname, 'public/build'),
+    filename: 'app.js'
   },
-  devtool: 'inline-source-map',
+  devtool: argv.mode === 'production' ? 'source-map' : 'eval',
   module: {
     rules: [{
       test: /\.js$/,
@@ -26,4 +29,4 @@ module.exports = {
       ]
     }]
   }
-};
+});

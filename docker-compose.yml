@@ -1,4 +1,4 @@
-version: '2'
+version: '3'
 services:
   logger:
     build:
@@ -6,9 +6,9 @@ services:
       dockerfile: ./logger/Dockerfile
     container_name: slack-patron-logger
     volumes:
-      - ./config.yml:/usr/local/slack-patron/config.yml
+      - .:/usr/local/slack-patron
     links:
-     - mongo
+      - mongo
 
   viewer:
     build:
@@ -16,11 +16,43 @@ services:
       dockerfile: ./viewer/Dockerfile
     container_name: slack-patron-viewer
     volumes:
-      - ./config.yml:/usr/local/slack-patron/config.yml
+      - .:/usr/local/slack-patron
     ports:
-     - "9292:9292"
-    links:
-     - mongo
+      - "127.0.0.1:9292:9292"
+    restart: always
+
+  connector:
+    build: connector
+    environment:
+      - MONSTACHE_DIRECT_READ_NS=slack_logger.messages
+      - MONSTACHE_ES_URLS=http://elasticsearch:9200
+      - MONSTACHE_MONGO_URL=mongodb://mongo:27017
+    depends_on:
+      - mongo
+      - elasticsearch
+    restart: always
+
+  elasticsearch:
+    build: elasticsearch
+    environment:
+      - ES_JAVA_OPTS=-Xms200m -Xmx640m -XX:G1PeriodicGCInterval=60k
+      - discovery.type=single-node
+    ports:
+      - "127.0.0.1:9200:9200"
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    restart: always
 
   mongo:
-    image: mongo
+    image: mongo:4.4.2
+    command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
+    volumes:
+      - mongodata:/data/db
+    ports:
+      - "127.0.0.1:27017:27017"
+    restart: always
+
+volumes:
+  esdata:
+  mongodata:
+  oplog:

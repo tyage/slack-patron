@@ -1,14 +1,57 @@
 require 'sinatra'
+require 'net/http'
 require 'json'
+require 'aws-sdk'
 require './lib/slack_import'
 require './lib/slack'
 require './lib/db'
 
-config = YAML.load_file('./config.yml')
+$config = YAML.load_file('./config.yml')
+$signer = nil
+
+if $config.has_key? 'aws'
+  Aws.config.update({
+    credentials: Aws::Credentials.new(
+      $config['aws']['access_key_id'],
+      $config['aws']['secret_access_key'],
+    ),
+    region: 'ap-northeast-1',
+  })
+  $signer = Aws::S3::Presigner.new
+end
 
 configure do
   set :absolute_redirects, false
   set :prefixed_redirects, true
+end
+
+def sign_file(file)
+  if file.has_key? 'url_private_download'
+    url = $signer.presigned_url(:get_object, {
+      bucket: 'tsgbot-slack-files',
+      key: file['id'],
+      expires_in: 180,
+    })
+    file['url_private_download'] = url
+  end
+end
+
+def sign_message_files(messages)
+  unless $signer.nil?
+    messages.each do |message|
+      if message.has_key? 'files'
+        message['files'].each do |file|
+          sign_file(file)
+        end
+      end
+
+      # Compatibility with old messages
+      if message.has_key? 'file'
+        file = message['file']
+        sign_file(file)
+      end
+    end
+  end
 end
 
 def users
@@ -37,6 +80,13 @@ def ims
   hashed_ims.sort_by {|k, v| v[:name] }.to_h
 end
 
+def emojis
+  emojis = Emojis.find.map do |emoji|
+    [emoji[:name], emoji[:url]]
+  end
+  emojis.to_h
+end
+
 def messages(params)
   limit = params[:limit] || 100
   ts_direction = params[:min_ts].nil? ? -1 : 1
@@ -46,17 +96,9 @@ def messages(params)
   condition[:ts] = { '$gte' => params[:min_ts] } unless params[:min_ts].nil?
   condition[:ts] = { '$lte' => params[:max_ts] } unless params[:max_ts].nil?
   condition[:channel] = params[:channel] unless params[:channel].nil?
-  condition['$or'] = [
-    # normal message
-    { text: Regexp.new(params[:search]) },
-    # bot message
-    {
-      attachments: {
-        '$elemMatch' => { text: Regexp.new(params[:search]) }
-      },
-      subtype: 'bot_message'
-    }
-  ] unless params[:search].nil?
+
+  # search thread replies
+  condition[:thread_ts] = params[:thread_ts] unless params[:thread_ts].nil?
 
   all_messages = Messages
     .find(condition)
@@ -65,7 +107,71 @@ def messages(params)
   return_messages = all_messages.limit(limit).to_a
   return_messages = return_messages.reverse if ts_direction == -1
 
+  sign_message_files(return_messages)
+
   return return_messages, has_more_message
+end
+
+def search(params)
+  limit = params[:limit] || 100
+  ts_direction = params[:min_ts].nil? ? 'desc' : 'asc'
+  ts_range = {
+    gte: params[:min_ts],
+    lte: params[:max_ts],
+  }
+
+  uri = URI.parse('http://elasticsearch:9200/slack_logger.messages/_search')
+  http = Net::HTTP.new(uri.host, uri.port)
+  query = {
+    query: {
+      bool: {
+        must: [
+          {
+            query_string: {
+              query: params[:search],
+              default_field: 'text',
+              default_operator: 'AND'
+            }
+          },
+          {
+            range: {
+              ts: ts_range
+            }
+          }
+        ]
+      }
+    },
+    size: limit,
+    sort: [
+      { ts: ts_direction }
+    ],
+    highlight: {
+      fields: { text: {} }
+    }
+  }
+  req = Net::HTTP::Post.new(uri.path)
+  req.initialize_http_header({ 'Content-Type' => 'application/json' })
+  req.body = query.to_json
+
+  res = http.request(req)
+  if res.is_a?(Net::HTTPSuccess)
+    res_data = JSON.parse(res.body)
+    all_messages = res_data['hits']['hits'].map do |entry|
+      message = entry['_source']
+      message['_id'] = { '$oid' => entry['_id'] }
+      if entry.has_key? 'highlight'
+        message['text'] = entry['highlight']['text'][0]
+      end
+      message
+    end
+    all_messages = all_messages.reverse if ts_direction == 'desc'
+    sign_message_files(all_messages)
+    # FIXME: The meaning of hits.total.value might change in ElasticSearch 8
+    # https://www.elastic.co/guide/en/elasticsearch/reference/current/breaking-changes-7.0.html#hits-total-now-object-search-response
+    return all_messages, res_data['hits']['total']['value'] > limit
+  else
+    return [], false
+  end
 end
 
 get '/users.json' do
@@ -81,6 +187,11 @@ end
 get '/ims.json' do
   content_type :json
   ims.to_json
+end
+
+get '/emojis.json' do
+  content_type :json
+  emojis.to_json
 end
 
 post '/messages/:channel.json' do
@@ -119,10 +230,23 @@ post '/around_messages/:channel.json' do
   }.to_json
 end
 
+post '/thread_messages.json' do
+  thread_messages, _ = messages(
+    thread_ts: params[:thread_ts],
+    limit: 10000
+  )
+
+  content_type :json
+  {
+    messages: thread_messages
+  }.to_json
+end
+
 get '/team.json' do
   content_type :json
   # TODO: cache in redis or mongodb or in memory?
-  Slack.team_info['team'].to_json
+  client = Slack::Web::Client.new
+  client.team_info['team'].to_json
 end
 
 post '/import_backup' do
@@ -137,7 +261,7 @@ end
 get '/' do
   hashed_channels = channels
   default_channel, _ = hashed_channels.find do |id, channel|
-    channel[:name] == config['default_channel']
+    channel[:name] == $config['default_channel']
   end
   if default_channel.nil?
     default_channel, _ = hashed_channels.first
@@ -154,18 +278,20 @@ end
 get '/search/:search_word' do
   erb :index
 end
+get '/thread/:thread_ts' do
+  erb :index
+end
 
 post '/search' do
-  all_messages, has_more_message = messages(
+  all_messages, has_more_message = search(
     search: params[:word],
     max_ts: params[:max_ts],
     min_ts: params[:min_ts]
   )
-  all_messages = all_messages.select { |m| m[:ts] != params[:max_ts] && m[:ts] != params[:min_ts] }
-
+  all_messages = all_messages.select { |m| m['ts'] != params[:max_ts] && m['ts'] != params[:min_ts] }
   content_type :json
   {
     messages: all_messages,
-    has_more_message: has_more_message
+    has_more_message: has_more_message,
   }.to_json
 end

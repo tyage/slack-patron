@@ -4,6 +4,10 @@ import MessagesList from './MessagesList';
 import SlackActions from '../actions/SlackActions';
 
 class SearchMessagesSection extends React.Component {
+  constructor(props) {
+    super(props);
+    this.handleToggleSidebar = this.handleToggleSidebar.bind(this);
+  }
   componentDidMount() {
     this.initialzeData(this.props.match.params.searchWord);
   }
@@ -15,12 +19,21 @@ class SearchMessagesSection extends React.Component {
   initialzeData(searchWord) {
     this.props.loadSearchMessages(decodeURIComponent(searchWord));
   }
+  handleToggleSidebar(event) {
+    event.stopPropagation();
+    this.props.openSidebar();
+  }
   render() {
     const { match, loadMoreSearchMessages } = this.props;
-    const searchWord = match.params.searchWord;
+    const searchWord = decodeURIComponent(match.params.searchWord);
     return (
       <div className="search-messages">
         <div className="messages-header">
+          <div className="toggle-sidebar" onClick={this.handleToggleSidebar}>
+            <div className="bar"/>
+            <div className="bar"/>
+            <div className="bar"/>
+          </div>
           <div className="title">Search: { searchWord }</div>
         </div>
         <MessagesList onLoadMoreMessages={loadMoreSearchMessages(searchWord)} />
@@ -36,6 +49,9 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
   return {
+    openSidebar: () => {
+      dispatch(SlackActions.openSidebar());
+    },
     loadMoreSearchMessages: searchWord => params => {
       dispatch(SlackActions.searchMore(searchWord, params));
     },

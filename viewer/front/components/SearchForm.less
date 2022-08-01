@@ -1,17 +1,28 @@
+@import '../styles/variable';
+
 .search-form-wrapper {
+  display: flex;
   position: absolute;
   right: 0;
   top: 0;
   z-index: 100;
-  &:before {
-    content: '🔍';
-    display: block;
-    position: absolute;
-    left: 10px;
-    top: 16px;
+  .advanced-search-toggler {
+    background-color: white;
+    text-decoration: underline blue;
+    color: blue;
+    padding: 16px 6px;
+    cursor: pointer;
   }
   .search-form {
+    position: relative;
     margin: 9px 6px 0 0;
+    &:before {
+      content: '🔍';
+      display: block;
+      position: absolute;
+      left: 10px;
+      top: 6px;
+    }
     input {
       border-radius: 40px;
       background: #FFF;
@@ -22,6 +33,9 @@
       font-size: 15px;
       padding: 2px 2rem;
       box-shadow: 1px 1px 2px #eee;
+      @media @mobile {
+        width: 160px;
+      }
     }
   }
 }

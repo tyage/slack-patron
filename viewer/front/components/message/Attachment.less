@@ -1,0 +1,100 @@
+@import '../../styles/variable';
+
+.slack-message-attachment {
+  line-height: 1.5em;
+  max-width: 40rem;
+  margin-top: 0.5rem;
+
+  .attachment-main {
+    display: flex;
+
+    .attachment-sidebar {
+      flex: 0 0 0.25rem;
+      background: lightgray;
+      border-radius: 9999px;
+      margin-right: 0.75rem;
+    }
+
+    .attachment-content {
+      flex: 1 1 0;
+      width: 0;
+    }
+
+    .attachment-author {
+      display: flex;
+      align-items: center;
+
+      .attachment-author-icon {
+        width: 1rem;
+        height: 1rem;
+        object-fit: contain;
+        margin-right: 0.3rem;
+      }
+
+      .attachment-author-name {
+        &, & > a {
+          color: dimgray;
+        }
+      }
+    }
+
+    .attachment-title {
+      font-weight: bold;
+    }
+
+    .attachment-image-wrap {
+      max-width: 24rem;
+
+      .attachment-image {
+        max-width: 100%;
+        max-height: 24rem;
+      }
+    }
+
+    .attachment-fields {
+      display: flex;
+      flex-wrap: wrap;
+
+      .attachment-field {
+        flex: 0 0 50%;
+        @media @mobile {
+          flex-basis: 100%;
+        }
+        margin: 0.3rem 0;
+
+        .attachment-field-title {
+          font-weight: bold;
+        }
+      }
+    }
+
+    .attachment-thumb {
+      width: 5rem;
+      height: 5rem;
+      border-radius: 3px;
+      object-fit: contain;
+      margin-left: 1rem;
+    }
+
+    .attachment-footer {
+      display: flex;
+      align-items: center;
+      font-size: 0.8rem;
+      color: dimgray;
+
+      .attachment-footer-icon {
+        width: 1rem;
+        height: 1rem;
+        object-fit: contain;
+        margin-right: 0.3rem;
+      }
+
+      .attachment-footer-separater {
+        height: 0.8rem;
+        width: 1px;
+        background-color: lightgray;
+        margin: 0 0.3rem;
+      }
+    }
+  }
+}

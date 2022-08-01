@@ -7,11 +7,11 @@ config = {
   'slack' => {
     'token' => nil
   },
-  'default_channel' => 'general',
-  'logger' => {
-    'enable_private_channel' => true,
-    'enable_direct_message' => true
+  'aws' => {
+    'access_key_id' => nil,
+    'secret_access_key' => nil,
   },
+  'default_channel' => 'general',
   'database' => {
     'uri' => 'mongo:27017',
     'database' => 'slack_logger'
