@@ -14,11 +14,11 @@ jobs:
         name: tyage/slack-patron-viewer
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: viewer
+        dockerfile: viewer/Dockerfile
     - name: Publish logger to Registry
       uses: elgohr/Publish-Docker-Github-Action@v4
       with:
         name: tyage/slack-patron-logger
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
-        workdir: logger
+        dockerfile: logger/Dockerfile
