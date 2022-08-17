@@ -4,22 +4,24 @@
   - You can also import data from backup file.
 - Web interface for searching messages.
 
-![](https://i.gyazo.com/626298851b7eb9a878b72ccc788b7086.png)
+![](./docs/screenshot.png)
 
-# Usage
+# Quick Usage
 
 1. Install Slack Patron App and get access token for your Slack workspace
 
 <https://slack-patron.herokuapp.com/>
 
-2. Run `docker compose up`
+2. Run `docker compose up` with ./docs/docker-compose-quick.yml
 
-```
-$ SLACK_PATRON_TOKEN=[YOUR TOKEN HERE]
-$ docker compose up
+```sh
+$ export SLACK_PATRON_SLACK_TOKEN=[YOUR TOKEN HERE]
+$ docker compose up -f ./docs/docker-compose-quick.yml
 ```
 
 3. Visit http://localhost:9292
+
+# Docs
 
 For more information, see [./docs/ADVANCED.md](./docs/ADVANCED.md)
 
