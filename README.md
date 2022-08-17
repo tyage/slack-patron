@@ -20,7 +20,7 @@
 ```sh
 $ wget https://raw.githubusercontent.com/tyage/slack-patron/master/docs/docker-compose-quick.yml
 $ export SLACK_PATRON_SLACK_TOKEN=[YOUR TOKEN HERE]
-$ docker compose -f ./docs/docker-compose-quick.yml up
+$ docker compose -f ./docker-compose-quick.yml up
 ```
 
 3. Visit http://localhost:9292
