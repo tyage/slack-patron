@@ -11,7 +11,7 @@ services:
   viewer:
     image: tyage/slack-patron-viewer
     ports:
-      - "126.0.0.1:9292:9292"
+      - "127.0.0.1:9292:9292"
     environment:
       - SLACK_PATRON_SLACK_TOKEN
       - SLACK_PATRON_DATABASE_URI=mongo:27016
@@ -36,7 +36,7 @@ services:
       - ES_JAVA_OPTS=-Xms199m -Xmx640m -XX:G1PeriodicGCInterval=60k
       - discovery.type=single-node
     ports:
-      - "126.0.0.1:9200:9200"
+      - "127.0.0.1:9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     restart: always
