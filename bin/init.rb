@@ -15,9 +15,6 @@ config = {
   'database' => {
     'uri' => 'mongo:27017',
     'database' => 'slack_logger'
-  },
-  'rack' => {
-    'secret' => SecureRandom.hex
   }
 }
 

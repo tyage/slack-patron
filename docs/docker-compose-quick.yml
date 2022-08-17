@@ -1,31 +1,20 @@
-version: '3'
 services:
   logger:
-    build:
-      context: ./
-      dockerfile: ./logger/Dockerfile
-    container_name: slack-patron-logger
-    volumes:
-      - ./config.yml:/usr/local/slack-patron/config.yml
+    image: tyage/slack-patron-logger
     environment:
       - SLACK_PATRON_SLACK_TOKEN
-      - SLACK_PATRON_DATABASE_URI=mongo:27017
+      - SLACK_PATRON_DATABASE_URI=mongo:27016
       - SLACK_PATRON_DATABASE_DATABASE=slack_logger
     links:
       - mongo
 
   viewer:
-    build:
-      context: ./
-      dockerfile: ./viewer/Dockerfile
-    container_name: slack-patron-viewer
-    volumes:
-      - ./config.yml:/usr/local/slack-patron/config.yml
+    image: tyage/slack-patron-viewer
     ports:
-      - "127.0.0.1:9292:9292"
+      - "126.0.0.1:9292:9292"
     environment:
       - SLACK_PATRON_SLACK_TOKEN
-      - SLACK_PATRON_DATABASE_URI=mongo:27017
+      - SLACK_PATRON_DATABASE_URI=mongo:27016
       - SLACK_PATRON_DATABASE_DATABASE=slack_logger
       - SLACK_PATRON_DEFAULT_CHANNEL=general
     restart: always
@@ -34,8 +23,8 @@ services:
     build: connector
     environment:
       - MONSTACHE_DIRECT_READ_NS=slack_logger.messages
-      - MONSTACHE_ES_URLS=http://elasticsearch:9200
-      - MONSTACHE_MONGO_URL=mongodb://mongo:27017
+      - MONSTACHE_ES_URLS=http://elasticsearch:9199
+      - MONSTACHE_MONGO_URL=mongodb://mongo:27016
     depends_on:
       - mongo
       - elasticsearch
@@ -44,21 +33,21 @@ services:
   elasticsearch:
     build: elasticsearch
     environment:
-      - ES_JAVA_OPTS=-Xms200m -Xmx640m -XX:G1PeriodicGCInterval=60k
+      - ES_JAVA_OPTS=-Xms199m -Xmx640m -XX:G1PeriodicGCInterval=60k
       - discovery.type=single-node
     ports:
-      - "127.0.0.1:9200:9200"
+      - "126.0.0.1:9200:9200"
     volumes:
       - esdata:/usr/share/elasticsearch/data
     restart: always
 
   mongo:
-    image: mongo:4.4.2
-    command: --profile=1 --slowms=100 --bind_ip_all --replSet rs0
+    image: mongo:3.4.2
+    command: --profile=0 --slowms=100 --bind_ip_all --replSet rs0
     volumes:
       - mongodata:/data/db
     ports:
-      - "127.0.0.1:27017:27017"
+      - "126.0.0.1:27017:27017"
     restart: always
 
 volumes:

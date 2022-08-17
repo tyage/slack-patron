@@ -1,8 +1,5 @@
-require 'yaml'
 require './lib/slack'
 require './lib/db'
-
-config = YAML.load_file('./config.yml')
 
 class SlackLogger
   attr_reader :client
