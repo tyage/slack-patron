@@ -22,3 +22,17 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         dockerfile: logger/Dockerfile
+    - name: Publish connector to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v4
+      with:
+        name: tyage/slack-patron-connector
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        context: connector
+    - name: Publish elasticsearch to Registry
+      uses: elgohr/Publish-Docker-Github-Action@v4
+      with:
+        name: tyage/slack-patron-elasticsearch
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        context: elasticsearch
