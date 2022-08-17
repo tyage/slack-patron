@@ -12,7 +12,7 @@
 
 <https://slack-patron.herokuapp.com/>
 
-2. Run `docker compose up` with <./docs/docker-compose-quick.yml>
+2. Run `docker compose up` with [./docs/docker-compose-quick.yml](./docs/docker-compose-quick.yml)
 
 ```sh
 $ export SLACK_PATRON_SLACK_TOKEN=[YOUR TOKEN HERE]
