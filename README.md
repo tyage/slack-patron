@@ -18,6 +18,7 @@
 2. Run `docker compose up` with [./docs/docker-compose-quick.yml](./docs/docker-compose-quick.yml)
 
 ```sh
+$ wget https://raw.githubusercontent.com/tyage/slack-patron/master/docs/docker-compose-quick.yml
 $ export SLACK_PATRON_SLACK_TOKEN=[YOUR TOKEN HERE]
 $ docker compose -f ./docs/docker-compose-quick.yml up
 ```
