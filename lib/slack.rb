@@ -1,10 +1,10 @@
-require 'yaml'
 require 'slack-ruby-client'
+require './lib/config'
 
-config = YAML.load_file('./config.yml')
+config = SlackPatronConfig.config
 
 Slack.configure do |c|
-  c.token = config['slack']['token']
+  c.token = config[:slack][:token]
 end
 
 Slack::RealTime::Client.configure do |c|
