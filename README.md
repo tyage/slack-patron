@@ -2,6 +2,8 @@
 
 <a href="https://hub.docker.com/r/tyage/slack-patron-viewer"><img src="https://img.shields.io/docker/v/tyage/slack-patron-viewer?label=slack-patron-viewer" /></a>
 <a href="https://hub.docker.com/r/tyage/slack-patron-logger"><img src="https://img.shields.io/docker/v/tyage/slack-patron-logger?label=slack-patron-logger" /></a>
+<a href="https://hub.docker.com/r/tyage/slack-patron-connector"><img src="https://img.shields.io/docker/v/tyage/slack-patron-connector?label=slack-patron-connector" /></a>
+<a href="https://hub.docker.com/r/tyage/slack-patron-elasticsearch"><img src="https://img.shields.io/docker/v/tyage/slack-patron-elasticsearch?label=slack-patron-elasticsearch" /></a>
 
 - Record Slack messages in MongoDB.
   - You can also import data from backup file.
@@ -32,5 +34,6 @@ $ docker compose -f ./docker-compose-quick.yml up
 
 # Special Thanks
 
-This product receives a lot of contribution from
-[TSG](https://github.com/tsg-ut) <https://github.com/tsg-ut/slack-patron>
+This product receives a lot of contribution from [TSG](https://github.com/tsg-ut) :heart:
+
+<https://github.com/tsg-ut/slack-patron>
