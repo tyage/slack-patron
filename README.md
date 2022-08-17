@@ -23,7 +23,8 @@ $ docker compose up -f ./docs/docker-compose-quick.yml
 
 # Docs
 
-For more information, see [./docs/ADVANCED.md](./docs/ADVANCED.md)
+- [./docs/DEVELOPMENT.md](./docs/DEVELOPMENT.md): for development
+- [./docs/BACKUP_IMPORT.md](./docs/BACKUP_IMPORT.md): for import Slack backup file
 
 # Special Thanks
 
