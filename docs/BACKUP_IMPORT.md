@@ -1,6 +1,6 @@
 # Import Slack backup file
 
-There is two ways to import Slack's backup file.
+There are two ways to import Slack's backup file.
 
 ## With GUI (in viewer)
 
