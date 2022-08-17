@@ -1,5 +1,8 @@
 # Slack patron
 
+<a href="https://hub.docker.com/r/tyage/slack-patron-viewer"><img src="https://img.shields.io/docker/v/tyage/slack-patron-viewer?label=slack-patron-viewer" /></a>
+<a href="https://hub.docker.com/r/tyage/slack-patron-logger"><img src="https://img.shields.io/docker/v/tyage/slack-patron-logger?label=slack-patron-logger" /></a>
+
 - Record Slack messages in MongoDB.
   - You can also import data from backup file.
 - Web interface for searching messages.
