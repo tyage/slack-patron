@@ -16,7 +16,7 @@
 
 ```sh
 $ export SLACK_PATRON_SLACK_TOKEN=[YOUR TOKEN HERE]
-$ docker compose up -f ./docs/docker-compose-quick.yml
+$ docker compose -f ./docs/docker-compose-quick.yml up
 ```
 
 3. Visit http://localhost:9292
