@@ -21,7 +21,7 @@ services:
     restart: always
 
   connector:
-    build: connector
+    image: tyage/slack-patron-connector
     environment:
       - MONSTACHE_DIRECT_READ_NS=slack_logger.messages
       - MONSTACHE_ES_URLS=http://elasticsearch:9200
@@ -32,7 +32,7 @@ services:
     restart: always
 
   elasticsearch:
-    build: elasticsearch
+    image: tyage/slack-patron-elasticsearch
     environment:
       - ES_JAVA_OPTS=-Xms200m -Xmx640m -XX:G1PeriodicGCInterval=60k
       - discovery.type=single-node
