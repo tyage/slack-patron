@@ -6,6 +6,10 @@ on:
       dockerfile_path:
         required: true
         type: string
+      docker_context:
+        required: false
+        default: "."
+        type: string
       image_name:
         required: true
         type: string
@@ -84,7 +88,7 @@ jobs:
         id: build-and-push
         uses: docker/build-push-action@v3
         with:
-          context: .
+          context: ${{ inputs.docker_context }}
           file: ${{ inputs.dockerfile_path }}
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
