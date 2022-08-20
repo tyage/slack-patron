@@ -23,7 +23,7 @@ on:
 
 jobs:
   publish:
-    uses: ./.github/workflows/publish
+    uses: ./.github/workflows/publish.yml
     with:
       dockerfile_path: ./viewer/Dockerfile
       image_name: slack-patron-viewer
