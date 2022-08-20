@@ -1,4 +1,4 @@
-name: Publish Logger Docker Image
+name: Publish Connector Docker Image
 
 on:
   push:

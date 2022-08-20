@@ -1,4 +1,4 @@
-name: Publish Logger Docker Image
+name: Publish ElasticSearch Docker Image
 
 on:
   push:
