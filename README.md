@@ -1,9 +1,5 @@
-# Slack patron
-
-<a href="https://hub.docker.com/r/tyage/slack-patron-viewer"><img src="https://img.shields.io/docker/v/tyage/slack-patron-viewer?label=slack-patron-viewer" /></a>
-<a href="https://hub.docker.com/r/tyage/slack-patron-logger"><img src="https://img.shields.io/docker/v/tyage/slack-patron-logger?label=slack-patron-logger" /></a>
-<a href="https://hub.docker.com/r/tyage/slack-patron-connector"><img src="https://img.shields.io/docker/v/tyage/slack-patron-connector?label=slack-patron-connector" /></a>
-<a href="https://hub.docker.com/r/tyage/slack-patron-elasticsearch"><img src="https://img.shields.io/docker/v/tyage/slack-patron-elasticsearch?label=slack-patron-elasticsearch" /></a>
+# Slack Patron
+[![Publish Viewer Docker Image](https://github.com/tyage/slack-patron/actions/workflows/publish-viewer.yml/badge.svg)](https://github.com/tyage/slack-patron/actions/workflows/publish-viewer.yml) [![Publish Logger Docker Image](https://github.com/tyage/slack-patron/actions/workflows/publish-logger.yml/badge.svg)](https://github.com/tyage/slack-patron/actions/workflows/publish-logger.yml) [![Publish Connector Docker Image](https://github.com/tyage/slack-patron/actions/workflows/publish-connector.yml/badge.svg)](https://github.com/tyage/slack-patron/actions/workflows/publish-connector.yml) [![Publish ElasticSearch Docker Image](https://github.com/tyage/slack-patron/actions/workflows/publish-elasticsearch.yml/badge.svg)](https://github.com/tyage/slack-patron/actions/workflows/publish-elasticsearch.yml)
 
 - Record Slack messages in MongoDB.
   - You can also import data from backup file.
