@@ -5,6 +5,7 @@ on:
     branches: ["master"]
     tags: ["v*.*.*"]
     paths:
+      - .github/workflows
       - lib/**
       - viewer/**
       - .dockerignore
@@ -13,6 +14,7 @@ on:
   pull_request:
     branches: ["master"]
     paths:
+      - .github/workflows
       - lib/**
       - viewer/**
       - .dockerignore
