@@ -6,6 +6,7 @@ on:
     tags: ["v*.*.*"]
     paths:
       - .github/workflows/publish-viewer.yml
+      - .github/workflows/publish.yml
       - lib/**
       - viewer/**
       - .dockerignore
@@ -15,6 +16,7 @@ on:
     branches: ["master"]
     paths:
       - .github/workflows/publish-viewer.yml
+      - .github/workflows/publish.yml
       - lib/**
       - viewer/**
       - .dockerignore
