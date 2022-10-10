@@ -10,7 +10,7 @@ require './lib/db'
 $config = SlackPatronConfig.config
 $signer = nil
 
-if $config.has_key? :aws
+if $config[:aws]&.values.all?
   Aws.config.update({
     credentials: Aws::Credentials.new(
       $config[:aws][:access_key_id],
