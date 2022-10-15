@@ -11,7 +11,7 @@
 
 1. Install Slack Patron App and get access token for your Slack workspace
 
-<https://slack-patron.herokuapp.com/>
+<a href="https://slack.com/oauth/authorize?client_id=96488045348.96491351300&scope=client"><img src="https://platform.slack-edge.com/img/add_to_slack.png"></a>
 
 2. Run `docker compose up` with [./docs/docker-compose-quick.yml](./docs/docker-compose-quick.yml)
 
